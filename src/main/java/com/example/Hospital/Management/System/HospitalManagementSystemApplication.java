@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 public class HospitalManagementSystemApplication {
@@ -58,8 +60,22 @@ public class HospitalManagementSystemApplication {
             roomRepo.save(r2);
 
             // Populează MedicalStaff
-            Doctor ms1 = new Doctor("MS1", "Dr. Ana Maria", "D1", "Cardiologie");
-            Nurse ms2 = new Nurse("MS2", "Sorina Popa", "D2", "Zi");
+            Doctor ms1 = new Doctor("MS1", "Dr. Ana Maria", "D1", "Cardiologie", Arrays.asList(
+                    new Appointment(
+                    "A002",
+                    "D2",
+                    "P002",
+                    LocalDate.of(2025, 11, 4),
+                    "Active"
+                    )));
+            Nurse ms2 = new Nurse("MS2", "Sorina Popa", "D2", "Zi", Arrays.asList(
+                    new Appointment(
+                            "A001", // id
+                            "D2",   // departmentId
+                            "P001", // patientId
+                            LocalDate.of(2025, 11, 3), // admissionDate
+                            "Active" // status
+                    )));
             staffRepo.save(ms1);
             staffRepo.save(ms2);
 

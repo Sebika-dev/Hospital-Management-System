@@ -24,6 +24,10 @@ public class Appointment {
     }
 
     // Getters and Setters
+    public LocalDate getDate() { return admissionDate; }
+    public void setDate(LocalDate date) { this.admissionDate = date; }
+
+
     public String getId() {
         return id;
     }

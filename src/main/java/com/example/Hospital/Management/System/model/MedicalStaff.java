@@ -8,17 +8,24 @@ public class MedicalStaff {
     private String name;
     private List<Appointment> appointments = new ArrayList<>();
     private String departmentId;
+    private String role;
 
     // Constructor
     public MedicalStaff() {}
 
-    public MedicalStaff(String id, String name, String departmentId) {
+    public MedicalStaff(String id, String name, String departmentId, List<Appointment> appointments) {
         this.id = id;
         this.name = name;
         this.departmentId = departmentId;
+        this.appointments = appointments;
     }
 
     // Getters and Setters
+
+    public String getRole() { return role; }
+
+    public void setRole(String role) { this.role = role; }
+
     public String getId() {
         return id;
     }

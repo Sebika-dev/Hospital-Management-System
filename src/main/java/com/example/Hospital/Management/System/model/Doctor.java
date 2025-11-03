@@ -1,6 +1,8 @@
 package com.example.Hospital.Management.System.model;
 
 
+import java.util.List;
+
 public class Doctor extends MedicalStaff {
     private String licenseNumber;
     private String specialization;
@@ -9,8 +11,8 @@ public class Doctor extends MedicalStaff {
     // Constructor
     public Doctor() {}
 
-    public Doctor(String id, String name, String departmentId, String licenseNumber) {
-        super(id, name, departmentId);
+    public Doctor(String id, String name, String departmentId, String licenseNumber, List<Appointment > appointments) {
+        super(id, name, departmentId, appointments);
         this.licenseNumber = licenseNumber;
     }
 

@@ -16,7 +16,6 @@
     <tr>
         <th>ID</th>
         <th>Număr</th>
-        <th>Disponibilitate</th>
         <th>Acțiuni</th>
     </tr>
     </thead>
@@ -24,7 +23,6 @@
     <tr th:each="room : ${rooms}">
         <td th:text="${room.id}">R1</td>
         <td th:text="${room.number}">101</td>
-        <td th:text="${room.availability} ? 'Da' : 'Nu'">Da</td>
         <td>
             <form th:action="@{'/rooms/' + ${room.id} + '/delete'}" method="post">
                 <button type="submit">Șterge</button>

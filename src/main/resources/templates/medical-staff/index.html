@@ -16,15 +16,19 @@
     <tr>
         <th>ID</th>
         <th>Nume</th>
-        <th>Rol</th>
+        <th>Departament</th>
+        <th>Appointments</th>
         <th>Acțiuni</th>
+
     </tr>
     </thead>
     <tbody>
     <tr th:each="staff : ${medicalStaff}">
         <td th:text="${staff.id}">MS1</td>
         <td th:text="${staff.name}">Dr. Ana Maria</td>
-        <td th:text="${staff.role}">Doctor</td>
+        <td th:text="${staff.departmentId}">dept</td>
+        <td th:text="${staff.appointments}">dept</td>
+
         <td>
             <form th:action="@{'/medical-staff/' + ${staff.id} + '/delete'}" method="post">
                 <button type="submit">Șterge</button>
