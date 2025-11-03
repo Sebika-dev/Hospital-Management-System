@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista Camerelor</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+<h1>Camere</h1>
+<a href="/rooms/new">Adaugă o nouă cameră</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Număr</th>
+        <th>Disponibilitate</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="room : ${rooms}">
+        <td th:text="${room.id}">R1</td>
+        <td th:text="${room.number}">101</td>
+        <td th:text="${room.availability} ? 'Da' : 'Nu'">Da</td>
+        <td>
+            <form th:action="@{'/rooms/' + ${room.id} + '/delete'}" method="post">
+                <button type="submit">Șterge</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

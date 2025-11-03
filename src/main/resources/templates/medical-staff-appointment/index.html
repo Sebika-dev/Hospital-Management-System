@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista Legăturilor Personal-Programare</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+<h1>Legături Personal-Programare</h1>
+<a href="/medical-staff-appointments/new">Adaugă o nouă legătură</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Medical Staff ID</th>
+        <th>Appointment ID</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="link : ${medicalStaffAppointments}">
+        <td th:text="${link.id}">L1</td>
+        <td th:text="${link.medicalStaffId}">MS1</td>
+        <td th:text="${link.appointmentId}">A1</td>
+        <td>
+            <form th:action="@{'/medical-staff-appointments/' + ${link.id} + '/delete'}" method="post">
+                <button type="submit">Șterge</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

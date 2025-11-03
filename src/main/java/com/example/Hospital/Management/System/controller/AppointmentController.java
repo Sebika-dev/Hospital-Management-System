@@ -3,12 +3,12 @@ package com.example.Hospital.Management.System.controller;
 import com.example.Hospital.Management.System.model.Appointment;
 import com.example.Hospital.Management.System.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/appointments")
+@Controller
+@RequestMapping("/appointments")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
@@ -19,22 +19,26 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public List<Appointment> getAllAppointments() {
-        return appointmentService.getAllAppointments();
+    public String getAllAppointments(Model model) {
+        model.addAttribute("appointments", appointmentService.getAllAppointments());
+        return "appointment/index";
     }
 
-    @GetMapping("/{id}")
-    public Appointment getAppointmentById(@PathVariable String id) {
-        return appointmentService.getAppointmentById(id);
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("appointment", new Appointment());
+        return "appointment/form";
     }
 
     @PostMapping
-    public Appointment createAppointment(@RequestBody Appointment appointment) {
-        return appointmentService.saveAppointment(appointment);
+    public String createAppointment(@ModelAttribute Appointment appointment) {
+        appointmentService.saveAppointment(appointment);
+        return "redirect:/appointments";
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteAppointment(@PathVariable String id) {
+    @PostMapping("/{id}/delete")
+    public String deleteAppointment(@PathVariable String id) {
         appointmentService.deleteAppointment(id);
+        return "redirect:/appointments";
     }
 }

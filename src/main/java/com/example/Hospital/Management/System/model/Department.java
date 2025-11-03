@@ -8,6 +8,14 @@ public class Department {
     private String name;
     private String hospitalId;
 
+    public Department() {}
+
+    public Department(String id, String name, String hospitalId) {
+        this.id = id;
+        this.name = name;
+        this.hospitalId = hospitalId;
+    }
+
     // Getters and Setters
     public String getId() {
         return id;

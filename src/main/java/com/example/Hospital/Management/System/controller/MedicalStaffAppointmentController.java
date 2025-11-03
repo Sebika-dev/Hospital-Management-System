@@ -3,12 +3,12 @@ package com.example.Hospital.Management.System.controller;
 import com.example.Hospital.Management.System.model.MedicalStaffAppointment;
 import com.example.Hospital.Management.System.service.MedicalStaffAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/medical-staff-appointments")
+@Controller
+@RequestMapping("/medical-staff-appointments")
 public class MedicalStaffAppointmentController {
 
     private final MedicalStaffAppointmentService medicalStaffAppointmentService;
@@ -19,22 +19,26 @@ public class MedicalStaffAppointmentController {
     }
 
     @GetMapping
-    public List<MedicalStaffAppointment> getAllMedicalStaffAppointments() {
-        return medicalStaffAppointmentService.getAllMedicalStaffAppointments();
+    public String getAllMedicalStaffAppointments(Model model) {
+        model.addAttribute("medicalStaffAppointments", medicalStaffAppointmentService.getAllMedicalStaffAppointments());
+        return "medical-staff-appointment/index";
     }
 
-    @GetMapping("/{id}")
-    public MedicalStaffAppointment getMedicalStaffAppointmentById(@PathVariable String id) {
-        return medicalStaffAppointmentService.getMedicalStaffAppointmentById(id);
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("medicalStaffAppointment", new MedicalStaffAppointment());
+        return "medical-staff-appointment/form";
     }
 
     @PostMapping
-    public MedicalStaffAppointment createMedicalStaffAppointment(@RequestBody MedicalStaffAppointment link) {
-        return medicalStaffAppointmentService.saveMedicalStaffAppointment(link);
+    public String createMedicalStaffAppointment(@ModelAttribute MedicalStaffAppointment link) {
+        medicalStaffAppointmentService.saveMedicalStaffAppointment(link);
+        return "redirect:/medical-staff-appointments";
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteMedicalStaffAppointment(@PathVariable String id) {
+    @PostMapping("/{id}/delete")
+    public String deleteMedicalStaffAppointment(@PathVariable String id) {
         medicalStaffAppointmentService.deleteMedicalStaffAppointment(id);
+        return "redirect:/medical-staff-appointments";
     }
 }

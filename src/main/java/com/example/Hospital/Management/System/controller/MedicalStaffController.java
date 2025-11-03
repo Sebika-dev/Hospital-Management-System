@@ -3,12 +3,12 @@ package com.example.Hospital.Management.System.controller;
 import com.example.Hospital.Management.System.model.MedicalStaff;
 import com.example.Hospital.Management.System.service.MedicalStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/medical-staff")
+@Controller
+@RequestMapping("/medical-staff")
 public class MedicalStaffController {
 
     private final MedicalStaffService medicalStaffService;
@@ -19,22 +19,26 @@ public class MedicalStaffController {
     }
 
     @GetMapping
-    public List<MedicalStaff> getAllMedicalStaff() {
-        return medicalStaffService.getAllMedicalStaff();
+    public String getAllMedicalStaff(Model model) {
+        model.addAttribute("medicalStaff", medicalStaffService.getAllMedicalStaff());
+        return "medical-staff/index";
     }
 
-    @GetMapping("/{id}")
-    public MedicalStaff getMedicalStaffById(@PathVariable String id) {
-        return medicalStaffService.getMedicalStaffById(id);
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("medicalStaff", new MedicalStaff());
+        return "medical-staff/form";
     }
 
     @PostMapping
-    public MedicalStaff createMedicalStaff(@RequestBody MedicalStaff medicalStaff) {
-        return medicalStaffService.saveMedicalStaff(medicalStaff);
+    public String createMedicalStaff(@ModelAttribute MedicalStaff medicalStaff) {
+        medicalStaffService.saveMedicalStaff(medicalStaff);
+        return "redirect:/medical-staff";
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteMedicalStaff(@PathVariable String id) {
+    @PostMapping("/{id}/delete")
+    public String deleteMedicalStaff(@PathVariable String id) {
         medicalStaffService.deleteMedicalStaff(id);
+        return "redirect:/medical-staff";
     }
 }

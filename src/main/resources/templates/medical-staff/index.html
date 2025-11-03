@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista Personalului Medical</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+<h1>Personal Medical</h1>
+<a href="/medical-staff/new">Adaugă un nou membru</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nume</th>
+        <th>Rol</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="staff : ${medicalStaff}">
+        <td th:text="${staff.id}">MS1</td>
+        <td th:text="${staff.name}">Dr. Ana Maria</td>
+        <td th:text="${staff.role}">Doctor</td>
+        <td>
+            <form th:action="@{'/medical-staff/' + ${staff.id} + '/delete'}" method="post">
+                <button type="submit">Șterge</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

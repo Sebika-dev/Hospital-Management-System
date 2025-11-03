@@ -3,12 +3,12 @@ package com.example.Hospital.Management.System.controller;
 import com.example.Hospital.Management.System.model.Department;
 import com.example.Hospital.Management.System.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/departments")
+@Controller
+@RequestMapping("/departments")
 public class DepartmentController {
 
     private final DepartmentService departmentService;
@@ -19,22 +19,26 @@ public class DepartmentController {
     }
 
     @GetMapping
-    public List<Department> getAllDepartments() {
-        return departmentService.getAllDepartments();
+    public String getAllDepartments(Model model) {
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        return "department/index";
     }
 
-    @GetMapping("/{id}")
-    public Department getDepartmentById(@PathVariable String id) {
-        return departmentService.getDepartmentById(id);
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("department", new Department());
+        return "department/form";
     }
 
     @PostMapping
-    public Department createDepartment(@RequestBody Department department) {
-        return departmentService.saveDepartment(department);
+    public String createDepartment(@ModelAttribute Department department) {
+        departmentService.saveDepartment(department);
+        return "redirect:/departments";
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteDepartment(@PathVariable String id) {
+    @PostMapping("/{id}/delete")
+    public String deleteDepartment(@PathVariable String id) {
         departmentService.deleteDepartment(id);
+        return "redirect:/departments";
     }
 }
