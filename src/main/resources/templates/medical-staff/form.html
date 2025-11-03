@@ -10,10 +10,13 @@
     <input type="text" id="id" th:field="*{id}" required><br><br>
     <label for="name">Nume:</label><br>
     <input type="text" id="name" th:field="*{name}" required><br><br>
-    <label for="departament">deparamentID</label>
+    <label for="departament">Departament ID:</label><br>
     <input type="text" id="departament" th:field="*{departmentId}" required><br><br>
-    <label for="appointments">appointments</label>
-    <input type="text" id="appointments" th:field="*{appointments}" required><br><br>
+    <!-- Simplificat: adaugă un singur appointment cu ID și descriere -->
+    <label for="appointmentId">Appointment ID:</label><br>
+    <input type="text" id="appointmentId" th:field="*{newAppointment.id}" required><br><br>
+    <label for="appointmentDesc">Appointment Descriere:</label><br>
+    <input type="text" id="appointmentDesc" th:field="*{newAppointment.description}" required><br><br>
     <button type="submit">Salvează</button>
 </form>
 <a href="/medical-staff">Înapoi la listă</a>
