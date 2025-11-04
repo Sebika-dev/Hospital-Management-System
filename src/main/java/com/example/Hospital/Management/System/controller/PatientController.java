@@ -1,44 +1,40 @@
 package com.example.Hospital.Management.System.controller;
 
 import com.example.Hospital.Management.System.model.Patient;
-import com.example.Hospital.Management.System.service.PatientService;
+import com.example.Hospital.Management.System.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import java.util.ArrayList;
 
 @Controller
-@RequestMapping("/patients")
 public class PatientController {
 
-    private final PatientService patientService;
-
     @Autowired
-    public PatientController(PatientService patientService) {
-        this.patientService = patientService;
-    }
+    private PatientRepository patientRepo; // Poate fi inutil dacă nu e JPA
 
-    @GetMapping
+    private ArrayList<Patient> patients = new ArrayList<>();
+
+    @GetMapping("/patients")
     public String getAllPatients(Model model) {
-        model.addAttribute("patients", patientService.getAllPatients());
+        model.addAttribute("patients", patients);
         return "patient/index";
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+    @GetMapping("/patients/new")
+    public String showPatientForm(Model model) {
         model.addAttribute("patient", new Patient());
         return "patient/form";
     }
 
-    @PostMapping
+    @PostMapping("/patients")
     public String createPatient(@ModelAttribute Patient patient) {
-        patientService.savePatient(patient);
-        return "redirect:/patients";
-    }
-
-    @PostMapping("/{id}/delete")
-    public String deletePatient(@PathVariable String id) {
-        patientService.deletePatient(id);
+        patients.add(patient); // Adăugare în listă în memorie
+        System.out.println("Salvat pacient: " + patient.getName());
         return "redirect:/patients";
     }
 }

@@ -10,8 +10,34 @@
     <input type="text" id="id" th:field="*{id}" required><br><br>
     <label for="name">Nume:</label><br>
     <input type="text" id="name" th:field="*{name}" required><br><br>
+    <label for="phoneNumber">Număr de telefon:</label><br>
+    <input type="text" id="phoneNumber" th:field="*{phoneNumber}"><br><br>
+    <label for="dateOfBirth">Data nașterii:</label><br>
+    <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}"><br><br>
+    <label>Programări:</label><br>
+    <div th:each="app, iterStat : *{appointments}">
+        <input type="hidden" th:field="*{appointments[__${iterStat.index}__].id}" value="A__${iterStat.index + 1}"/>
+        <input type="text" th:field="*{appointments[__${iterStat.index}__].departmentId}" placeholder="Departament ID" required><br>
+        <input type="date" th:field="*{appointments[__${iterStat.index}__].admissionDate}" required><br>
+        <input type="text" th:field="*{appointments[__${iterStat.index}__].status}" placeholder="Status" required><br><br>
+    </div>
+    <button type="button" onclick="addAppointmentField()">Adaugă programare</button><br><br>
     <button type="submit">Salvează</button>
 </form>
 <a href="/patients">Înapoi la listă</a>
+
+<script>
+    function addAppointmentField() {
+        const form = document.querySelector('form');
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <input type="hidden" th:field="*{appointments[__${form.querySelectorAll('div').length}__].id}" value="A__${form.querySelectorAll('div').length + 1}"/>
+            <input type="text" th:field="*{appointments[__${form.querySelectorAll('div').length}__].departmentId}" placeholder="Departament ID" required><br>
+            <input type="date" th:field="*{appointments[__${form.querySelectorAll('div').length}__].admissionDate}" required><br>
+            <input type="text" th:field="*{appointments[__${form.querySelectorAll('div').length}__].status}" placeholder="Status" required><br><br>
+        `;
+        form.insertBefore(div, form.lastElementChild);
+    }
+</script>
 </body>
 </html>

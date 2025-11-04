@@ -13,10 +13,12 @@ public class Hospital {
     // Constructor
     public Hospital() {}
 
-    public Hospital(String id, String name, String city) {
+    public Hospital(String id, String name, String city, ArrayList<Department> departments, ArrayList<Room> rooms) {
         this.id = id;
         this.name = name;
         this.city = city;
+        this.departments = departments;
+        this.rooms = rooms;
     }
 
     // Getters and Setters

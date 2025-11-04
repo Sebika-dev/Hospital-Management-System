@@ -12,6 +12,21 @@
     <input type="text" id="name" th:field="*{name}" required><br><br>
     <label for="city">Oraș:</label><br>
     <input type="text" id="city" th:field="*{city}" required><br><br>
+
+    <!-- Câmpuri pentru un departament -->
+    <label for="departmentId">ID Departament:</label><br>
+    <input type="text" id="departmentId" th:field="*{departments[0].id}" required><br><br>
+    <label for="departmentName">Nume Departament:</label><br>
+    <input type="text" id="departmentName" th:field="*{departments[0].name}" required><br><br>
+    <label for="departmentHospitalId">Hospital ID (Departament):</label><br>
+    <input type="text" id="departmentHospitalId" th:field="*{departments[0].hospitalId}" required><br><br>
+
+    <!-- Câmpuri pentru o cameră -->
+    <label for="roomId">ID Cameră:</label><br>
+    <input type="text" id="roomId" th:field="*{rooms[0].id}" required><br><br>
+    <label for="roomNumber">Număr Cameră:</label><br>
+    <input type="text" id="roomNumber" th:field="*{rooms[0].number}" required><br><br>
+
     <button type="submit">Salvează</button>
 </form>
 <a href="/hospitals">Înapoi la listă</a>

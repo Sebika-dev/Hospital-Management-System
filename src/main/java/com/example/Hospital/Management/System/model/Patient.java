@@ -20,6 +20,12 @@ public class Patient {
         this.name = name;
     }
 
+    public Patient(String id, String name, List<Appointment> appointments) {
+        this.id = id;
+        this.name = name;
+        this.appointments = appointments != null ? new ArrayList<>(appointments) : new ArrayList<>();
+    }
+
     // Getters and Setters
     public String getId() {
         return id;
@@ -42,7 +48,7 @@ public class Patient {
     }
 
     public void setAppointments(List<Appointment> appointments) {
-        this.appointments = appointments;
+        this.appointments = appointments != null ? new ArrayList<>(appointments) : new ArrayList<>();
     }
 
     public String getPhoneNumber() { return phoneNumber; }

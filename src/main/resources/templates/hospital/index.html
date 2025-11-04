@@ -6,6 +6,7 @@
         table { border-collapse: collapse; width: 100%; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
+        ul { list-style-type: none; padding-left: 20px; }
     </style>
 </head>
 <body>
@@ -17,6 +18,8 @@
         <th>ID</th>
         <th>Nume</th>
         <th>Oraș</th>
+        <th>Departamente</th>
+        <th>Camere</th>
         <th>Acțiuni</th>
     </tr>
     </thead>
@@ -25,6 +28,16 @@
         <td th:text="${hospital.id}">H1</td>
         <td th:text="${hospital.name}">Spital Central</td>
         <td th:text="${hospital.city}">București</td>
+        <td>
+            <ul>
+                <li th:each="dept : ${hospital.departments}" th:text="${dept.id} + ' - ' + ${dept.name} + ' (' + ${dept.hospitalId} + ')'"></li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li th:each="room : ${hospital.rooms}" th:text="${room.id} + ' - ' + ${room.number}"></li>
+            </ul>
+        </td>
         <td>
             <form th:action="@{'/hospitals/' + ${hospital.id} + '/delete'}" method="post">
                 <button type="submit">Șterge</button>

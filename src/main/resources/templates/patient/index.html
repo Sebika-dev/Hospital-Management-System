@@ -16,6 +16,7 @@
     <tr>
         <th>ID</th>
         <th>Nume</th>
+        <th>Programări</th>
         <th>Acțiuni</th>
     </tr>
     </thead>
@@ -23,6 +24,11 @@
     <tr th:each="patient : ${patients}">
         <td th:text="${patient.id}">P1</td>
         <td th:text="${patient.name}">Ion Popescu</td>
+        <td>
+            <ul>
+                <li th:each="app : ${patient.appointments}" th:text="${app.id} + ' - ' + ${app.admissionDate} + ' (' + ${app.status} + ')'"></li>
+            </ul>
+        </td>
         <td>
             <form th:action="@{'/patients/' + ${patient.id} + '/delete'}" method="post">
                 <button type="submit">Șterge</button>
