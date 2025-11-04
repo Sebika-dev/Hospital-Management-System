@@ -2,34 +2,36 @@ package com.example.Hospital.Management.System.service;
 
 import com.example.Hospital.Management.System.model.MedicalStaff;
 import com.example.Hospital.Management.System.repository.MedicalStaffRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class MedicalStaffService {
 
-    private final MedicalStaffRepository medicalStaffRepository;
+    private final MedicalStaffRepository repo;
 
-    @Autowired
-    public MedicalStaffService(MedicalStaffRepository medicalStaffRepository) {
-        this.medicalStaffRepository = medicalStaffRepository;
+    public MedicalStaffService(MedicalStaffRepository repo) {
+        this.repo = repo;
     }
 
-    public MedicalStaff saveMedicalStaff(MedicalStaff medicalStaff) {
-        return medicalStaffRepository.save(medicalStaff);
+    public List<MedicalStaff> findAll() {
+        return repo.findAll();
     }
 
-    public List<MedicalStaff> getAllMedicalStaff() {
-        return medicalStaffRepository.findAll();
+    public MedicalStaff findById(String id) {
+        return repo.findById(id).orElse(null); // Returnează null dacă nu găsește
     }
 
-    public MedicalStaff getMedicalStaffById(String id) {
-        return medicalStaffRepository.findById(id);
+    public void save(MedicalStaff staff) {
+        if (staff.getId() == null || staff.getId().isEmpty()) {
+            staff.setId(UUID.randomUUID().toString());
+        }
+        repo.save(staff);
     }
 
-    public void deleteMedicalStaff(String id) {
-        medicalStaffRepository.delete(id);
+    public void deleteById(String id) {
+        repo.delete(id);
     }
 }

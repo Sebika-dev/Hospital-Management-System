@@ -3,58 +3,35 @@ package com.example.Hospital.Management.System.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MedicalStaff {
+public abstract class MedicalStaff {
     private String id;
     private String name;
-    private List<Appointment> appointments = new ArrayList<>();
     private String departmentId;
-    private String role;
+    private List<String> appointmentIds = new ArrayList<>();
 
-    // Constructor
     public MedicalStaff() {}
 
-    public MedicalStaff(String id, String name, String departmentId, List<Appointment> appointments) {
+    public MedicalStaff(String id, String name, String departmentId) {
         this.id = id;
         this.name = name;
         this.departmentId = departmentId;
-        this.appointments = appointments;
     }
 
     // Getters and Setters
-
-    public String getRole() { return role; }
-
-    public void setRole(String role) { this.role = role; }
-
-    public String getId() {
-        return id;
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getDepartmentId() { return departmentId; }
+    public void setDepartmentId(String departmentId) { this.departmentId = departmentId; }
+    public List<String> getAppointmentIds() { return appointmentIds; }
+    public void setAppointmentIds(List<String> appointmentIds) {
+        this.appointmentIds = appointmentIds != null ? new ArrayList<>(appointmentIds) : new ArrayList<>();
     }
-
-    public void setId(String id) {
-        this.id = id;
+    public void addAppointmentId(String apptId) {
+        if (apptId != null && !this.appointmentIds.contains(apptId)) this.appointmentIds.add(apptId);
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Appointment> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(List<Appointment> appointments) {
-        this.appointments = appointments;
-    }
-
-    public String getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
+    public void removeAppointmentId(String apptId) {
+        if (apptId != null) this.appointmentIds.remove(apptId);
     }
 }

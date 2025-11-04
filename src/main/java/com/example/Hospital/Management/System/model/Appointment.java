@@ -9,7 +9,7 @@ public class Appointment {
     private String departmentId;
     private String patientId;
     private LocalDate admissionDate;
-    private String status; // "Active" / "Completed"
+    private String status; // "Active" / "Completed" // sa fie enum
     private List<MedicalStaff> medicalStaff = new ArrayList<>();
 
     // Constructor

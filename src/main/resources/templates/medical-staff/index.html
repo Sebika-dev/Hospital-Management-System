@@ -1,41 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Lista Personalului Medical</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
+    <title>Lista Personal Medical</title>
 </head>
 <body>
 <h1>Personal Medical</h1>
-<a href="/medical-staff/new">Adaugă un nou membru</a>
-<table>
+<a th:href="@{/medical-staff/new(type='DOCTOR')}">Creează Doctor</a>
+<a th:href="@{/medical-staff/new(type='NURSE')}">Creează Nurse</a>
+<table border="1">
     <thead>
     <tr>
         <th>ID</th>
         <th>Nume</th>
         <th>Departament</th>
-        <th>Appointments</th>
+        <th>Tip</th>
+        <th>#Programări</th>
         <th>Acțiuni</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="staff : ${medicalStaff}">
-        <td th:text="${staff.id}">MS1</td>
-        <td th:text="${staff.name}">Dr. Ana Maria</td>
-        <td th:text="${staff.departmentId}">dept</td>
+    <tr th:each="s : ${staff}">
+        <td th:text="${s.id}"></td>
+        <td th:text="${s.name}"></td>
+        <td th:text="${s.departmentId}"></td>
+        <td><span th:text="${s.getClass().simpleName}"></span></td>
+        <td th:text="${#lists.size(s.appointmentIds)}"></td>
         <td>
-            <ul>
-                <li th:each="app : ${staff.appointments}" th:text="${app.id} + ' - ' + ${app.admissionDate} + ' (' + ${app.status} + ')'"></li>
-            </ul>
+            <a th:href="@{/medical-staff/edit/{id}(id=${s.id})}">Editează</a>
+            <a th:href="@{/medical-staff/delete/{id}(id=${s.id})}" onclick="return confirm('Sigur ștergi?')">Șterge</a>
         </td>
-        <td>
-            <form th:action="@{'/medical-staff/' + ${staff.id} + '/delete'}" method="post">
-                <button type="submit">Șterge</button>
-            </form>
-        </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(staff)}">
+        <td colspan="6">Nu există personal medical.</td>
     </tr>
     </tbody>
 </table>

@@ -1,24 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Adaugă Personal Medical</title>
+    <title>Formular Personal Medical</title>
 </head>
 <body>
-<h1>Adaugă un nou membru al personalului medical</h1>
-<form th:action="@{/medical-staff}" th:object="${medicalStaff}" method="post">
-    <label for="id">ID:</label><br>
-    <input type="text" id="id" th:field="*{id}" required><br><br>
-    <label for="name">Nume:</label><br>
-    <input type="text" id="name" th:field="*{name}" required><br><br>
-    <label for="departament">Departament ID:</label><br>
-    <input type="text" id="departament" th:field="*{departmentId}" required><br><br>
-    <!-- Simplificat: adaugă un singur appointment cu ID și descriere -->
-    <label for="appointmentId">Appointment ID:</label><br>
-    <input type="text" id="appointmentId" th:field="*{newAppointment.id}" required><br><br>
-    <label for="appointmentDesc">Appointment Descriere:</label><br>
-    <input type="text" id="appointmentDesc" th:field="*{newAppointment.description}" required><br><br>
-    <button type="submit">Salvează</button>
+<h1 th:text="${medicalStaff.id == null ? 'Creează Personal' : 'Editează Personal'}"></h1>
+<form th:action="@{/medical-staff/save}" th:object="${medicalStaff}" method="post">
+    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" th:name="type" th:value="${type}" />
+    <div>
+        <label for="name">Nume</label>
+        <input type="text" th:field="*{name}" required />
+    </div>
+    <div>
+        <label for="departmentId">Department ID</label>
+        <input type="text" th:field="*{departmentId}" />
+    </div>
+    <div>
+        <label for="extra">Extra (Licență/Nivel)</label>
+        <input type="text" th:name="extra" th:value="${medicalStaff instanceof T(com.example.Hospital.Management.System.model.Doctor) ? medicalStaff.licenseNumber : medicalStaff.qualificationLevel}" />
+    </div>
+    <div>
+        <label>Programări (IDs)</label>
+        <div th:each="aid, stat : *{appointmentIds}">
+            <input type="text" th:field="*{appointmentIds[__${stat.index}__]}" />
+        </div>
+        <button type="button" onclick="addAppointmentField()">Adaugă programare</button>
+    </div>
+    <div>
+        <button type="submit">Salvează</button>
+        <a th:href="@{/medical-staff}">Anulează</a>
+    </div>
 </form>
-<a href="/medical-staff">Înapoi la listă</a>
+
+<script>
+    function addAppointmentField() {
+        const form = document.querySelector('form');
+        const div = document.createElement('div');
+        const index = form.querySelectorAll('div[label="Programări (IDs)"] div').length;
+        div.innerHTML = `<input type="text" th:field="*{appointmentIds[__${index}__]}" name="appointmentIds" />`;
+        form.querySelector('div[label="Programări (IDs)"]').appendChild(div);
+    }
+</script>
 </body>
 </html>

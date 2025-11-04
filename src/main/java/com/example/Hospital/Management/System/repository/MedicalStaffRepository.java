@@ -7,25 +7,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class MedicalStaffRepository {
-    private final Map<String, MedicalStaff> staff = new HashMap<>();
 
-    public MedicalStaff save(MedicalStaff medicalStaff) {
-        staff.put(medicalStaff.getId(), medicalStaff);
-        return medicalStaff;
-    }
+    private final Map<String, MedicalStaff> store = new HashMap<>();
 
     public List<MedicalStaff> findAll() {
-        return new ArrayList<>(staff.values());
+        return new ArrayList<>(store.values());
     }
 
-    public MedicalStaff findById(String id) {
-        return staff.get(id);
+    public Optional<MedicalStaff> findById(String id) {
+        return Optional.ofNullable(store.get(id));
+    }
+
+    public void save(MedicalStaff staff) {
+        if (staff.getId() == null || staff.getId().isEmpty()) {
+            throw new IllegalArgumentException("ID cannot be null or empty");
+        }
+        store.put(staff.getId(), staff);
     }
 
     public void delete(String id) {
-        staff.remove(id);
+        store.remove(id);
     }
 }
