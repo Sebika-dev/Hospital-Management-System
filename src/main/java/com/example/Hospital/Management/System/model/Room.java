@@ -8,24 +8,22 @@ public class Room {
     private String hospitalId;
     private double capacity;
     private String number;
-    private String status; // "Available" / "Occupied"
-    private List<Appointment> appointments = new ArrayList<>();
+    private RoomStatus status;
+    private List<String> appointmentIds;
 
-    private String type; // "ICU", "General", "Emergency"
-    private boolean hasMonitoringEquipment;
-
-    // Constructor
-    public Room() {}
-
-    public Room(String id, String hospitalId, String number, double capacity, String status) {
-        this.id = id;
-        this.hospitalId = hospitalId;
-        this.number = number;
-        this.capacity = capacity;
-        this.status = status;
+    public Room() {
+        this.appointmentIds = new ArrayList<>();
     }
 
-    // Getters and Setters
+    public Room(String id, String hospitalId, double capacity, String number, RoomStatus status) {
+        this.id = id;
+        this.hospitalId = hospitalId;
+        this.capacity = capacity;
+        this.number = number;
+        this.status = status;
+        this.appointmentIds = new ArrayList<>();
+    }
+
     public String getId() {
         return id;
     }
@@ -58,25 +56,35 @@ public class Room {
         this.number = number;
     }
 
-    public String getStatus() {
+    public RoomStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RoomStatus status) {
         this.status = status;
     }
 
-    public List<Appointment> getAppointments() {
-        return appointments;
+    public List<String> getAppointmentIds() {
+        return appointmentIds;
     }
 
-    public void setAppointments(List<Appointment> appointments) {
-        this.appointments = appointments;
+    public void setAppointmentIds(List<String> appointmentIds) {
+        this.appointmentIds = appointmentIds;
     }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public void addAppointment(String appointmentId) {
+        this.appointmentIds.add(appointmentId);
+    }
 
-    public boolean isHasMonitoringEquipment() { return hasMonitoringEquipment; }
-    public void setHasMonitoringEquipment(boolean hasMonitoringEquipment) { this.hasMonitoringEquipment = hasMonitoringEquipment; }
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id='" + id + '\'' +
+                ", hospitalId='" + hospitalId + '\'' +
+                ", capacity=" + capacity +
+                ", number='" + number + '\'' +
+                ", status=" + status +
+                ", appointmentIds=" + appointmentIds +
+                '}';
+    }
 }

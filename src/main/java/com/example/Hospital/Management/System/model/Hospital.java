@@ -7,21 +7,22 @@ public class Hospital {
     private String id;
     private String name;
     private String city;
-    private List<Department> departments = new ArrayList<>();
-    private List<Room> rooms = new ArrayList<>();
+    private List<String> departmentIds;
+    private List<String> roomIds;
 
-    // Constructor
-    public Hospital() {}
+    public Hospital() {
+        this.departmentIds = new ArrayList<>();
+        this.roomIds = new ArrayList<>();
+    }
 
-    public Hospital(String id, String name, String city, ArrayList<Department> departments, ArrayList<Room> rooms) {
+    public Hospital(String id, String name, String city) {
         this.id = id;
         this.name = name;
         this.city = city;
-        this.departments = departments;
-        this.rooms = rooms;
+        this.departmentIds = new ArrayList<>();
+        this.roomIds = new ArrayList<>();
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -46,19 +47,38 @@ public class Hospital {
         this.city = city;
     }
 
-    public List<Department> getDepartments() {
-        return departments;
+    public List<String> getDepartmentIds() {
+        return departmentIds;
     }
 
-    public void setDepartments(List<Department> departments) {
-        this.departments = departments;
+    public void setDepartmentIds(List<String> departmentIds) {
+        this.departmentIds = departmentIds;
     }
 
-    public List<Room> getRooms() {
-        return rooms;
+    public void addDepartment(String departmentId) {
+        this.departmentIds.add(departmentId);
     }
 
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
+    public List<String> getRoomIds() {
+        return roomIds;
+    }
+
+    public void setRoomIds(List<String> roomIds) {
+        this.roomIds = roomIds;
+    }
+
+    public void addRoom(String roomId) {
+        this.roomIds.add(roomId);
+    }
+
+    @Override
+    public String toString() {
+        return "Hospital{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", city='" + city + '\'' +
+                ", departmentIds=" + departmentIds +
+                ", roomIds=" + roomIds +
+                '}';
     }
 }

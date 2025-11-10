@@ -1,45 +1,54 @@
 package com.example.Hospital.Management.System.controller;
 
 import com.example.Hospital.Management.System.model.Hospital;
-import com.example.Hospital.Management.System.model.Department;
-import com.example.Hospital.Management.System.model.Room;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import com.example.Hospital.Management.System.service.HospitalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api/hospitals")
 public class HospitalController {
 
-    // Listă statică pentru stocarea temporară a spitalelor
-    private static List<Hospital> hospitals = new ArrayList<>();
+    private final HospitalService hospitalService;
 
-    // Afișează lista de spitale
-    @GetMapping("/hospitals")
-    public String getAllHospitals(Model model) {
-        model.addAttribute("hospitals", hospitals); // Trimite lista existentă
-        return "hospital/index"; // Calea către index.html
+    @Autowired
+    public HospitalController(HospitalService hospitalService) {
+        this.hospitalService = hospitalService;
     }
 
-    // Afișează formularul pentru adăugare
-    @GetMapping("/hospitals/new")
-    public String showHospitalForm(Model model) {
-        Hospital hospital = new Hospital();
-        hospital.getDepartments().add(new Department()); // Inițializează cu un departament gol
-        hospital.getRooms().add(new Room()); // Inițializează cu o cameră goală
-        model.addAttribute("hospital", hospital);
-        return "hospital/form"; // Calea către form.html
+    @PostMapping
+    public ResponseEntity<Hospital> createHospital(@RequestBody Hospital hospital) {
+        Hospital created = hospitalService.addHospital(hospital);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    // Procesează salvarea spitalului
-    @PostMapping("/hospitals")
-    public String createHospital(@ModelAttribute Hospital hospital) {
-        hospitals.add(hospital); // Adaugă spitalul în listă
-        System.out.println("Salvat spital: " + hospital.getName());
-        return "redirect:/hospitals"; // Redirect către lista de spitale
+    @GetMapping
+    public ResponseEntity<List<Hospital>> getAllHospitals() {
+        List<Hospital> hospitals = hospitalService.getAllHospitals();
+        return ResponseEntity.ok(hospitals);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Hospital> getHospitalById(@PathVariable String id) {
+        return hospitalService.getHospitalById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Hospital> updateHospital(@PathVariable String id, @RequestBody Hospital hospital) {
+        hospital.setId(id);
+        Hospital updated = hospitalService.updateHospital(hospital);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteHospital(@PathVariable String id) {
+        hospitalService.deleteHospital(id);
+        return ResponseEntity.noContent().build();
     }
 }

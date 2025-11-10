@@ -5,8 +5,8 @@ public class MedicalStaffAppointment {
     private String appointmentId;
     private String medicalStaffId;
 
-    // Constructor
-    public MedicalStaffAppointment() {}
+    public MedicalStaffAppointment() {
+    }
 
     public MedicalStaffAppointment(String id, String appointmentId, String medicalStaffId) {
         this.id = id;
@@ -14,7 +14,6 @@ public class MedicalStaffAppointment {
         this.medicalStaffId = medicalStaffId;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -37,5 +36,14 @@ public class MedicalStaffAppointment {
 
     public void setMedicalStaffId(String medicalStaffId) {
         this.medicalStaffId = medicalStaffId;
+    }
+
+    @Override
+    public String toString() {
+        return "MedicalStaffAppointment{" +
+                "id='" + id + '\'' +
+                ", appointmentId='" + appointmentId + '\'' +
+                ", medicalStaffId='" + medicalStaffId + '\'' +
+                '}';
     }
 }

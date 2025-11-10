@@ -9,24 +9,21 @@ public class Appointment {
     private String departmentId;
     private String patientId;
     private LocalDate admissionDate;
-    private String status; // "Active" / "Completed" // sa fie enum
-    private List<MedicalStaff> medicalStaff = new ArrayList<>();
+    private AppointmentStatus status;
+    private List<String> medicalStaffIds;
 
-    // Constructor
-    public Appointment() {}
+    public Appointment() {
+        this.medicalStaffIds = new ArrayList<>();
+    }
 
-    public Appointment(String id, String departmentId, String patientId, LocalDate admissionDate, String status) {
+    public Appointment(String id, String departmentId, String patientId, LocalDate admissionDate, AppointmentStatus status) {
         this.id = id;
         this.departmentId = departmentId;
         this.patientId = patientId;
         this.admissionDate = admissionDate;
         this.status = status;
+        this.medicalStaffIds = new ArrayList<>();
     }
-
-    // Getters and Setters
-    public LocalDate getDate() { return admissionDate; }
-    public void setDate(LocalDate date) { this.admissionDate = date; }
-
 
     public String getId() {
         return id;
@@ -60,19 +57,35 @@ public class Appointment {
         this.admissionDate = admissionDate;
     }
 
-    public String getStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 
-    public List<MedicalStaff> getMedicalStaff() {
-        return medicalStaff;
+    public List<String> getMedicalStaffIds() {
+        return medicalStaffIds;
     }
 
-    public void setMedicalStaff(List<MedicalStaff> medicalStaff) {
-        this.medicalStaff = medicalStaff;
+    public void setMedicalStaffIds(List<String> medicalStaffIds) {
+        this.medicalStaffIds = medicalStaffIds;
+    }
+
+    public void addMedicalStaff(String medicalStaffId) {
+        this.medicalStaffIds.add(medicalStaffId);
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id='" + id + '\'' +
+                ", departmentId='" + departmentId + '\'' +
+                ", patientId='" + patientId + '\'' +
+                ", admissionDate=" + admissionDate +
+                ", status=" + status +
+                ", medicalStaffIds=" + medicalStaffIds +
+                '}';
     }
 }
