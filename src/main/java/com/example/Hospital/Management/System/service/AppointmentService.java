@@ -1,9 +1,9 @@
 package com.example.Hospital.Management.System.service;
 
 import com.example.Hospital.Management.System.model.Appointment;
+import com.example.Hospital.Management.System.model.Patient;
 import com.example.Hospital.Management.System.repository.inmemory.InMemoryAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,14 +12,26 @@ import java.util.Optional;
 @Service
 public class AppointmentService {
     private final InMemoryAppointmentRepository appointmentRepository;
+    private final PatientService patientService;
 
     @Autowired
-    public AppointmentService(@Qualifier("inMemoryAppointmentRepository") InMemoryAppointmentRepository appointmentRepository) {
+    public AppointmentService(InMemoryAppointmentRepository appointmentRepository,
+                              PatientService patientService) {
         this.appointmentRepository = appointmentRepository;
+        this.patientService = patientService;
     }
 
     public Appointment addAppointment(Appointment appointment) {
-        return appointmentRepository.save(appointment);
+        Appointment saved = appointmentRepository.save(appointment);
+        if (saved.getPatientId() != null) {
+            patientService.getPatientById(saved.getPatientId()).ifPresent(p -> {
+                if (!p.getAppointmentIds().contains(saved.getId())) {
+                    p.addAppointment(saved.getId());
+                    patientService.updatePatient(p);
+                }
+            });
+        }
+        return saved;
     }
 
     public Appointment updateAppointment(Appointment appointment) {
@@ -43,6 +55,14 @@ public class AppointmentService {
     }
 
     public void deleteAppointment(String id) {
+        appointmentRepository.findById(id).ifPresent(app -> {
+            if (app.getPatientId() != null) {
+                patientService.getPatientById(app.getPatientId()).ifPresent(p -> {
+                    p.getAppointmentIds().remove(id);
+                    patientService.updatePatient(p);
+                });
+            }
+        });
         appointmentRepository.delete(id);
     }
 

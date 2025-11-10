@@ -3,7 +3,6 @@ package com.example.Hospital.Management.System.service;
 import com.example.Hospital.Management.System.model.Doctor;
 import com.example.Hospital.Management.System.repository.inmemory.InMemoryDoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public class DoctorService {
     private final InMemoryDoctorRepository doctorRepository;
 
     @Autowired
-    public DoctorService(@Qualifier("inMemoryDoctorRepository") InMemoryDoctorRepository doctorRepository) {
+    public DoctorService(InMemoryDoctorRepository doctorRepository) {
         this.doctorRepository = doctorRepository;
     }
 
@@ -44,5 +43,15 @@ public class DoctorService {
 
     public void deleteAllDoctors() {
         doctorRepository.deleteAll();
+    }
+
+    // Helper opțional
+    public void addAppointmentToDoctor(String doctorId, String appointmentId) {
+        getDoctorById(doctorId).ifPresent(d -> {
+            if (!d.getAppointmentIds().contains(appointmentId)) {
+                d.addAppointment(appointmentId);
+                updateDoctor(d);
+            }
+        });
     }
 }

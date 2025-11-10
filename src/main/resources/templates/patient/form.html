@@ -1,43 +1,16 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Adaugă Pacient</title>
-</head>
-<body>
-<h1>Adaugă un nou pacient</h1>
-<form th:action="@{/patients}" th:object="${patient}" method="post">
-    <label for="id">ID:</label><br>
-    <input type="text" id="id" th:field="*{id}" required><br><br>
-    <label for="name">Nume:</label><br>
-    <input type="text" id="name" th:field="*{name}" required><br><br>
-    <label for="phoneNumber">Număr de telefon:</label><br>
-    <input type="text" id="phoneNumber" th:field="*{phoneNumber}"><br><br>
-    <label for="dateOfBirth">Data nașterii:</label><br>
-    <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}"><br><br>
-    <label>Programări:</label><br>
-    <div th:each="app, iterStat : *{appointments}">
-        <input type="hidden" th:field="*{appointments[__${iterStat.index}__].id}" value="A__${iterStat.index + 1}"/>
-        <input type="text" th:field="*{appointments[__${iterStat.index}__].departmentId}" placeholder="Departament ID" required><br>
-        <input type="date" th:field="*{appointments[__${iterStat.index}__].admissionDate}" required><br>
-        <input type="text" th:field="*{appointments[__${iterStat.index}__].status}" placeholder="Status" required><br><br>
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8"><title>New Patient</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head><body><div class="wrap">
+    <div class="topbar"><a class="back" th:href="@{/patients}">← Back</a><div class="hx"><div class="pill p">🧑‍⚕️</div><h1>New Patient</h1></div></div>
+    <div class="card">
+        <form class="form" th:action="@{/patients}" th:object="${patient}" method="post">
+            <div class="row">
+                <div><label>Name</label><input th:field="*{name}" required></div>
+                <div><label>Phone</label><input th:field="*{phoneNumber}"></div>
+            </div>
+            <div><label>Email</label><input type="email" th:field="*{email}"></div>
+            <div><button class="btn btn-success" type="submit">Create</button></div>
+        </form>
     </div>
-    <button type="button" onclick="addAppointmentField()">Adaugă programare</button><br><br>
-    <button type="submit">Salvează</button>
-</form>
-<a href="/patients">Înapoi la listă</a>
-
-<script>
-    function addAppointmentField() {
-        const form = document.querySelector('form');
-        const div = document.createElement('div');
-        div.innerHTML = `
-            <input type="hidden" th:field="*{appointments[__${form.querySelectorAll('div').length}__].id}" value="A__${form.querySelectorAll('div').length + 1}"/>
-            <input type="text" th:field="*{appointments[__${form.querySelectorAll('div').length}__].departmentId}" placeholder="Departament ID" required><br>
-            <input type="date" th:field="*{appointments[__${form.querySelectorAll('div').length}__].admissionDate}" required><br>
-            <input type="text" th:field="*{appointments[__${form.querySelectorAll('div').length}__].status}" placeholder="Status" required><br><br>
-        `;
-        form.insertBefore(div, form.lastElementChild);
-    }
-</script>
-</body>
-</html>
+</div></body></html>

@@ -1,37 +1,23 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Lista Programărilor</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
-</head>
-<body>
-<h1>Programări</h1>
-<a href="/appointments/new">Adaugă o nouă programare</a>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Patient ID</th>
-        <th>Dată</th>
-        <th>Acțiuni</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="appointment : ${appointments}">
-        <td th:text="${appointment.id}">A1</td>
-        <td th:text="${appointment.patientId}">P1</td>
-        <td th:text="${appointment.date}">2025-11-03</td>
-        <td>
-            <form th:action="@{'/appointments/' + ${appointment.id} + '/delete'}" method="post">
-                <button type="submit">Șterge</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-</body>
-</html>
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8"><title>Appointments</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head><body><div class="wrap">
+    <div class="topbar"><a class="back" th:href="@{/}">← Home</a><div class="hx"><div class="pill a">📅</div><h1>Appointments</h1></div></div>
+    <div class="card">
+        <div class="actions"><a class="btn btn-success" th:href="@{/appointments/new}">＋ Add Appointment</a></div>
+        <table class="table">
+            <thead><tr><th>ID</th><th>Department</th><th>Patient</th><th>Admission Date</th><th>Status</th><th>Medical Staff</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="a : ${appointments}">
+                <td th:text="${a.id}"></td>
+                <td th:text="${departmentNames.get(a.departmentId)}"></td>
+                <td th:text="${patientNames.get(a.patientId)}"></td>
+                <td th:text="${a.admissionDate}"></td>
+                <td th:text="${a.status}"></td>
+                <td th:text="${a.medicalStaffIds.size()}"></td>
+                <td><form th:action="@{/appointments/{id}/delete(id=${a.id})}" method="post"><button class="btn btn-danger" type="submit">Delete</button></form></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div></body></html>

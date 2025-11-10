@@ -1,10 +1,10 @@
 package com.example.Hospital.Management.System.service;
 
 import com.example.Hospital.Management.System.model.Department;
-import com.example.Hospital.Management.System.repository.Repository;
+import com.example.Hospital.Management.System.model.Hospital;
 import com.example.Hospital.Management.System.repository.inmemory.InMemoryDepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +13,26 @@ import java.util.Optional;
 @Service
 public class DepartmentService {
     private final InMemoryDepartmentRepository departmentRepository;
+    private final HospitalService hospitalService;
 
     @Autowired
-    public DepartmentService(@Qualifier("inMemoryDepartmentRepository") InMemoryDepartmentRepository departmentRepository) {
+    public DepartmentService(InMemoryDepartmentRepository departmentRepository,
+                             @Lazy HospitalService hospitalService) {
         this.departmentRepository = departmentRepository;
+        this.hospitalService = hospitalService;
     }
 
     public Department addDepartment(Department department) {
-        return departmentRepository.save(department);
+        Department saved = departmentRepository.save(department);
+        if (saved.getHospitalId() != null) {
+            hospitalService.getHospitalById(saved.getHospitalId()).ifPresent(h -> {
+                if (!h.getDepartmentIds().contains(saved.getId())) {
+                    h.addDepartment(saved.getId());
+                    hospitalService.updateHospital(h);
+                }
+            });
+        }
+        return saved;
     }
 
     public Department updateDepartment(Department department) {
@@ -40,6 +52,14 @@ public class DepartmentService {
     }
 
     public void deleteDepartment(String id) {
+        departmentRepository.findById(id).ifPresent(dept -> {
+            if (dept.getHospitalId() != null) {
+                hospitalService.getHospitalById(dept.getHospitalId()).ifPresent(h -> {
+                    h.getDepartmentIds().remove(id);
+                    hospitalService.updateHospital(h);
+                });
+            }
+        });
         departmentRepository.delete(id);
     }
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8"><title>Doctors</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head><body><div class="wrap">
+    <div class="topbar"><a class="back" th:href="@{/}">← Home</a><div class="hx"><div class="pill dr">👨‍⚕️</div><h1>Doctors</h1></div></div>
+    <div class="card">
+        <div class="actions"><a class="btn btn-success" th:href="@{/doctors/new}">＋ Add Doctor</a></div>
+        <table class="table">
+            <thead><tr><th>ID</th><th>Name</th><th>Department</th><th>License</th><th>Appointments</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="d : ${doctors}">
+                <td th:text="${d.id}"></td><td th:text="${d.name}"></td>
+                <td th:text="${departmentNames.get(d.departmentId)}"></td>
+                <td th:text="${d.licenseNumber}"></td>
+                <td th:text="${d.appointmentIds.size()}"></td>
+                <td><form th:action="@{/doctors/{id}/delete(id=${d.id})}" method="post"><button class="btn btn-danger" type="submit">Delete</button></form></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div></body></html>
