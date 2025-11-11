@@ -2,11 +2,17 @@
     <meta charset="UTF-8"><title>Appointments</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head><body><div class="wrap">
-    <div class="topbar"><a class="back" th:href="@{/}">← Home</a><div class="hx"><div class="pill a">📅</div><h1>Appointments</h1></div></div>
+    <div class="topbar"><a class="back" th:href="@{/}">← Home</a>
+        <div class="hx"><div class="pill a">📅</div><h1>Appointments</h1></div>
+    </div>
     <div class="card">
         <div class="actions"><a class="btn btn-success" th:href="@{/appointments/new}">＋ Add Appointment</a></div>
         <table class="table">
-            <thead><tr><th>ID</th><th>Department</th><th>Patient</th><th>Admission Date</th><th>Status</th><th>Medical Staff</th><th></th></tr></thead>
+            <thead>
+            <tr>
+                <th>ID</th><th>Department</th><th>Patient</th><th>Admission Date</th><th>Status</th><th>Doctor</th><th>Nurse</th><th></th>
+            </tr>
+            </thead>
             <tbody>
             <tr th:each="a : ${appointments}">
                 <td th:text="${a.id}"></td>
@@ -14,8 +20,13 @@
                 <td th:text="${patientNames.get(a.patientId)}"></td>
                 <td th:text="${a.admissionDate}"></td>
                 <td th:text="${a.status}"></td>
-                <td th:text="${a.medicalStaffIds.size()}"></td>
-                <td><form th:action="@{/appointments/{id}/delete(id=${a.id})}" method="post"><button class="btn btn-danger" type="submit">Delete</button></form></td>
+                <td th:text="${a.doctorId != null ? doctorNames.get(a.doctorId) : '-'}"></td>
+                <td th:text="${a.nurseId != null ? nurseNames.get(a.nurseId) : '-'}"></td>
+                <td>
+                    <form th:action="@{/appointments/{id}/delete(id=${a.id})}" method="post">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

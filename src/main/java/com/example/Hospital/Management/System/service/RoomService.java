@@ -24,6 +24,7 @@ public class RoomService {
 
     public Room addRoom(Room room) {
         Room saved = roomRepository.save(room);
+        // atașează camera la spital
         if (saved.getHospitalId() != null) {
             hospitalService.getHospitalById(saved.getHospitalId()).ifPresent(h -> {
                 if (!h.getRoomIds().contains(saved.getId())) {
@@ -36,6 +37,29 @@ public class RoomService {
     }
 
     public Room updateRoom(Room room) {
+        // Dacă s-a schimbat hospitalId, mută camera între spitale
+        roomRepository.findById(room.getId()).ifPresent(old -> {
+            String oldHospital = old.getHospitalId();
+            String newHospital = room.getHospitalId();
+
+            if (oldHospital != null && !oldHospital.equals(newHospital)) {
+                // scoate din spitalul vechi
+                hospitalService.getHospitalById(oldHospital).ifPresent(h -> {
+                    h.getRoomIds().remove(room.getId());
+                    hospitalService.updateHospital(h);
+                });
+            }
+            if (newHospital != null && !newHospital.equals(oldHospital)) {
+                // adaugă în spitalul nou
+                hospitalService.getHospitalById(newHospital).ifPresent(h -> {
+                    if (!h.getRoomIds().contains(room.getId())) {
+                        h.addRoom(room.getId());
+                        hospitalService.updateHospital(h);
+                    }
+                });
+            }
+        });
+
         return roomRepository.save(room);
     }
 
@@ -65,5 +89,25 @@ public class RoomService {
 
     public void deleteAllRooms() {
         roomRepository.deleteAll();
+    }
+
+    // ===== Helpers pentru appointments în cameră =====
+    public void attachAppointmentToRoom(String roomId, String appointmentId) {
+        if (roomId == null || appointmentId == null) return;
+        getRoomById(roomId).ifPresent(r -> {
+            if (!r.getAppointmentIds().contains(appointmentId)) {
+                r.getAppointmentIds().add(appointmentId);
+                updateRoom(r);
+            }
+        });
+    }
+
+    public void detachAppointmentFromRoom(String roomId, String appointmentId) {
+        if (roomId == null || appointmentId == null) return;
+        getRoomById(roomId).ifPresent(r -> {
+            if (r.getAppointmentIds().remove(appointmentId)) {
+                updateRoom(r);
+            }
+        });
     }
 }

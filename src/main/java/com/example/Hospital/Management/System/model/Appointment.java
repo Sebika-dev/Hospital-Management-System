@@ -8,8 +8,15 @@ public class Appointment {
     private String id;
     private String departmentId;
     private String patientId;
+
+    // NOI
+    private String doctorId;
+    private String nurseId;
+
     private LocalDate admissionDate;
     private AppointmentStatus status;
+
+    // Poți păstra pentru extensii viitoare
     private List<String> medicalStaffIds;
 
     public Appointment() {
@@ -25,67 +32,28 @@ public class Appointment {
         this.medicalStaffIds = new ArrayList<>();
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getDepartmentId() { return departmentId; }
+    public void setDepartmentId(String departmentId) { this.departmentId = departmentId; }
 
-    public String getDepartmentId() {
-        return departmentId;
-    }
+    public String getPatientId() { return patientId; }
+    public void setPatientId(String patientId) { this.patientId = patientId; }
 
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
-    }
+    public String getDoctorId() { return doctorId; }
+    public void setDoctorId(String doctorId) { this.doctorId = doctorId; }
 
-    public String getPatientId() {
-        return patientId;
-    }
+    public String getNurseId() { return nurseId; }
+    public void setNurseId(String nurseId) { this.nurseId = nurseId; }
 
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
+    public LocalDate getAdmissionDate() { return admissionDate; }
+    public void setAdmissionDate(LocalDate admissionDate) { this.admissionDate = admissionDate; }
 
-    public LocalDate getAdmissionDate() {
-        return admissionDate;
-    }
+    public AppointmentStatus getStatus() { return status; }
+    public void setStatus(AppointmentStatus status) { this.status = status; }
 
-    public void setAdmissionDate(LocalDate admissionDate) {
-        this.admissionDate = admissionDate;
-    }
-
-    public AppointmentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(AppointmentStatus status) {
-        this.status = status;
-    }
-
-    public List<String> getMedicalStaffIds() {
-        return medicalStaffIds;
-    }
-
-    public void setMedicalStaffIds(List<String> medicalStaffIds) {
-        this.medicalStaffIds = medicalStaffIds;
-    }
-
-    public void addMedicalStaff(String medicalStaffId) {
-        this.medicalStaffIds.add(medicalStaffId);
-    }
-
-    @Override
-    public String toString() {
-        return "Appointment{" +
-                "id='" + id + '\'' +
-                ", departmentId='" + departmentId + '\'' +
-                ", patientId='" + patientId + '\'' +
-                ", admissionDate=" + admissionDate +
-                ", status=" + status +
-                ", medicalStaffIds=" + medicalStaffIds +
-                '}';
-    }
+    public List<String> getMedicalStaffIds() { return medicalStaffIds; }
+    public void setMedicalStaffIds(List<String> medicalStaffIds) { this.medicalStaffIds = medicalStaffIds; }
+    public void addMedicalStaff(String medicalStaffId) { this.medicalStaffIds.add(medicalStaffId); }
 }

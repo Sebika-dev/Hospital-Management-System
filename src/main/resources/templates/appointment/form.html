@@ -17,16 +17,34 @@
             <div class="row">
                 <div>
                     <label>Department</label>
-                    <select th:field="*{departmentId}" required>
+                    <select name="departmentId" th:field="*{departmentId}" required>
                         <option value="">-- Select Department --</option>
                         <option th:each="dep : ${departments}" th:value="${dep.id}" th:text="${dep.name}"></option>
                     </select>
                 </div>
                 <div>
                     <label>Patient</label>
-                    <select th:field="*{patientId}" required>
+                    <select name="patientId" th:field="*{patientId}" required>
                         <option value="">-- Select Patient --</option>
                         <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.name}"></option>
+                    </select>
+                    <div id="roomInfo" class="back" style="margin-top:6px">Room: -</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Doctor</label>
+                    <select th:field="*{doctorId}">
+                        <option value="">-- No Doctor --</option>
+                        <option th:each="d : ${doctors}" th:value="${d.id}" th:text="${d.name}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Nurse</label>
+                    <select th:field="*{nurseId}">
+                        <option value="">-- No Nurse --</option>
+                        <option th:each="n : ${nurses}" th:value="${n.id}" th:text="${n.name}"></option>
                     </select>
                 </div>
             </div>
@@ -44,11 +62,32 @@
                 </div>
             </div>
 
-            <div>
-                <button class="btn btn-success" type="submit">Create</button>
-            </div>
+            <div><button class="btn btn-success" type="submit">Create</button></div>
         </form>
     </div>
 </div>
+
+<script th:inline="javascript">
+    const patientSelect = document.querySelector('select[name="patientId"]');
+    const departmentSelect = document.querySelector('select[name="departmentId"]');
+    const roomInfo = document.getElementById('roomInfo');
+
+    async function onPatientChange() {
+        const id = patientSelect.value;
+        if (!id) { roomInfo.textContent = 'Room: -'; return; }
+        try {
+            const resp = await fetch('/api/patients/' + id);
+            if (!resp.ok) return;
+            const data = await resp.json();
+
+            if (data.departmentId) {
+                const opt = [...departmentSelect.options].find(o => o.value === data.departmentId);
+                if (opt) departmentSelect.value = data.departmentId;
+            }
+            roomInfo.textContent = data.roomId ? ('Room: ' + data.roomId) : 'Room: -';
+        } catch(e) {}
+    }
+    if (patientSelect) patientSelect.addEventListener('change', onPatientChange);
+</script>
 </body>
 </html>

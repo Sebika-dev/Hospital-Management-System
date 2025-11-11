@@ -6,21 +6,14 @@ import java.util.List;
 public class Patient {
     private String id;
     private String name;
-    private String phoneNumber;    // NOU
-    private String email;          // NOU
-    private List<String> appointmentIds;
+    private String phoneNumber;
+    private String email;
 
-    public Patient() {
-        this.appointmentIds = new ArrayList<>();
-    }
+    // NOI
+    private String roomId;
+    private String departmentId;
 
-    public Patient(String id, String name, String phoneNumber, String email) {
-        this.id = id;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.appointmentIds = new ArrayList<>();
-    }
+    private List<String> appointmentIds = new ArrayList<>();
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -34,17 +27,13 @@ public class Patient {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
+    public String getRoomId() { return roomId; }
+    public void setRoomId(String roomId) { this.roomId = roomId; }
+
+    public String getDepartmentId() { return departmentId; }
+    public void setDepartmentId(String departmentId) { this.departmentId = departmentId; }
+
     public List<String> getAppointmentIds() { return appointmentIds; }
     public void setAppointmentIds(List<String> appointmentIds) { this.appointmentIds = appointmentIds; }
-    public void addAppointment(String appointmentId) { this.appointmentIds.add(appointmentId); }
-
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
+    public void addAppointment(String id) { this.appointmentIds.add(id); }
 }
