@@ -1,50 +1,21 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Lista Spitalelor</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        ul { list-style-type: none; padding-left: 20px; }
-    </style>
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8"><title>Hospitals</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
-<body>
-<h1>Spitale</h1>
-<a href="/hospitals/new">Adaugă un nou spital</a>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nume</th>
-        <th>Oraș</th>
-        <th>Departamente</th>
-        <th>Camere</th>
-        <th>Acțiuni</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="hospital : ${hospitals}">
-        <td th:text="${hospital.id}">H1</td>
-        <td th:text="${hospital.name}">Spital Central</td>
-        <td th:text="${hospital.city}">București</td>
-        <td>
-            <ul>
-                <li th:each="dept : ${hospital.departments}" th:text="${dept.id} + ' - ' + ${dept.name} + ' (' + ${dept.hospitalId} + ')'"></li>
-            </ul>
-        </td>
-        <td>
-            <ul>
-                <li th:each="room : ${hospital.rooms}" th:text="${room.id} + ' - ' + ${room.number}"></li>
-            </ul>
-        </td>
-        <td>
-            <form th:action="@{'/hospitals/' + ${hospital.id} + '/delete'}" method="post">
-                <button type="submit">Șterge</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-</body>
-</html>
+<body><div class="wrap">
+    <div class="topbar"><a class="back" th:href="@{/}">← Home</a><div class="hx"><div class="pill h">🏨</div><h1>Hospitals</h1></div></div>
+    <div class="card">
+        <div class="actions"><a class="btn btn-success" th:href="@{/hospitals/new}">＋ Add Hospital</a></div>
+        <table class="table">
+            <thead><tr><th>ID</th><th>Name</th><th>City</th><th>Address</th><th>Phone</th><th>Depts</th><th>Rooms</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="h : ${hospitals}">
+                <td th:text="${h.id}"></td><td th:text="${h.name}"></td><td th:text="${h.city}"></td>
+                <td th:text="${h.address}"></td><td th:text="${h.phoneNumber}"></td>
+                <td th:text="${h.departmentIds.size()}"></td><td th:text="${h.roomIds.size()}"></td>
+                <td><form th:action="@{/hospitals/{id}/delete(id=${h.id})}" method="post"><button class="btn btn-danger" type="submit">Delete</button></form></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div></body></html>

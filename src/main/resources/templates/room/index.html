@@ -1,39 +1,23 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Lista Camerelor</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
-</head>
-<body>
-<h1>Camere</h1>
-<a href="/rooms/new">Adaugă o nouă cameră</a>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Număr</th>
-        <th>Capacitate</th>
-        <th>Status</th>
-        <th>Acțiuni</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="room : ${rooms}">
-        <td th:text="${room.id}">R1</td>
-        <td th:text="${room.number}">101</td>
-        <td th:text="${room.capacity}">15</td>
-        <td th:text="${room.status}">15</td>
-        <td>
-            <form th:action="@{'/rooms/' + ${room.id} + '/delete'}" method="post">
-                <button type="submit">Șterge</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-</body>
-</html>
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8"><title>Rooms</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head><body><div class="wrap">
+    <div class="topbar"><a class="back" th:href="@{/}">← Home</a><div class="hx"><div class="pill r">🛏️</div><h1>Rooms</h1></div></div>
+    <div class="card">
+        <div class="actions"><a class="btn btn-success" th:href="@{/rooms/new}">＋ Add Room</a></div>
+        <table class="table">
+            <thead><tr><th>ID</th><th>Hospital</th><th>Number</th><th>Capacity</th><th>Status</th><th>Appointments</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="r : ${rooms}">
+                <td th:text="${r.id}"></td>
+                <td th:text="${hospitalNames.get(r.hospitalId)}"></td>
+                <td th:text="${r.number}"></td>
+                <td th:text="${r.capacity}"></td>
+                <td th:text="${r.status}"></td>
+                <td th:text="${r.appointmentIds.size()}"></td>
+                <td><form th:action="@{/rooms/{id}/delete(id=${r.id})}" method="post"><button class="btn btn-danger" type="submit">Delete</button></form></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div></body></html>

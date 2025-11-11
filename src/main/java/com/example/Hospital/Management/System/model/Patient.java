@@ -1,59 +1,39 @@
 package com.example.Hospital.Management.System.model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Patient {
     private String id;
     private String name;
-    private List<Appointment> appointments = new ArrayList<>();
-
     private String phoneNumber;
-    private LocalDate dateOfBirth;
+    private String email;
 
-    // Constructor
-    public Patient() {}
+    // NOI
+    private String roomId;
+    private String departmentId;
 
-    public Patient(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    private List<String> appointmentIds = new ArrayList<>();
 
-    public Patient(String id, String name, List<Appointment> appointments) {
-        this.id = id;
-        this.name = name;
-        this.appointments = appointments != null ? new ArrayList<>(appointments) : new ArrayList<>();
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    // Getters and Setters
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Appointment> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(List<Appointment> appointments) {
-        this.appointments = appointments != null ? new ArrayList<>(appointments) : new ArrayList<>();
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
-    public LocalDate getDateOfBirth() { return dateOfBirth; }
-    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getRoomId() { return roomId; }
+    public void setRoomId(String roomId) { this.roomId = roomId; }
+
+    public String getDepartmentId() { return departmentId; }
+    public void setDepartmentId(String departmentId) { this.departmentId = departmentId; }
+
+    public List<String> getAppointmentIds() { return appointmentIds; }
+    public void setAppointmentIds(List<String> appointmentIds) { this.appointmentIds = appointmentIds; }
+    public void addAppointment(String id) { this.appointmentIds.add(id); }
 }

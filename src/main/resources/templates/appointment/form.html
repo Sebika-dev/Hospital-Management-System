@@ -1,19 +1,93 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Adaugă Programare</title>
+    <meta charset="UTF-8">
+    <title>New Appointment</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
-<h1>Adaugă o nouă programare</h1>
-<form th:action="@{/appointments}" th:object="${appointment}" method="post">
-    <label for="id">ID:</label><br>
-    <input type="text" id="id" th:field="*{id}" required><br><br>
-    <label for="patientId">Patient ID:</label><br>
-    <input type="text" id="patientId" th:field="*{patientId}" required><br><br>
-    <label for="date">Dată:</label><br>
-    <input type="text" id="date" th:field="*{date}" required><br><br>
-    <button type="submit">Salvează</button>
-</form>
-<a href="/appointments">Înapoi la listă</a>
+<div class="wrap">
+    <div class="topbar">
+        <a class="back" th:href="@{/appointments}">← Back</a>
+        <div class="hx"><div class="pill a">📅</div><h1>New Appointment</h1></div>
+    </div>
+
+    <div class="card">
+        <form class="form" th:action="@{/appointments}" th:object="${appointment}" method="post">
+            <div class="row">
+                <div>
+                    <label>Department</label>
+                    <select name="departmentId" th:field="*{departmentId}" required>
+                        <option value="">-- Select Department --</option>
+                        <option th:each="dep : ${departments}" th:value="${dep.id}" th:text="${dep.name}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Patient</label>
+                    <select name="patientId" th:field="*{patientId}" required>
+                        <option value="">-- Select Patient --</option>
+                        <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.name}"></option>
+                    </select>
+                    <div id="roomInfo" class="back" style="margin-top:6px">Room: -</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Doctor</label>
+                    <select th:field="*{doctorId}">
+                        <option value="">-- No Doctor --</option>
+                        <option th:each="d : ${doctors}" th:value="${d.id}" th:text="${d.name}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Nurse</label>
+                    <select th:field="*{nurseId}">
+                        <option value="">-- No Nurse --</option>
+                        <option th:each="n : ${nurses}" th:value="${n.id}" th:text="${n.name}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Admission Date</label>
+                    <input type="date" th:field="*{admissionDate}" required>
+                </div>
+                <div>
+                    <label>Status</label>
+                    <select th:field="*{status}" required>
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div><button class="btn btn-success" type="submit">Create</button></div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const patientSelect = document.querySelector('select[name="patientId"]');
+    const departmentSelect = document.querySelector('select[name="departmentId"]');
+    const roomInfo = document.getElementById('roomInfo');
+
+    async function onPatientChange() {
+        const id = patientSelect.value;
+        if (!id) { roomInfo.textContent = 'Room: -'; return; }
+        try {
+            const resp = await fetch('/api/patients/' + id);
+            if (!resp.ok) return;
+            const data = await resp.json();
+
+            if (data.departmentId) {
+                const opt = [...departmentSelect.options].find(o => o.value === data.departmentId);
+                if (opt) departmentSelect.value = data.departmentId;
+            }
+            roomInfo.textContent = data.roomId ? ('Room: ' + data.roomId) : 'Room: -';
+        } catch(e) {}
+    }
+    if (patientSelect) patientSelect.addEventListener('change', onPatientChange);
+</script>
 </body>
 </html>

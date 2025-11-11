@@ -9,36 +9,36 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/medical-staff-appointments")
-public class MedicalStaffAppointmentController {
+public class MedicalStaffAppointmentWebController {
 
-    private final MedicalStaffAppointmentService medicalStaffAppointmentService;
+    private final MedicalStaffAppointmentService msaService;
 
     @Autowired
-    public MedicalStaffAppointmentController(MedicalStaffAppointmentService medicalStaffAppointmentService) {
-        this.medicalStaffAppointmentService = medicalStaffAppointmentService;
+    public MedicalStaffAppointmentWebController(MedicalStaffAppointmentService msaService) {
+        this.msaService = msaService;
     }
 
     @GetMapping
-    public String getAllMedicalStaffAppointments(Model model) {
-        model.addAttribute("medicalStaffAppointments", medicalStaffAppointmentService.getAllMedicalStaffAppointments());
+    public String listMedicalStaffAppointments(Model model) {
+        model.addAttribute("msaList", msaService.getAllMedicalStaffAppointments());
         return "medical-staff-appointment/index";
     }
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
-        model.addAttribute("medicalStaffAppointment", new MedicalStaffAppointment());
+        model.addAttribute("msa", new MedicalStaffAppointment());
         return "medical-staff-appointment/form";
     }
 
     @PostMapping
-    public String createMedicalStaffAppointment(@ModelAttribute MedicalStaffAppointment link) {
-        medicalStaffAppointmentService.saveMedicalStaffAppointment(link);
+    public String createMedicalStaffAppointment(@ModelAttribute MedicalStaffAppointment msa) {
+        msaService.addMedicalStaffAppointment(msa);
         return "redirect:/medical-staff-appointments";
     }
 
     @PostMapping("/{id}/delete")
     public String deleteMedicalStaffAppointment(@PathVariable String id) {
-        medicalStaffAppointmentService.deleteMedicalStaffAppointment(id);
+        msaService.deleteMedicalStaffAppointment(id);
         return "redirect:/medical-staff-appointments";
     }
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8"><title>New Doctor</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head><body><div class="wrap">
+    <div class="topbar"><a class="back" th:href="@{/doctors}">← Back</a><div class="hx"><div class="pill dr">👨‍⚕️</div><h1>New Doctor</h1></div></div>
+    <div class="card">
+        <form class="form" th:action="@{/doctors}" th:object="${doctor}" method="post">
+            <div class="row">
+                <div><label>Name</label><input th:field="*{name}" required></div>
+                <div>
+                    <label>Department</label>
+                    <select th:field="*{departmentId}" required>
+                        <option value="">-- Select Department --</option>
+                        <option th:each="dep : ${departments}" th:value="${dep.id}" th:text="${dep.name}"></option>
+                    </select>
+                </div>
+            </div>
+            <div><label>License Number</label><input th:field="*{licenseNumber}" required></div>
+            <div><button class="btn btn-success" type="submit">Create</button></div>
+        </form>
+    </div>
+</div></body></html>

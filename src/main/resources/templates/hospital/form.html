@@ -1,34 +1,18 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Adaugă Spital</title>
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="UTF-8"><title>New Hospital</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
-<body>
-<h1>Adaugă un nou spital</h1>
-<form th:action="@{/hospitals}" th:object="${hospital}" method="post">
-    <label for="id">ID:</label><br>
-    <input type="text" id="id" th:field="*{id}" required><br><br>
-    <label for="name">Nume:</label><br>
-    <input type="text" id="name" th:field="*{name}" required><br><br>
-    <label for="city">Oraș:</label><br>
-    <input type="text" id="city" th:field="*{city}" required><br><br>
-
-    <!-- Câmpuri pentru un departament -->
-    <label for="departmentId">ID Departament:</label><br>
-    <input type="text" id="departmentId" th:field="*{departments[0].id}" required><br><br>
-    <label for="departmentName">Nume Departament:</label><br>
-    <input type="text" id="departmentName" th:field="*{departments[0].name}" required><br><br>
-    <label for="departmentHospitalId">Hospital ID (Departament):</label><br>
-    <input type="text" id="departmentHospitalId" th:field="*{departments[0].hospitalId}" required><br><br>
-
-    <!-- Câmpuri pentru o cameră -->
-    <label for="roomId">ID Cameră:</label><br>
-    <input type="text" id="roomId" th:field="*{rooms[0].id}" required><br><br>
-    <label for="roomNumber">Număr Cameră:</label><br>
-    <input type="text" id="roomNumber" th:field="*{rooms[0].number}" required><br><br>
-
-    <button type="submit">Salvează</button>
-</form>
-<a href="/hospitals">Înapoi la listă</a>
-</body>
-</html>
+<body><div class="wrap">
+    <div class="topbar"><a class="back" th:href="@{/hospitals}">← Back</a><div class="hx"><div class="pill h">🏨</div><h1>New Hospital</h1></div></div>
+    <div class="card">
+        <form class="form" th:action="@{/hospitals}" th:object="${hospital}" method="post">
+            <div class="row">
+                <div><label>Name</label><input th:field="*{name}" required></div>
+                <div><label>City</label><input th:field="*{city}" required></div>
+            </div>
+            <div><label>Address</label><input th:field="*{address}"></div>
+            <div><label>Phone</label><input th:field="*{phoneNumber}"></div>
+            <div><button class="btn btn-success" type="submit">Create</button></div>
+        </form>
+    </div>
+</div></body></html>
