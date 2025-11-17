@@ -14,7 +14,7 @@ public class HospitalService {
     private final Repository<Hospital> hospitalRepository;
 
     @Autowired
-    public HospitalService(@Qualifier("inMemoryHospitalRepository") Repository<Hospital> hospitalRepository) {
+    public HospitalService(@Qualifier("fileHospitalRepository") Repository<Hospital> hospitalRepository) {
         this.hospitalRepository = hospitalRepository;
     }
 

@@ -1,0 +1,9 @@
+[ {
+  "id" : "PAT-8eb328d4",
+  "name" : "Fabian Laszlo",
+  "phoneNumber" : "0771719661",
+  "email" : "fabianraul1904@gmail.com",
+  "roomId" : "ROOM-e8827bcd",
+  "departmentId" : "DEPT-6f194287",
+  "appointmentIds" : [ "APP-5e58edaa" ]
+} ]

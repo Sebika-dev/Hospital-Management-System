@@ -1,7 +1,7 @@
 package com.example.Hospital.Management.System.service;
 
 import com.example.Hospital.Management.System.model.Appointment;
-import com.example.Hospital.Management.System.repository.inmemory.InMemoryAppointmentRepository;
+import com.example.Hospital.Management.System.repository.infile.FileAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +11,14 @@ import java.util.Optional;
 
 @Service
 public class AppointmentService {
-    private final InMemoryAppointmentRepository appointmentRepository;
+    private final FileAppointmentRepository appointmentRepository;
     private final PatientService patientService;
     private final DoctorService doctorService;
     private final NurseService nurseService;
     private final RoomService roomService;
 
     @Autowired
-    public AppointmentService(InMemoryAppointmentRepository appointmentRepository,
+    public AppointmentService(FileAppointmentRepository appointmentRepository,
                               PatientService patientService,
                               DoctorService doctorService,
                               NurseService nurseService,

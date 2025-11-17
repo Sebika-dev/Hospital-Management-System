@@ -1,8 +1,7 @@
 package com.example.Hospital.Management.System.service;
 
-import com.example.Hospital.Management.System.model.Hospital;
 import com.example.Hospital.Management.System.model.Room;
-import com.example.Hospital.Management.System.repository.inmemory.InMemoryRoomRepository;
+import com.example.Hospital.Management.System.repository.infile.FileRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -12,11 +11,11 @@ import java.util.Optional;
 
 @Service
 public class RoomService {
-    private final InMemoryRoomRepository roomRepository;
+    private final FileRoomRepository roomRepository;
     private final HospitalService hospitalService;
 
     @Autowired
-    public RoomService(InMemoryRoomRepository roomRepository,
+    public RoomService(FileRoomRepository roomRepository,
                        @Lazy HospitalService hospitalService) {
         this.roomRepository = roomRepository;
         this.hospitalService = hospitalService;

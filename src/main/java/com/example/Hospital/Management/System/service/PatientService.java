@@ -1,7 +1,7 @@
 package com.example.Hospital.Management.System.service;
 
 import com.example.Hospital.Management.System.model.Patient;
-import com.example.Hospital.Management.System.repository.inmemory.InMemoryPatientRepository;
+import com.example.Hospital.Management.System.repository.infile.FilePatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +12,11 @@ import java.util.Optional;
 @Service
 public class PatientService {
 
-    private final InMemoryPatientRepository patientRepository;
+    private final FilePatientRepository patientRepository;
     private final RoomService roomService;
 
     @Autowired
-    public PatientService(InMemoryPatientRepository patientRepository,
+    public PatientService(FilePatientRepository patientRepository,
                           RoomService roomService) {
         this.patientRepository = patientRepository;
         this.roomService = roomService;
@@ -54,7 +54,6 @@ public class PatientService {
     }
 
     public void deletePatient(String id) {
-        // Notă: aici nu ștergem appointments; presupunem că se face separat
         patientRepository.delete(id);
     }
 

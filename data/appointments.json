@@ -1,0 +1,10 @@
+[ {
+  "id" : "APP-5e58edaa",
+  "departmentId" : "DEPT-6f194287",
+  "patientId" : "PAT-8eb328d4",
+  "doctorId" : "DOC-87862823",
+  "nurseId" : "NUR-80637081",
+  "admissionDate" : "2025-11-17",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+} ]
