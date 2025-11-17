@@ -1,7 +1,7 @@
 package com.example.Hospital.Management.System.service;
 
 import com.example.Hospital.Management.System.model.Nurse;
-import com.example.Hospital.Management.System.repository.inmemory.InMemoryNurseRepository;
+import com.example.Hospital.Management.System.repository.infile.FileNurseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +10,10 @@ import java.util.Optional;
 
 @Service
 public class NurseService {
-    private final InMemoryNurseRepository nurseRepository;
+    private final FileNurseRepository nurseRepository;
 
     @Autowired
-    public NurseService(InMemoryNurseRepository nurseRepository) {
+    public NurseService(FileNurseRepository nurseRepository) {
         this.nurseRepository = nurseRepository;
     }
 

@@ -1,0 +1,8 @@
+[ {
+  "id" : "ROOM-e8827bcd",
+  "hospitalId" : "HOS-b75d5001",
+  "number" : "12",
+  "capacity" : 21.0,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ "APP-5e58edaa" ]
+} ]

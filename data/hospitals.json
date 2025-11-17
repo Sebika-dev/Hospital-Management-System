@@ -1,0 +1,9 @@
+[ {
+  "id" : "HOS-b75d5001",
+  "name" : "Regina Maria",
+  "city" : "Cluj-Napoca",
+  "address" : "Strada Buna Ziua nr 39",
+  "phoneNumber" : "0771719661",
+  "departmentIds" : [ "DEPT-6f194287" ],
+  "roomIds" : [ "ROOM-e8827bcd" ]
+} ]

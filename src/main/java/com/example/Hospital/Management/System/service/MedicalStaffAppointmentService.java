@@ -1,7 +1,7 @@
 package com.example.Hospital.Management.System.service;
 
 import com.example.Hospital.Management.System.model.MedicalStaffAppointment;
-import com.example.Hospital.Management.System.repository.inmemory.InMemoryMedicalStaffAppointmentRepository;
+import com.example.Hospital.Management.System.repository.infile.FileMedicalStaffAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -11,10 +11,10 @@ import java.util.Optional;
 
 @Service
 public class MedicalStaffAppointmentService {
-    private final InMemoryMedicalStaffAppointmentRepository msaRepository;
+    private final FileMedicalStaffAppointmentRepository msaRepository;
 
     @Autowired
-    public MedicalStaffAppointmentService(@Qualifier("inMemoryMedicalStaffAppointmentRepository") InMemoryMedicalStaffAppointmentRepository msaRepository) {
+    public MedicalStaffAppointmentService(@Qualifier("fileMedicalStaffAppointmentRepository") FileMedicalStaffAppointmentRepository msaRepository) {
         this.msaRepository = msaRepository;
     }
 
