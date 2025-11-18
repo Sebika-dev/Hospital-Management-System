@@ -55,4 +55,20 @@ public class NurseWebController {
         nurseService.deleteNurse(id);
         return "redirect:/nurses";
     }
+
+    @GetMapping("/{id}/edit")
+    public String editNurse(@PathVariable String id, Model model) {
+        Nurse nurse = nurseService.getNurseById(id).orElseThrow();
+        model.addAttribute("nurse", nurse);
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        model.addAttribute("qualificationLevels", NurseQualificationLevel.values());
+        return "nurse/form";
+    }
+
+    @PostMapping("/{id}")
+    public String updateNurse(@PathVariable String id, @ModelAttribute Nurse nurse) {
+        nurse.setId(id);
+        nurseService.updateNurse(nurse);
+        return "redirect:/nurses";
+    }
 }

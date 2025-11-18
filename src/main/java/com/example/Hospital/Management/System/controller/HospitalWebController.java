@@ -40,4 +40,19 @@ public class HospitalWebController {
         hospitalService.deleteHospital(id);
         return "redirect:/hospitals";
     }
+
+    @GetMapping("/{id}/edit")
+    public String editHospital(@PathVariable String id, Model model) {
+        Hospital hospital = hospitalService.getHospitalById(id).orElseThrow();
+        model.addAttribute("hospital", hospital);
+        return "hospital/form";
+    }
+
+    @PostMapping("/{id}")
+    public String updateHospital(@PathVariable String id, @ModelAttribute Hospital hospital) {
+        hospital.setId(id);
+        hospitalService.updateHospital(hospital);
+        return "redirect:/hospitals";
+    }
+
 }

@@ -55,4 +55,20 @@ public class RoomWebController {
         roomService.deleteRoom(id);
         return "redirect:/rooms";
     }
+
+    @GetMapping("/{id}/edit")
+    public String editRoom(@PathVariable String id, Model model) {
+        Room room = roomService.getRoomById(id).orElseThrow();
+        model.addAttribute("room", room);
+        model.addAttribute("hospitals", hospitalService.getAllHospitals());
+        model.addAttribute("statuses", RoomStatus.values());
+        return "room/form";
+    }
+
+    @PostMapping("/{id}")
+    public String updateRoom(@PathVariable String id, @ModelAttribute Room room) {
+        room.setId(id);
+        roomService.updateRoom(room);
+        return "redirect:/rooms";
+    }
 }

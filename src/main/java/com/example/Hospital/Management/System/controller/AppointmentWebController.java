@@ -84,4 +84,26 @@ public class AppointmentWebController {
         appointmentService.deleteAppointment(id);
         return "redirect:/appointments";
     }
+
+    @GetMapping("/{id}/edit")
+    public String editAppointment(@PathVariable String id, Model model) {
+        Appointment appointment = appointmentService.getAppointmentById(id).orElseThrow();
+        model.addAttribute("appointment", appointment);
+
+        // Trebuie încărcate toate listele pentru dropdown-uri
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        model.addAttribute("patients", patientService.getAllPatients());
+        model.addAttribute("doctors", doctorService.getAllDoctors());
+        model.addAttribute("nurses", nurseService.getAllNurses());
+        model.addAttribute("statuses", AppointmentStatus.values());
+
+        return "appointment/form";
+    }
+
+    @PostMapping("/{id}")
+    public String updateAppointment(@PathVariable String id, @ModelAttribute Appointment appointment) {
+        appointment.setId(id);
+        appointmentService.updateAppointment(appointment);
+        return "redirect:/appointments";
+    }
 }

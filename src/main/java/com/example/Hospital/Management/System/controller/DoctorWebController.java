@@ -53,4 +53,19 @@ public class DoctorWebController {
         doctorService.deleteDoctor(id);
         return "redirect:/doctors";
     }
+
+    @GetMapping("/{id}/edit")
+    public String editDoctor(@PathVariable String id, Model model) {
+        Doctor doctor = doctorService.getDoctorById(id).orElseThrow();
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        return "doctor/form";
+    }
+
+    @PostMapping("/{id}")
+    public String updateDoctor(@PathVariable String id, @ModelAttribute Doctor doctor) {
+        doctor.setId(id);
+        doctorService.updateDoctor(doctor);
+        return "redirect:/doctors";
+    }
 }
