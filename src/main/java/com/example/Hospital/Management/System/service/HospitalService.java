@@ -12,17 +12,22 @@ import java.util.Optional;
 @Service
 public class HospitalService {
     private final Repository<Hospital> hospitalRepository;
+    private final Validator validator;
 
     @Autowired
-    public HospitalService(@Qualifier("fileHospitalRepository") Repository<Hospital> hospitalRepository) {
+    public HospitalService(@Qualifier("fileHospitalRepository") Repository<Hospital> hospitalRepository,
+                           Validator validator) {
         this.hospitalRepository = hospitalRepository;
+        this.validator = validator;
     }
 
     public Hospital addHospital(Hospital hospital) {
+        validator.validateHospital(hospital);
         return hospitalRepository.save(hospital);
     }
 
     public Hospital updateHospital(Hospital hospital) {
+        validator.validateHospital(hospital);
         return hospitalRepository.save(hospital);
     }
 

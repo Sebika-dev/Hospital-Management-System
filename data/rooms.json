@@ -1,8 +1,12 @@
-[ {
-  "id" : "ROOM-e8827bcd",
-  "hospitalId" : "HOS-b75d5001",
-  "number" : "12",
-  "capacity" : 21.0,
-  "status" : "AVAILABLE",
-  "appointmentIds" : [ "APP-5e58edaa" ]
-} ]
+[
+  { "id": "ROM-01", "hospitalId": "HOS-01", "number": "101", "capacity": 2.0, "status": "AVAILABLE", "appointmentIds": [] },
+  { "id": "ROM-02", "hospitalId": "HOS-01", "number": "102", "capacity": 1.0, "status": "OCCUPIED", "appointmentIds": ["APP-01"] },
+  { "id": "ROM-03", "hospitalId": "HOS-02", "number": "201", "capacity": 4.0, "status": "AVAILABLE", "appointmentIds": [] },
+  { "id": "ROM-04", "hospitalId": "HOS-02", "number": "202", "capacity": 2.0, "status": "AVAILABLE", "appointmentIds": [] },
+  { "id": "ROM-05", "hospitalId": "HOS-03", "number": "305", "capacity": 1.0, "status": "OCCUPIED", "appointmentIds": ["APP-02"] },
+  { "id": "ROM-06", "hospitalId": "HOS-04", "number": "A1", "capacity": 3.0, "status": "AVAILABLE", "appointmentIds": [] },
+  { "id": "ROM-07", "hospitalId": "HOS-05", "number": "B2", "capacity": 2.0, "status": "AVAILABLE", "appointmentIds": [] },
+  { "id": "ROM-08", "hospitalId": "HOS-06", "number": "C3", "capacity": 5.0, "status": "AVAILABLE", "appointmentIds": [] },
+  { "id": "ROM-09", "hospitalId": "HOS-07", "number": "12", "capacity": 2.0, "status": "OCCUPIED", "appointmentIds": ["APP-03"] },
+  { "id": "ROM-10", "hospitalId": "HOS-08", "number": "ICU-1", "capacity": 1.0, "status": "AVAILABLE", "appointmentIds": [] }
+]

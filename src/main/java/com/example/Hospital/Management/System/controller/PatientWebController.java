@@ -1,11 +1,11 @@
 package com.example.Hospital.Management.System.controller;
 
 import com.example.Hospital.Management.System.model.Patient;
+import com.example.Hospital.Management.System.model.Room;
+import com.example.Hospital.Management.System.model.Department;
 import com.example.Hospital.Management.System.service.PatientService;
 import com.example.Hospital.Management.System.service.RoomService;
 import com.example.Hospital.Management.System.service.DepartmentService;
-import com.example.Hospital.Management.System.model.Room;
-import com.example.Hospital.Management.System.model.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,14 +34,13 @@ public class PatientWebController {
     public String listPatients(Model model) {
         model.addAttribute("patients", patientService.getAllPatients());
 
-        // map-uri pentru UI (opțional să afișezi numele camerei/departmentului)
         Map<String,String> roomLabels = roomService.getAllRooms()
                 .stream().collect(Collectors.toMap(Room::getId, r -> "Room " + r.getNumber()));
         Map<String,String> departmentNames = departmentService.getAllDepartments()
                 .stream().collect(Collectors.toMap(Department::getId, Department::getName));
+
         model.addAttribute("roomLabels", roomLabels);
         model.addAttribute("departmentNames", departmentNames);
-
         return "patient/index";
     }
 
@@ -54,26 +53,38 @@ public class PatientWebController {
     }
 
     @PostMapping
-    public String createPatient(@ModelAttribute Patient patient) {
-        patientService.addPatient(patient);
-        return "redirect:/patients";
+    public String createPatient(@ModelAttribute Patient patient, Model model) {
+        try {
+            patientService.addPatient(patient);
+            return "redirect:/patients";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("rooms", roomService.getAllRooms());
+            model.addAttribute("departments", departmentService.getAllDepartments());
+            return "patient/form";
+        }
     }
 
-    // opțional: edit
     @GetMapping("/{id}/edit")
     public String editPatient(@PathVariable String id, Model model) {
-        var p = patientService.getPatientById(id).orElseThrow();
-        model.addAttribute("patient", p);
+        model.addAttribute("patient", patientService.getPatientById(id).orElseThrow());
         model.addAttribute("rooms", roomService.getAllRooms());
         model.addAttribute("departments", departmentService.getAllDepartments());
         return "patient/form";
     }
 
     @PostMapping("/{id}")
-    public String updatePatient(@PathVariable String id, @ModelAttribute Patient patient) {
-        patient.setId(id);
-        patientService.updatePatient(patient); // va sincroniza camera (Room.appointmentIds) conform logicii din service
-        return "redirect:/patients";
+    public String updatePatient(@PathVariable String id, @ModelAttribute Patient patient, Model model) {
+        try {
+            patient.setId(id);
+            patientService.updatePatient(patient);
+            return "redirect:/patients";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("rooms", roomService.getAllRooms());
+            model.addAttribute("departments", departmentService.getAllDepartments());
+            return "patient/form";
+        }
     }
 
     @PostMapping("/{id}/delete")

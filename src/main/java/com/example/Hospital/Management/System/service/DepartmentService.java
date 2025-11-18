@@ -13,21 +13,31 @@ import java.util.Optional;
 public class DepartmentService {
     private final FileDepartmentRepository departmentRepository;
     private final HospitalService hospitalService;
+    private final Validator validator;
 
     @Autowired
     public DepartmentService(FileDepartmentRepository departmentRepository,
-                             @Lazy HospitalService hospitalService) {
+                             @Lazy HospitalService hospitalService,
+                             Validator validator) {
         this.departmentRepository = departmentRepository;
         this.hospitalService = hospitalService;
+        this.validator = validator;
     }
 
     public Department addDepartment(Department department) {
+        validator.validateDepartment(department);
+
         Department saved = departmentRepository.save(department);
         if (saved.getHospitalId() != null) {
             hospitalService.getHospitalById(saved.getHospitalId()).ifPresent(h -> {
                 if (!h.getDepartmentIds().contains(saved.getId())) {
                     h.addDepartment(saved.getId());
-                    hospitalService.updateHospital(h);
+                    // Update intern la spital, nu revalidăm spitalul complet aici
+                    hospitalService.getHospitalById(h.getId()).ifPresent(current -> {
+                        // Forțăm salvarea directă prin repository dacă e nevoie,
+                        // sau folosim updateHospital dacă datele spitalului sunt valide curent
+                        hospitalService.updateHospital(h);
+                    });
                 }
             });
         }
@@ -35,6 +45,7 @@ public class DepartmentService {
     }
 
     public Department updateDepartment(Department department) {
+        validator.validateDepartment(department);
         return departmentRepository.save(department);
     }
 

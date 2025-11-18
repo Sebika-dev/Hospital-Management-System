@@ -43,29 +43,40 @@ public class DepartmentWebController {
     }
 
     @PostMapping
-    public String createDepartment(@ModelAttribute Department department) {
-        departmentService.addDepartment(department);
-        return "redirect:/departments";
-    }
-
-    @PostMapping("/{id}/delete")
-    public String deleteDepartment(@PathVariable String id) {
-        departmentService.deleteDepartment(id);
-        return "redirect:/departments";
+    public String createDepartment(@ModelAttribute Department department, Model model) {
+        try {
+            departmentService.addDepartment(department);
+            return "redirect:/departments";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("hospitals", hospitalService.getAllHospitals());
+            return "department/form";
+        }
     }
 
     @GetMapping("/{id}/edit")
     public String editDepartment(@PathVariable String id, Model model) {
-        Department department = departmentService.getDepartmentById(id).orElseThrow();
-        model.addAttribute("department", department);
+        model.addAttribute("department", departmentService.getDepartmentById(id).orElseThrow());
         model.addAttribute("hospitals", hospitalService.getAllHospitals());
         return "department/form";
     }
 
     @PostMapping("/{id}")
-    public String updateDepartment(@PathVariable String id, @ModelAttribute Department department) {
-        department.setId(id);
-        departmentService.updateDepartment(department);
+    public String updateDepartment(@PathVariable String id, @ModelAttribute Department department, Model model) {
+        try {
+            department.setId(id);
+            departmentService.updateDepartment(department);
+            return "redirect:/departments";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("hospitals", hospitalService.getAllHospitals());
+            return "department/form";
+        }
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteDepartment(@PathVariable String id) {
+        departmentService.deleteDepartment(id);
         return "redirect:/departments";
     }
 }

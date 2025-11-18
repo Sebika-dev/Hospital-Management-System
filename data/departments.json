@@ -1,7 +1,12 @@
-[ {
-  "id" : "DEPT-6f194287",
-  "name" : "Dept Urologie",
-  "hospitalId" : "HOS-b75d5001",
-  "headDoctorName" : "Mina",
-  "phoneNumber" : "21"
-} ]
+[
+  { "id": "DEP-01", "name": "Cardiologie", "hospitalId": "HOS-01", "headDoctorName": "Dr. Popescu", "phoneNumber": "101" },
+  { "id": "DEP-02", "name": "Neurologie", "hospitalId": "HOS-01", "headDoctorName": "Dr. Ionescu", "phoneNumber": "102" },
+  { "id": "DEP-03", "name": "Pediatrie", "hospitalId": "HOS-02", "headDoctorName": "Dr. Georgescu", "phoneNumber": "103" },
+  { "id": "DEP-04", "name": "Oncologie", "hospitalId": "HOS-02", "headDoctorName": "Dr. Stan", "phoneNumber": "104" },
+  { "id": "DEP-05", "name": "Chirurgie", "hospitalId": "HOS-03", "headDoctorName": "Dr. Dumitrescu", "phoneNumber": "105" },
+  { "id": "DEP-06", "name": "Ortopedie", "hospitalId": "HOS-04", "headDoctorName": "Dr. Marin", "phoneNumber": "106" },
+  { "id": "DEP-07", "name": "Dermatologie", "hospitalId": "HOS-05", "headDoctorName": "Dr. Florea", "phoneNumber": "107" },
+  { "id": "DEP-08", "name": "Ginecologie", "hospitalId": "HOS-06", "headDoctorName": "Dr. Radu", "phoneNumber": "108" },
+  { "id": "DEP-09", "name": "Urologie", "hospitalId": "HOS-07", "headDoctorName": "Dr. Stoica", "phoneNumber": "109" },
+  { "id": "DEP-10", "name": "ATI", "hospitalId": "HOS-08", "headDoctorName": "Dr. Munteanu", "phoneNumber": "110" }
+]

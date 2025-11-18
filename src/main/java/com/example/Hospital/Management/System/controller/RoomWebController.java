@@ -45,30 +45,43 @@ public class RoomWebController {
     }
 
     @PostMapping
-    public String createRoom(@ModelAttribute Room room) {
-        roomService.addRoom(room);
-        return "redirect:/rooms";
-    }
-
-    @PostMapping("/{id}/delete")
-    public String deleteRoom(@PathVariable String id) {
-        roomService.deleteRoom(id);
-        return "redirect:/rooms";
+    public String createRoom(@ModelAttribute Room room, Model model) {
+        try {
+            roomService.addRoom(room);
+            return "redirect:/rooms";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("hospitals", hospitalService.getAllHospitals());
+            model.addAttribute("statuses", RoomStatus.values());
+            return "room/form";
+        }
     }
 
     @GetMapping("/{id}/edit")
     public String editRoom(@PathVariable String id, Model model) {
-        Room room = roomService.getRoomById(id).orElseThrow();
-        model.addAttribute("room", room);
+        model.addAttribute("room", roomService.getRoomById(id).orElseThrow());
         model.addAttribute("hospitals", hospitalService.getAllHospitals());
         model.addAttribute("statuses", RoomStatus.values());
         return "room/form";
     }
 
     @PostMapping("/{id}")
-    public String updateRoom(@PathVariable String id, @ModelAttribute Room room) {
-        room.setId(id);
-        roomService.updateRoom(room);
+    public String updateRoom(@PathVariable String id, @ModelAttribute Room room, Model model) {
+        try {
+            room.setId(id);
+            roomService.updateRoom(room);
+            return "redirect:/rooms";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("hospitals", hospitalService.getAllHospitals());
+            model.addAttribute("statuses", RoomStatus.values());
+            return "room/form";
+        }
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteRoom(@PathVariable String id) {
+        roomService.deleteRoom(id);
         return "redirect:/rooms";
     }
 }

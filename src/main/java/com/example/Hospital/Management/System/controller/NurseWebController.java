@@ -45,30 +45,43 @@ public class NurseWebController {
     }
 
     @PostMapping
-    public String createNurse(@ModelAttribute Nurse nurse) {
-        nurseService.addNurse(nurse);
-        return "redirect:/nurses";
-    }
-
-    @PostMapping("/{id}/delete")
-    public String deleteNurse(@PathVariable String id) {
-        nurseService.deleteNurse(id);
-        return "redirect:/nurses";
+    public String createNurse(@ModelAttribute Nurse nurse, Model model) {
+        try {
+            nurseService.addNurse(nurse);
+            return "redirect:/nurses";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("departments", departmentService.getAllDepartments());
+            model.addAttribute("qualificationLevels", NurseQualificationLevel.values());
+            return "nurse/form";
+        }
     }
 
     @GetMapping("/{id}/edit")
     public String editNurse(@PathVariable String id, Model model) {
-        Nurse nurse = nurseService.getNurseById(id).orElseThrow();
-        model.addAttribute("nurse", nurse);
+        model.addAttribute("nurse", nurseService.getNurseById(id).orElseThrow());
         model.addAttribute("departments", departmentService.getAllDepartments());
         model.addAttribute("qualificationLevels", NurseQualificationLevel.values());
         return "nurse/form";
     }
 
     @PostMapping("/{id}")
-    public String updateNurse(@PathVariable String id, @ModelAttribute Nurse nurse) {
-        nurse.setId(id);
-        nurseService.updateNurse(nurse);
+    public String updateNurse(@PathVariable String id, @ModelAttribute Nurse nurse, Model model) {
+        try {
+            nurse.setId(id);
+            nurseService.updateNurse(nurse);
+            return "redirect:/nurses";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("departments", departmentService.getAllDepartments());
+            model.addAttribute("qualificationLevels", NurseQualificationLevel.values());
+            return "nurse/form";
+        }
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteNurse(@PathVariable String id) {
+        nurseService.deleteNurse(id);
         return "redirect:/nurses";
     }
 }

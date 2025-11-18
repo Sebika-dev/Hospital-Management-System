@@ -11,17 +11,21 @@ import java.util.Optional;
 @Service
 public class NurseService {
     private final FileNurseRepository nurseRepository;
+    private final Validator validator;
 
     @Autowired
-    public NurseService(FileNurseRepository nurseRepository) {
+    public NurseService(FileNurseRepository nurseRepository, Validator validator) {
         this.nurseRepository = nurseRepository;
+        this.validator = validator;
     }
 
     public Nurse addNurse(Nurse nurse) {
+        validator.validateNurse(nurse);
         return nurseRepository.save(nurse);
     }
 
     public Nurse updateNurse(Nurse nurse) {
+        validator.validateNurse(nurse);
         return nurseRepository.save(nurse);
     }
 
@@ -45,12 +49,12 @@ public class NurseService {
         nurseRepository.deleteAll();
     }
 
-    // Helper opțional
     public void addAppointmentToNurse(String nurseId, String appointmentId) {
         getNurseById(nurseId).ifPresent(n -> {
             if (!n.getAppointmentIds().contains(appointmentId)) {
                 n.addAppointment(appointmentId);
-                updateNurse(n);
+                // Aici nu validăm tot obiectul din nou, doar salvăm relația
+                nurseRepository.save(n);
             }
         });
     }

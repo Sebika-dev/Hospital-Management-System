@@ -1,9 +1,12 @@
-[ {
-  "id" : "HOS-b75d5001",
-  "name" : "Regina Maria",
-  "city" : "Cluj-Napoca",
-  "address" : "Strada Buna Ziua nr 39",
-  "phoneNumber" : "0771719661",
-  "departmentIds" : [ "DEPT-6f194287" ],
-  "roomIds" : [ "ROOM-e8827bcd" ]
-} ]
+[
+  { "id": "HOS-01", "name": "Spitalul Județean", "city": "Cluj-Napoca", "address": "Str. Clinicilor 1", "phoneNumber": "0264111111", "departmentIds": ["DEP-01", "DEP-02"], "roomIds": ["ROM-01", "ROM-02"] },
+  { "id": "HOS-02", "name": "Regina Maria", "city": "București", "address": "Bd. Unirii 2", "phoneNumber": "0212222222", "departmentIds": ["DEP-03", "DEP-04"], "roomIds": ["ROM-03", "ROM-04"] },
+  { "id": "HOS-03", "name": "Sanador", "city": "București", "address": "Str. Sevastopol 9", "phoneNumber": "0213333333", "departmentIds": ["DEP-05"], "roomIds": ["ROM-05"] },
+  { "id": "HOS-04", "name": "Arcadia", "city": "Iași", "address": "Str. Cicoarei 2", "phoneNumber": "0232444444", "departmentIds": ["DEP-06"], "roomIds": ["ROM-06"] },
+  { "id": "HOS-05", "name": "MedLife", "city": "Brașov", "address": "Str. Turnului 5", "phoneNumber": "0268555555", "departmentIds": ["DEP-07"], "roomIds": ["ROM-07"] },
+  { "id": "HOS-06", "name": "Spitalul Municipal", "city": "Timisoara", "address": "Bd. Revoluției 3", "phoneNumber": "0256666666", "departmentIds": ["DEP-08"], "roomIds": ["ROM-08"] },
+  { "id": "HOS-07", "name": "Pelican", "city": "Oradea", "address": "Str. Corneliu Coposu 2", "phoneNumber": "0259777777", "departmentIds": ["DEP-09"], "roomIds": ["ROM-09"] },
+  { "id": "HOS-08", "name": "Spitalul Militar", "city": "Cluj-Napoca", "address": "Str. G-ral Traian Moșoiu", "phoneNumber": "0264888888", "departmentIds": ["DEP-10"], "roomIds": ["ROM-10"] },
+  { "id": "HOS-09", "name": "Euromaterna", "city": "Constanța", "address": "Str. Ștefan cel Mare", "phoneNumber": "0241999999", "departmentIds": [], "roomIds": [] },
+  { "id": "HOS-10", "name": "Novamed", "city": "Bălți", "address": "Str. Libertății", "phoneNumber": "0231000000", "departmentIds": [], "roomIds": [] }
+]

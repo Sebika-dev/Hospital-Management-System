@@ -43,29 +43,40 @@ public class DoctorWebController {
     }
 
     @PostMapping
-    public String createDoctor(@ModelAttribute Doctor doctor) {
-        doctorService.addDoctor(doctor);
-        return "redirect:/doctors";
-    }
-
-    @PostMapping("/{id}/delete")
-    public String deleteDoctor(@PathVariable String id) {
-        doctorService.deleteDoctor(id);
-        return "redirect:/doctors";
+    public String createDoctor(@ModelAttribute Doctor doctor, Model model) {
+        try {
+            doctorService.addDoctor(doctor);
+            return "redirect:/doctors";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("departments", departmentService.getAllDepartments());
+            return "doctor/form";
+        }
     }
 
     @GetMapping("/{id}/edit")
     public String editDoctor(@PathVariable String id, Model model) {
-        Doctor doctor = doctorService.getDoctorById(id).orElseThrow();
-        model.addAttribute("doctor", doctor);
+        model.addAttribute("doctor", doctorService.getDoctorById(id).orElseThrow());
         model.addAttribute("departments", departmentService.getAllDepartments());
         return "doctor/form";
     }
 
     @PostMapping("/{id}")
-    public String updateDoctor(@PathVariable String id, @ModelAttribute Doctor doctor) {
-        doctor.setId(id);
-        doctorService.updateDoctor(doctor);
+    public String updateDoctor(@PathVariable String id, @ModelAttribute Doctor doctor, Model model) {
+        try {
+            doctor.setId(id);
+            doctorService.updateDoctor(doctor);
+            return "redirect:/doctors";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("departments", departmentService.getAllDepartments());
+            return "doctor/form";
+        }
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteDoctor(@PathVariable String id) {
+        doctorService.deleteDoctor(id);
         return "redirect:/doctors";
     }
 }

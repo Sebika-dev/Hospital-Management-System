@@ -16,22 +16,25 @@ public class AppointmentService {
     private final DoctorService doctorService;
     private final NurseService nurseService;
     private final RoomService roomService;
+    private final Validator validator;
 
     @Autowired
     public AppointmentService(FileAppointmentRepository appointmentRepository,
                               PatientService patientService,
                               DoctorService doctorService,
                               NurseService nurseService,
-                              RoomService roomService) {
+                              RoomService roomService,
+                              Validator validator) {
         this.appointmentRepository = appointmentRepository;
         this.patientService = patientService;
         this.doctorService = doctorService;
         this.nurseService = nurseService;
         this.roomService = roomService;
+        this.validator = validator;
     }
 
     public Appointment addAppointment(Appointment appt) {
-        // Dacă lipsește departamentul pe appointment, îl completăm din pacient (dacă există pe pacient)
+        // Auto-fill department din pacient dacă lipsește
         if ((appt.getDepartmentId() == null || appt.getDepartmentId().isEmpty())
                 && appt.getPatientId() != null) {
             patientService.getPatientById(appt.getPatientId()).ifPresent(p -> {
@@ -41,28 +44,27 @@ public class AppointmentService {
             });
         }
 
+        validator.validateAppointment(appt);
+
         Appointment saved = appointmentRepository.save(appt);
 
-        // patient
+        // Update Patient
         if (saved.getPatientId() != null) {
             patientService.getPatientById(saved.getPatientId()).ifPresent(p -> {
                 if (!p.getAppointmentIds().contains(saved.getId())) {
                     p.getAppointmentIds().add(saved.getId());
+                    // Folosim save direct din repository-ul pacientului pentru a evita validarea duplicat aici
+                    // sau folosim updatePatient dacă suntem siguri că datele pacientului sunt valide
                     patientService.updatePatient(p);
                 }
-                // room: dacă pacientul e cazat, adaugă appointmentul la camera lui
+                // Update Room (prin pacient)
                 if (p.getRoomId() != null) {
-                    roomService.getRoomById(p.getRoomId()).ifPresent(r -> {
-                        if (!r.getAppointmentIds().contains(saved.getId())) {
-                            r.getAppointmentIds().add(saved.getId());
-                            roomService.updateRoom(r);
-                        }
-                    });
+                    roomService.attachAppointmentToRoom(p.getRoomId(), saved.getId());
                 }
             });
         }
 
-        // doctor
+        // Update Doctor
         if (saved.getDoctorId() != null && !saved.getDoctorId().isEmpty()) {
             doctorService.getDoctorById(saved.getDoctorId()).ifPresent(d -> {
                 if (!d.getAppointmentIds().contains(saved.getId())) {
@@ -72,7 +74,7 @@ public class AppointmentService {
             });
         }
 
-        // nurse
+        // Update Nurse
         if (saved.getNurseId() != null && !saved.getNurseId().isEmpty()) {
             nurseService.getNurseById(saved.getNurseId()).ifPresent(n -> {
                 if (!n.getAppointmentIds().contains(saved.getId())) {
@@ -86,8 +88,10 @@ public class AppointmentService {
     }
 
     public Appointment updateAppointment(Appointment appt) {
+        validator.validateAppointment(appt);
+
         appointmentRepository.findById(appt.getId()).ifPresent(old -> {
-            // doctor change
+            // Gestionare schimbare Doctor
             if (!Objects.equals(old.getDoctorId(), appt.getDoctorId())) {
                 if (old.getDoctorId() != null && !old.getDoctorId().isEmpty()) {
                     doctorService.getDoctorById(old.getDoctorId()).ifPresent(d -> {
@@ -105,7 +109,7 @@ public class AppointmentService {
                 }
             }
 
-            // nurse change
+            // Gestionare schimbare Nurse
             if (!Objects.equals(old.getNurseId(), appt.getNurseId())) {
                 if (old.getNurseId() != null && !old.getNurseId().isEmpty()) {
                     nurseService.getNurseById(old.getNurseId()).ifPresent(n -> {
@@ -136,28 +140,25 @@ public class AppointmentService {
 
     public void deleteAppointment(String id) {
         appointmentRepository.findById(id).ifPresent(appt -> {
-            // patient
+            // Curățare referințe din Patient și Room
             if (appt.getPatientId() != null) {
                 patientService.getPatientById(appt.getPatientId()).ifPresent(p -> {
                     p.getAppointmentIds().remove(id);
                     patientService.updatePatient(p);
 
                     if (p.getRoomId() != null) {
-                        roomService.getRoomById(p.getRoomId()).ifPresent(r -> {
-                            r.getAppointmentIds().remove(id);
-                            roomService.updateRoom(r);
-                        });
+                        roomService.detachAppointmentFromRoom(p.getRoomId(), id);
                     }
                 });
             }
-            // doctor
+            // Curățare referințe Doctor
             if (appt.getDoctorId() != null && !appt.getDoctorId().isEmpty()) {
                 doctorService.getDoctorById(appt.getDoctorId()).ifPresent(d -> {
                     d.getAppointmentIds().remove(id);
                     doctorService.updateDoctor(d);
                 });
             }
-            // nurse
+            // Curățare referințe Nurse
             if (appt.getNurseId() != null && !appt.getNurseId().isEmpty()) {
                 nurseService.getNurseById(appt.getNurseId()).ifPresent(n -> {
                     n.getAppointmentIds().remove(id);

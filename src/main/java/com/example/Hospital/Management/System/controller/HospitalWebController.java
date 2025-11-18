@@ -30,9 +30,32 @@ public class HospitalWebController {
     }
 
     @PostMapping
-    public String createHospital(@ModelAttribute Hospital hospital) {
-        hospitalService.addHospital(hospital);
-        return "redirect:/hospitals";
+    public String createHospital(@ModelAttribute Hospital hospital, Model model) {
+        try {
+            hospitalService.addHospital(hospital);
+            return "redirect:/hospitals";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "hospital/form";
+        }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editHospital(@PathVariable String id, Model model) {
+        model.addAttribute("hospital", hospitalService.getHospitalById(id).orElseThrow());
+        return "hospital/form";
+    }
+
+    @PostMapping("/{id}")
+    public String updateHospital(@PathVariable String id, @ModelAttribute Hospital hospital, Model model) {
+        try {
+            hospital.setId(id);
+            hospitalService.updateHospital(hospital);
+            return "redirect:/hospitals";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "hospital/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -40,19 +63,4 @@ public class HospitalWebController {
         hospitalService.deleteHospital(id);
         return "redirect:/hospitals";
     }
-
-    @GetMapping("/{id}/edit")
-    public String editHospital(@PathVariable String id, Model model) {
-        Hospital hospital = hospitalService.getHospitalById(id).orElseThrow();
-        model.addAttribute("hospital", hospital);
-        return "hospital/form";
-    }
-
-    @PostMapping("/{id}")
-    public String updateHospital(@PathVariable String id, @ModelAttribute Hospital hospital) {
-        hospital.setId(id);
-        hospitalService.updateHospital(hospital);
-        return "redirect:/hospitals";
-    }
-
 }

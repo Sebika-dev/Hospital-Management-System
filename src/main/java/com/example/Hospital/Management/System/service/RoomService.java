@@ -13,17 +13,21 @@ import java.util.Optional;
 public class RoomService {
     private final FileRoomRepository roomRepository;
     private final HospitalService hospitalService;
+    private final Validator validator;
 
     @Autowired
     public RoomService(FileRoomRepository roomRepository,
-                       @Lazy HospitalService hospitalService) {
+                       @Lazy HospitalService hospitalService,
+                       Validator validator) {
         this.roomRepository = roomRepository;
         this.hospitalService = hospitalService;
+        this.validator = validator;
     }
 
     public Room addRoom(Room room) {
+        validator.validateRoom(room);
+
         Room saved = roomRepository.save(room);
-        // atașează camera la spital
         if (saved.getHospitalId() != null) {
             hospitalService.getHospitalById(saved.getHospitalId()).ifPresent(h -> {
                 if (!h.getRoomIds().contains(saved.getId())) {
@@ -36,20 +40,19 @@ public class RoomService {
     }
 
     public Room updateRoom(Room room) {
-        // Dacă s-a schimbat hospitalId, mută camera între spitale
+        validator.validateRoom(room);
+
         roomRepository.findById(room.getId()).ifPresent(old -> {
             String oldHospital = old.getHospitalId();
             String newHospital = room.getHospitalId();
 
             if (oldHospital != null && !oldHospital.equals(newHospital)) {
-                // scoate din spitalul vechi
                 hospitalService.getHospitalById(oldHospital).ifPresent(h -> {
                     h.getRoomIds().remove(room.getId());
                     hospitalService.updateHospital(h);
                 });
             }
             if (newHospital != null && !newHospital.equals(oldHospital)) {
-                // adaugă în spitalul nou
                 hospitalService.getHospitalById(newHospital).ifPresent(h -> {
                     if (!h.getRoomIds().contains(room.getId())) {
                         h.addRoom(room.getId());
@@ -90,13 +93,13 @@ public class RoomService {
         roomRepository.deleteAll();
     }
 
-    // ===== Helpers pentru appointments în cameră =====
     public void attachAppointmentToRoom(String roomId, String appointmentId) {
         if (roomId == null || appointmentId == null) return;
         getRoomById(roomId).ifPresent(r -> {
             if (!r.getAppointmentIds().contains(appointmentId)) {
                 r.getAppointmentIds().add(appointmentId);
-                updateRoom(r);
+                // Salvare directă fără validare completă (e doar o actualizare de relație)
+                roomRepository.save(r);
             }
         });
     }
@@ -105,7 +108,7 @@ public class RoomService {
         if (roomId == null || appointmentId == null) return;
         getRoomById(roomId).ifPresent(r -> {
             if (r.getAppointmentIds().remove(appointmentId)) {
-                updateRoom(r);
+                roomRepository.save(r);
             }
         });
     }

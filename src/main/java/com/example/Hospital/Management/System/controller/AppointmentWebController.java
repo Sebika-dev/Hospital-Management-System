@@ -1,16 +1,7 @@
 package com.example.Hospital.Management.System.controller;
 
-import com.example.Hospital.Management.System.model.Appointment;
-import com.example.Hospital.Management.System.model.Department;
-import com.example.Hospital.Management.System.model.Patient;
-import com.example.Hospital.Management.System.model.Doctor;
-import com.example.Hospital.Management.System.model.Nurse;
-import com.example.Hospital.Management.System.model.AppointmentStatus;
-import com.example.Hospital.Management.System.service.AppointmentService;
-import com.example.Hospital.Management.System.service.DepartmentService;
-import com.example.Hospital.Management.System.service.PatientService;
-import com.example.Hospital.Management.System.service.DoctorService;
-import com.example.Hospital.Management.System.service.NurseService;
+import com.example.Hospital.Management.System.model.*;
+import com.example.Hospital.Management.System.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,18 +56,40 @@ public class AppointmentWebController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("appointment", new Appointment());
-        model.addAttribute("departments", departmentService.getAllDepartments());
-        model.addAttribute("patients", patientService.getAllPatients());
-        model.addAttribute("doctors", doctorService.getAllDoctors());
-        model.addAttribute("nurses", nurseService.getAllNurses());
-        model.addAttribute("statuses", AppointmentStatus.values());
+        populateFormData(model);
         return "appointment/form";
     }
 
     @PostMapping
-    public String createAppointment(@ModelAttribute Appointment appointment) {
-        appointmentService.addAppointment(appointment);
-        return "redirect:/appointments";
+    public String createAppointment(@ModelAttribute Appointment appointment, Model model) {
+        try {
+            appointmentService.addAppointment(appointment);
+            return "redirect:/appointments";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            populateFormData(model);
+            return "appointment/form";
+        }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editAppointment(@PathVariable String id, Model model) {
+        model.addAttribute("appointment", appointmentService.getAppointmentById(id).orElseThrow());
+        populateFormData(model);
+        return "appointment/form";
+    }
+
+    @PostMapping("/{id}")
+    public String updateAppointment(@PathVariable String id, @ModelAttribute Appointment appointment, Model model) {
+        try {
+            appointment.setId(id);
+            appointmentService.updateAppointment(appointment);
+            return "redirect:/appointments";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            populateFormData(model);
+            return "appointment/form";
+        }
     }
 
     @PostMapping("/{id}/delete")
@@ -85,25 +98,11 @@ public class AppointmentWebController {
         return "redirect:/appointments";
     }
 
-    @GetMapping("/{id}/edit")
-    public String editAppointment(@PathVariable String id, Model model) {
-        Appointment appointment = appointmentService.getAppointmentById(id).orElseThrow();
-        model.addAttribute("appointment", appointment);
-
-        // Trebuie încărcate toate listele pentru dropdown-uri
+    private void populateFormData(Model model) {
         model.addAttribute("departments", departmentService.getAllDepartments());
         model.addAttribute("patients", patientService.getAllPatients());
         model.addAttribute("doctors", doctorService.getAllDoctors());
         model.addAttribute("nurses", nurseService.getAllNurses());
         model.addAttribute("statuses", AppointmentStatus.values());
-
-        return "appointment/form";
-    }
-
-    @PostMapping("/{id}")
-    public String updateAppointment(@PathVariable String id, @ModelAttribute Appointment appointment) {
-        appointment.setId(id);
-        appointmentService.updateAppointment(appointment);
-        return "redirect:/appointments";
     }
 }

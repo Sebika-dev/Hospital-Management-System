@@ -11,17 +11,21 @@ import java.util.Optional;
 @Service
 public class DoctorService {
     private final FileDoctorRepository doctorRepository;
+    private final Validator validator;
 
     @Autowired
-    public DoctorService(FileDoctorRepository doctorRepository) {
+    public DoctorService(FileDoctorRepository doctorRepository, Validator validator) {
         this.doctorRepository = doctorRepository;
+        this.validator = validator;
     }
 
     public Doctor addDoctor(Doctor doctor) {
+        validator.validateDoctor(doctor);
         return doctorRepository.save(doctor);
     }
 
     public Doctor updateDoctor(Doctor doctor) {
+        validator.validateDoctor(doctor);
         return doctorRepository.save(doctor);
     }
 
@@ -43,15 +47,5 @@ public class DoctorService {
 
     public void deleteAllDoctors() {
         doctorRepository.deleteAll();
-    }
-
-    // Helper opțional
-    public void addAppointmentToDoctor(String doctorId, String appointmentId) {
-        getDoctorById(doctorId).ifPresent(d -> {
-            if (!d.getAppointmentIds().contains(appointmentId)) {
-                d.addAppointment(appointmentId);
-                updateDoctor(d);
-            }
-        });
     }
 }

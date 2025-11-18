@@ -1,7 +1,12 @@
-[ {
-  "id" : "DOC-87862823",
-  "name" : "Albu Marian",
-  "appointmentIds" : [ "APP-5e58edaa" ],
-  "departmentId" : "DEPT-6f194287",
-  "licenseNumber" : "222"
-} ]
+[
+  { "id": "DOC-01", "name": "Ion Popescu", "departmentId": "DEP-01", "licenseNumber": "L-12345", "appointmentIds": ["APP-01"] },
+  { "id": "DOC-02", "name": "Maria Ionescu", "departmentId": "DEP-02", "licenseNumber": "L-23456", "appointmentIds": [] },
+  { "id": "DOC-03", "name": "Andrei Georgescu", "departmentId": "DEP-03", "licenseNumber": "L-34567", "appointmentIds": [] },
+  { "id": "DOC-04", "name": "Elena Stan", "departmentId": "DEP-04", "licenseNumber": "L-45678", "appointmentIds": [] },
+  { "id": "DOC-05", "name": "Mihai Dumitrescu", "departmentId": "DEP-05", "licenseNumber": "L-56789", "appointmentIds": ["APP-02"] },
+  { "id": "DOC-06", "name": "Cristina Marin", "departmentId": "DEP-06", "licenseNumber": "L-67890", "appointmentIds": [] },
+  { "id": "DOC-07", "name": "Vasile Florea", "departmentId": "DEP-07", "licenseNumber": "L-78901", "appointmentIds": [] },
+  { "id": "DOC-08", "name": "Carmen Radu", "departmentId": "DEP-08", "licenseNumber": "L-89012", "appointmentIds": [] },
+  { "id": "DOC-09", "name": "Alexandru Stoica", "departmentId": "DEP-09", "licenseNumber": "L-90123", "appointmentIds": ["APP-03"] },
+  { "id": "DOC-10", "name": "Laura Munteanu", "departmentId": "DEP-10", "licenseNumber": "L-01234", "appointmentIds": [] }
+]

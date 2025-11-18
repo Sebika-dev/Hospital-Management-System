@@ -1,7 +1,12 @@
-[ {
-  "id" : "NUR-80637081",
-  "name" : "Alba Iulia",
-  "appointmentIds" : [ "APP-5e58edaa" ],
-  "departmentId" : "DEPT-6f194287",
-  "qualificationLevel" : "REGISTERED_NURSE"
-} ]
+[
+  { "id": "NUR-01", "name": "Ana Diaconu", "departmentId": "DEP-01", "qualificationLevel": "REGISTERED_NURSE", "appointmentIds": ["APP-01"] },
+  { "id": "NUR-02", "name": "Ioana Barbu", "departmentId": "DEP-02", "qualificationLevel": "PRACTICAL_NURSE", "appointmentIds": [] },
+  { "id": "NUR-03", "name": "Raluca Nistor", "departmentId": "DEP-03", "qualificationLevel": "REGISTERED_NURSE", "appointmentIds": [] },
+  { "id": "NUR-04", "name": "Simona Voinea", "departmentId": "DEP-04", "qualificationLevel": "REGISTERED_NURSE", "appointmentIds": [] },
+  { "id": "NUR-05", "name": "Daniela Rusu", "departmentId": "DEP-05", "qualificationLevel": "PRACTICAL_NURSE", "appointmentIds": ["APP-02"] },
+  { "id": "NUR-06", "name": "Georgeta Preda", "departmentId": "DEP-06", "qualificationLevel": "REGISTERED_NURSE", "appointmentIds": [] },
+  { "id": "NUR-07", "name": "Mihaela Toma", "departmentId": "DEP-07", "qualificationLevel": "PRACTICAL_NURSE", "appointmentIds": [] },
+  { "id": "NUR-08", "name": "Gabriela Sandu", "departmentId": "DEP-08", "qualificationLevel": "REGISTERED_NURSE", "appointmentIds": [] },
+  { "id": "NUR-09", "name": "Alina Dobre", "departmentId": "DEP-09", "qualificationLevel": "REGISTERED_NURSE", "appointmentIds": ["APP-03"] },
+  { "id": "NUR-10", "name": "Diana Mocanu", "departmentId": "DEP-10", "qualificationLevel": "PRACTICAL_NURSE", "appointmentIds": [] }
+]
