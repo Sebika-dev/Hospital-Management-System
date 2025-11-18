@@ -9,7 +9,9 @@ public class Patient {
     private String phoneNumber;
     private String email;
 
-    // NOI
+    // NOU: Legătura directă cu spitalul
+    private String hospitalId;
+
     private String roomId;
     private String departmentId;
 
@@ -26,6 +28,9 @@ public class Patient {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getHospitalId() { return hospitalId; }
+    public void setHospitalId(String hospitalId) { this.hospitalId = hospitalId; }
 
     public String getRoomId() { return roomId; }
     public void setRoomId(String roomId) { this.roomId = roomId; }

@@ -98,7 +98,6 @@ public class RoomService {
         getRoomById(roomId).ifPresent(r -> {
             if (!r.getAppointmentIds().contains(appointmentId)) {
                 r.getAppointmentIds().add(appointmentId);
-                // Salvare directă fără validare completă (e doar o actualizare de relație)
                 roomRepository.save(r);
             }
         });

@@ -14,8 +14,13 @@ public class Validator {
     public void validatePatient(Patient patient) {
         validateName(patient.getName(), "Nume Pacient");
         validatePhone(patient.getPhoneNumber());
+
+        if (patient.getHospitalId() == null || patient.getHospitalId().isEmpty()) {
+            throw new IllegalArgumentException("Selectarea spitalului este obligatorie!");
+        }
     }
 
+    // ... Restul metodelor (validateDoctor, validateNurse etc.) rămân neschimbate ...
     public void validateDoctor(Doctor doctor) {
         validateName(doctor.getName(), "Nume Doctor");
         if (doctor.getLicenseNumber() == null || doctor.getLicenseNumber().trim().isEmpty()) {

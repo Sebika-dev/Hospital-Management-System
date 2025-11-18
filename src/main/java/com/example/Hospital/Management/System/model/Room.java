@@ -1,6 +1,5 @@
 package com.example.Hospital.Management.System.model;
 
-import com.example.Hospital.Management.System.model.RoomStatus;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,10 +7,9 @@ public class Room {
     private String id;
     private String hospitalId;
     private String number;
-    private double capacity;
+    private int capacity; // Modificat din double în int
     private RoomStatus status;
 
-    // NOI: programări aferente camerei (pacienții cazați care au programări)
     private List<String> appointmentIds = new ArrayList<>();
 
     public String getId() { return id; }
@@ -23,8 +21,8 @@ public class Room {
     public String getNumber() { return number; }
     public void setNumber(String number) { this.number = number; }
 
-    public double getCapacity() { return capacity; }
-    public void setCapacity(double capacity) { this.capacity = capacity; }
+    public int getCapacity() { return capacity; } // Getter actualizat
+    public void setCapacity(int capacity) { this.capacity = capacity; } // Setter actualizat
 
     public RoomStatus getStatus() { return status; }
     public void setStatus(RoomStatus status) { this.status = status; }

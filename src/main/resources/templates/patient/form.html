@@ -1,12 +1,22 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
-    <meta charset="UTF-8"><title>Patient</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Form</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
-</head><body><div class="wrap">
+</head>
+<body>
+<div class="wrap">
     <div class="topbar">
         <a class="back" th:href="@{/patients}">← Back</a>
         <div class="hx"><div class="pill p">🧑‍⚕️</div><h1 th:text="${patient.id} != null ? 'Edit Patient' : 'New Patient'">New Patient</h1></div>
     </div>
     <div class="card">
+        <div th:if="${error}" class="alert alert-danger"
+             style="background-color: #ef4444; color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+            <span th:text="${error}">Error</span>
+        </div>
+
         <form class="form" th:action="${patient.id} != null ? @{/patients/{id}(id=${patient.id})} : @{/patients}" th:object="${patient}" method="post">
             <div class="row">
                 <div><label>Name</label><input th:field="*{name}" required></div>
@@ -14,22 +24,92 @@
             </div>
             <div class="row">
                 <div><label>Email</label><input type="email" th:field="*{email}"></div>
+
                 <div>
-                    <label>Department</label>
-                    <select th:field="*{departmentId}">
-                        <option value="">-- None --</option>
-                        <option th:each="dep : ${departments}" th:value="${dep.id}" th:text="${dep.name}"></option>
+                    <label>Hospital</label>
+                    <select id="hospitalSelect" th:field="*{hospitalId}" required onchange="loadHospitalResources()">
+                        <option value="">-- Select Hospital --</option>
+                        <option th:each="h : ${hospitals}" th:value="${h.id}" th:text="${h.name}"></option>
                     </select>
                 </div>
             </div>
-            <div>
-                <label>Room</label>
-                <select th:field="*{roomId}">
-                    <option value="">-- None --</option>
-                    <option th:each="r : ${rooms}" th:value="${r.id}" th:text="${'Room ' + r.number}"></option>
-                </select>
+
+            <div class="row">
+                <div>
+                    <label>Department</label>
+                    <select id="departmentSelect" th:field="*{departmentId}">
+                        <option value="">-- First select a hospital --</option>
+                        <option th:each="dep : ${departments}"
+                                th:value="${dep.id}"
+                                th:text="${dep.name}"
+                                th:if="${patient.hospitalId == dep.hospitalId}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Room</label>
+                    <select id="roomSelect" th:field="*{roomId}">
+                        <option value="">-- First select a hospital --</option>
+                        <option th:each="r : ${rooms}"
+                                th:value="${r.id}"
+                                th:text="${'Room ' + r.number}"
+                                th:if="${patient.hospitalId == r.hospitalId}"></option>
+                    </select>
+                </div>
             </div>
+
             <div><button class="btn btn-success" type="submit" th:text="${patient.id} != null ? 'Save' : 'Create'">Create</button></div>
         </form>
     </div>
-</div></body></html>
+</div>
+
+<script th:inline="javascript">
+    /* Logică pentru încărcarea dinamică */
+    const hospitalSelect = document.getElementById('hospitalSelect');
+    const departmentSelect = document.getElementById('departmentSelect');
+    const roomSelect = document.getElementById('roomSelect');
+
+    // Valori salvate (pentru editare)
+    const currentDeptId = [[${patient.departmentId}]];
+    const currentRoomId = [[${patient.roomId}]];
+
+    async function loadHospitalResources() {
+        const hospitalId = hospitalSelect.value;
+
+        // Reset dropdowns
+        departmentSelect.innerHTML = '<option value="">-- Select Department --</option>';
+        roomSelect.innerHTML = '<option value="">-- Select Room --</option>';
+
+        if (!hospitalId) return;
+
+        try {
+            const response = await fetch('/api/hospitals/' + hospitalId + '/resources');
+            if (response.ok) {
+                const data = await response.json();
+
+                // Populează Departamente
+                data.departments.forEach(dept => {
+                    const opt = document.createElement('option');
+                    opt.value = dept.id;
+                    opt.textContent = dept.name;
+                    if (dept.id === currentDeptId) opt.selected = true;
+                    departmentSelect.appendChild(opt);
+                });
+
+                // Populează Camere
+                data.rooms.forEach(room => {
+                    const opt = document.createElement('option');
+                    opt.value = room.id;
+                    opt.textContent = 'Room ' + room.number + ' (Cap: ' + room.capacity + ')';
+                    if (room.id === currentRoomId) opt.selected = true;
+                    roomSelect.appendChild(opt);
+                });
+            }
+        } catch (error) {
+            console.error("Error loading resources:", error);
+        }
+    }
+
+
+</script>
+</body>
+</html>

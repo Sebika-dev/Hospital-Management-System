@@ -14,24 +14,30 @@ public class PatientService {
 
     private final FilePatientRepository patientRepository;
     private final RoomService roomService;
+    private final DepartmentService departmentService; // Avem nevoie de asta pentru verificare
     private final Validator validator;
 
     @Autowired
     public PatientService(FilePatientRepository patientRepository,
                           RoomService roomService,
+                          DepartmentService departmentService,
                           Validator validator) {
         this.patientRepository = patientRepository;
         this.roomService = roomService;
+        this.departmentService = departmentService;
         this.validator = validator;
     }
 
     public Patient addPatient(Patient p) {
         validator.validatePatient(p);
+        validateHospitalConsistency(p); // Verificare extra
         return patientRepository.save(p);
     }
 
     public Patient updatePatient(Patient updated) {
         validator.validatePatient(updated);
+        validateHospitalConsistency(updated); // Verificare extra
+
         patientRepository.findById(updated.getId()).ifPresent(old -> {
             if (!Objects.equals(old.getRoomId(), updated.getRoomId())) {
                 // Scoate din camera veche
@@ -55,6 +61,27 @@ public class PatientService {
             }
         });
         return patientRepository.save(updated);
+    }
+
+    // Metodă privată pentru a asigura consistența datelor
+    private void validateHospitalConsistency(Patient p) {
+        String hosId = p.getHospitalId();
+
+        if (p.getRoomId() != null && !p.getRoomId().isEmpty()) {
+            roomService.getRoomById(p.getRoomId()).ifPresent(room -> {
+                if (!Objects.equals(room.getHospitalId(), hosId)) {
+                    throw new IllegalArgumentException("Camera selectată nu aparține spitalului ales!");
+                }
+            });
+        }
+
+        if (p.getDepartmentId() != null && !p.getDepartmentId().isEmpty()) {
+            departmentService.getDepartmentById(p.getDepartmentId()).ifPresent(dept -> {
+                if (!Objects.equals(dept.getHospitalId(), hosId)) {
+                    throw new IllegalArgumentException("Departamentul selectat nu aparține spitalului ales!");
+                }
+            });
+        }
     }
 
     public void deletePatient(String id) {
