@@ -1,12 +1,30 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
-    <meta charset="UTF-8"><title>Rooms</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rooms</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
-</head><body><div class="wrap">
-    <div class="topbar"><a class="back" th:href="@{/}">← Home</a><div class="hx"><div class="pill r">🛏️</div><h1>Rooms</h1></div></div>
+</head>
+<body>
+<div class="wrap">
+    <div class="topbar">
+        <a class="back" th:href="@{/}">← Home</a>
+        <div class="hx"><div class="pill r">🛏️</div><h1>Rooms</h1></div>
+    </div>
     <div class="card">
         <div class="actions"><a class="btn btn-success" th:href="@{/rooms/new}">＋ Add Room</a></div>
         <table class="table">
-            <thead><tr><th>ID</th><th>Hospital</th><th>Number</th><th>Capacity</th><th>Status</th><th>Appointments</th><th></th></tr></thead>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Hospital</th>
+                <th>Number</th>
+                <th>Capacity</th>
+                <th>Status</th>
+                <th>Appointments</th>
+                <th></th>
+            </tr>
+            </thead>
             <tbody>
             <tr th:each="r : ${rooms}">
                 <td th:text="${r.id}"></td>
@@ -15,9 +33,16 @@
                 <td th:text="${r.capacity}"></td>
                 <td th:text="${r.status}"></td>
                 <td th:text="${r.appointmentIds.size()}"></td>
-                <td><form th:action="@{/rooms/{id}/delete(id=${r.id})}" method="post"><button class="btn btn-danger" type="submit">Delete</button></form></td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{/rooms/{id}/edit(id=${r.id})}">Edit</a>
+                    <form style="display:inline" th:action="@{/rooms/{id}/delete(id=${r.id})}" method="post">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
-</div></body></html>
+</div>
+</body>
+</html>

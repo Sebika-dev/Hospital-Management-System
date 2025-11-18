@@ -2,18 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New Appointment</title>
+    <title>Appointment Form</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div class="wrap">
     <div class="topbar">
         <a class="back" th:href="@{/appointments}">← Back</a>
-        <div class="hx"><div class="pill a">📅</div><h1>New Appointment</h1></div>
+        <div class="hx">
+            <div class="pill a">📅</div>
+            <h1 th:text="${appointment.id} != null ? 'Edit Appointment' : 'New Appointment'">New Appointment</h1>
+        </div>
     </div>
 
     <div class="card">
-        <form class="form" th:action="@{/appointments}" th:object="${appointment}" method="post">
+        <form class="form"
+              th:action="${appointment.id} != null ? @{/appointments/{id}(id=${appointment.id})} : @{/appointments}"
+              th:object="${appointment}"
+              method="post">
+
             <div class="row">
                 <div>
                     <label>Department</label>
@@ -62,7 +69,9 @@
                 </div>
             </div>
 
-            <div><button class="btn btn-success" type="submit">Create</button></div>
+            <div>
+                <button class="btn btn-success" type="submit" th:text="${appointment.id} != null ? 'Save' : 'Create'">Create</button>
+            </div>
         </form>
     </div>
 </div>

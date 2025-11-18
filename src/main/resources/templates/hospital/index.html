@@ -1,21 +1,50 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
-    <meta charset="UTF-8"><title>Hospitals</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospitals</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
-<body><div class="wrap">
-    <div class="topbar"><a class="back" th:href="@{/}">← Home</a><div class="hx"><div class="pill h">🏨</div><h1>Hospitals</h1></div></div>
+<body>
+<div class="wrap">
+    <div class="topbar">
+        <a class="back" th:href="@{/}">← Home</a>
+        <div class="hx"><div class="pill h">🏨</div><h1>Hospitals</h1></div>
+    </div>
     <div class="card">
         <div class="actions"><a class="btn btn-success" th:href="@{/hospitals/new}">＋ Add Hospital</a></div>
         <table class="table">
-            <thead><tr><th>ID</th><th>Name</th><th>City</th><th>Address</th><th>Phone</th><th>Depts</th><th>Rooms</th><th></th></tr></thead>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Depts</th>
+                <th>Rooms</th>
+                <th></th>
+            </tr>
+            </thead>
             <tbody>
             <tr th:each="h : ${hospitals}">
-                <td th:text="${h.id}"></td><td th:text="${h.name}"></td><td th:text="${h.city}"></td>
-                <td th:text="${h.address}"></td><td th:text="${h.phoneNumber}"></td>
-                <td th:text="${h.departmentIds.size()}"></td><td th:text="${h.roomIds.size()}"></td>
-                <td><form th:action="@{/hospitals/{id}/delete(id=${h.id})}" method="post"><button class="btn btn-danger" type="submit">Delete</button></form></td>
+                <td th:text="${h.id}"></td>
+                <td th:text="${h.name}"></td>
+                <td th:text="${h.city}"></td>
+                <td th:text="${h.address}"></td>
+                <td th:text="${h.phoneNumber}"></td>
+                <td th:text="${h.departmentIds.size()}"></td>
+                <td th:text="${h.roomIds.size()}"></td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{/hospitals/{id}/edit(id=${h.id})}">Edit</a>
+                    <form style="display:inline" th:action="@{/hospitals/{id}/delete(id=${h.id})}" method="post">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
-</div></body></html>
+</div>
+</body>
+</html>
