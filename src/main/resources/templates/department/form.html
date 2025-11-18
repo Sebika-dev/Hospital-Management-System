@@ -1,10 +1,25 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
-    <meta charset="UTF-8"><title>New Department</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Department Form</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
-</head><body><div class="wrap">
-    <div class="topbar"><a class="back" th:href="@{/departments}">← Back</a><div class="hx"><div class="pill d">🏥</div><h1>New Department</h1></div></div>
+</head>
+<body>
+<div class="wrap">
+    <div class="topbar">
+        <a class="back" th:href="@{/departments}">← Back</a>
+        <div class="hx">
+            <div class="pill d">🏥</div>
+            <h1 th:text="${department.id} != null ? 'Edit Department' : 'New Department'">New Department</h1>
+        </div>
+    </div>
     <div class="card">
-        <form class="form" th:action="@{/departments}" th:object="${department}" method="post">
+        <form class="form"
+              th:action="${department.id} != null ? @{/departments/{id}(id=${department.id})} : @{/departments}"
+              th:object="${department}"
+              method="post">
+
             <div class="row">
                 <div><label>Name</label><input th:field="*{name}" required></div>
                 <div>
@@ -19,7 +34,12 @@
                 <div><label>Head Doctor</label><input th:field="*{headDoctorName}"></div>
                 <div><label>Phone</label><input th:field="*{phoneNumber}"></div>
             </div>
-            <div><button class="btn btn-success" type="submit">Create</button></div>
+
+            <div>
+                <button class="btn btn-success" type="submit" th:text="${department.id} != null ? 'Save' : 'Create'">Create</button>
+            </div>
         </form>
     </div>
-</div></body></html>
+</div>
+</body>
+</html>
