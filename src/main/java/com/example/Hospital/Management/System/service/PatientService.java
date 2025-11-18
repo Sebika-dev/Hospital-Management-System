@@ -14,7 +14,7 @@ public class PatientService {
 
     private final FilePatientRepository patientRepository;
     private final RoomService roomService;
-    private final DepartmentService departmentService; // Avem nevoie de asta pentru verificare
+    private final DepartmentService departmentService;
     private final Validator validator;
 
     @Autowired
@@ -30,24 +30,22 @@ public class PatientService {
 
     public Patient addPatient(Patient p) {
         validator.validatePatient(p);
-        validateHospitalConsistency(p); // Verificare extra
+        validateHospitalConsistency(p);
         return patientRepository.save(p);
     }
 
     public Patient updatePatient(Patient updated) {
         validator.validatePatient(updated);
-        validateHospitalConsistency(updated); // Verificare extra
+        validateHospitalConsistency(updated);
 
         patientRepository.findById(updated.getId()).ifPresent(old -> {
             if (!Objects.equals(old.getRoomId(), updated.getRoomId())) {
-                // Scoate din camera veche
                 if (old.getRoomId() != null) {
                     roomService.getRoomById(old.getRoomId()).ifPresent(r -> {
                         r.getAppointmentIds().removeAll(updated.getAppointmentIds());
                         roomService.updateRoom(r);
                     });
                 }
-                // Adaugă în camera nouă
                 if (updated.getRoomId() != null) {
                     roomService.getRoomById(updated.getRoomId()).ifPresent(r -> {
                         for (String appId : updated.getAppointmentIds()) {
@@ -63,10 +61,27 @@ public class PatientService {
         return patientRepository.save(updated);
     }
 
-    // Metodă privată pentru a asigura consistența datelor
+    // METODĂ NOUĂ: Adaugă programare fără validare completă a datelor pacientului
+    // (utilă pentru a nu bloca fluxul dacă pacientul are date vechi ușor incomplete)
+    public void addAppointmentToPatient(String patientId, String appointmentId) {
+        patientRepository.findById(patientId).ifPresent(p -> {
+            if (!p.getAppointmentIds().contains(appointmentId)) {
+                p.getAppointmentIds().add(appointmentId);
+                patientRepository.save(p); // Salvare directă
+            }
+        });
+    }
+
+    public void removeAppointmentFromPatient(String patientId, String appointmentId) {
+        patientRepository.findById(patientId).ifPresent(p -> {
+            if (p.getAppointmentIds().remove(appointmentId)) {
+                patientRepository.save(p); // Salvare directă
+            }
+        });
+    }
+
     private void validateHospitalConsistency(Patient p) {
         String hosId = p.getHospitalId();
-
         if (p.getRoomId() != null && !p.getRoomId().isEmpty()) {
             roomService.getRoomById(p.getRoomId()).ifPresent(room -> {
                 if (!Objects.equals(room.getHospitalId(), hosId)) {
@@ -74,7 +89,6 @@ public class PatientService {
                 }
             });
         }
-
         if (p.getDepartmentId() != null && !p.getDepartmentId().isEmpty()) {
             departmentService.getDepartmentById(p.getDepartmentId()).ifPresent(dept -> {
                 if (!Objects.equals(dept.getHospitalId(), hosId)) {

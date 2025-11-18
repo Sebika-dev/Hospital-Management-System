@@ -1,12 +1,91 @@
-[
-  { "id": "APP-01", "departmentId": "DEP-01", "patientId": "PAT-01", "doctorId": "DOC-01", "nurseId": "NUR-01", "admissionDate": "2025-11-20", "status": "ACTIVE", "medicalStaffIds": [] },
-  { "id": "APP-02", "departmentId": "DEP-05", "patientId": "PAT-03", "doctorId": "DOC-05", "nurseId": "NUR-05", "admissionDate": "2025-11-21", "status": "ACTIVE", "medicalStaffIds": [] },
-  { "id": "APP-03", "departmentId": "DEP-09", "patientId": "PAT-05", "doctorId": "DOC-09", "nurseId": "NUR-09", "admissionDate": "2025-11-22", "status": "COMPLETED", "medicalStaffIds": [] },
-  { "id": "APP-04", "departmentId": "DEP-02", "patientId": "PAT-02", "doctorId": null, "nurseId": null, "admissionDate": "2025-11-23", "status": "ACTIVE", "medicalStaffIds": [] },
-  { "id": "APP-05", "departmentId": "DEP-04", "patientId": "PAT-04", "doctorId": null, "nurseId": null, "admissionDate": "2025-11-24", "status": "ACTIVE", "medicalStaffIds": [] },
-  { "id": "APP-06", "departmentId": "DEP-06", "patientId": "PAT-06", "doctorId": null, "nurseId": null, "admissionDate": "2025-11-25", "status": "ACTIVE", "medicalStaffIds": [] },
-  { "id": "APP-07", "departmentId": "DEP-07", "patientId": "PAT-07", "doctorId": null, "nurseId": null, "admissionDate": "2025-11-26", "status": "ACTIVE", "medicalStaffIds": [] },
-  { "id": "APP-08", "departmentId": "DEP-08", "patientId": "PAT-08", "doctorId": null, "nurseId": null, "admissionDate": "2025-11-27", "status": "ACTIVE", "medicalStaffIds": [] },
-  { "id": "APP-09", "departmentId": "DEP-09", "patientId": "PAT-09", "doctorId": null, "nurseId": null, "admissionDate": "2025-11-28", "status": "ACTIVE", "medicalStaffIds": [] },
-  { "id": "APP-10", "departmentId": "DEP-10", "patientId": "PAT-10", "doctorId": null, "nurseId": null, "admissionDate": "2025-11-29", "status": "ACTIVE", "medicalStaffIds": [] }
-]
+[ {
+  "id" : "APP-09",
+  "departmentId" : "DEP-09",
+  "patientId" : "PAT-09",
+  "doctorId" : "DOC-10",
+  "nurseId" : "NUR-06",
+  "admissionDate" : "2025-10-29",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+}, {
+  "id" : "APP-08",
+  "departmentId" : "DEP-08",
+  "patientId" : "PAT-08",
+  "doctorId" : "DOC-05",
+  "nurseId" : "NUR-09",
+  "admissionDate" : "2025-11-13",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+}, {
+  "id" : "APP-07",
+  "departmentId" : "DEP-07",
+  "patientId" : "PAT-07",
+  "doctorId" : "DOC-02",
+  "nurseId" : "NUR-07",
+  "admissionDate" : "2025-11-21",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+}, {
+  "id" : "APP-06",
+  "departmentId" : "DEP-06",
+  "patientId" : "PAT-06",
+  "doctorId" : "DOC-01",
+  "nurseId" : "NUR-08",
+  "admissionDate" : "2025-11-12",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+}, {
+  "id" : "APP-05",
+  "departmentId" : "DEP-10",
+  "patientId" : "PAT-04",
+  "doctorId" : "DOC-04",
+  "nurseId" : "NUR-03",
+  "admissionDate" : "2025-11-05",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+}, {
+  "id" : "APP-04",
+  "departmentId" : "DEP-02",
+  "patientId" : "PAT-02",
+  "doctorId" : "DOC-07",
+  "nurseId" : "NUR-04",
+  "admissionDate" : "2025-11-17",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+}, {
+  "id" : "APP-03",
+  "departmentId" : "DEP-09",
+  "patientId" : "PAT-05",
+  "doctorId" : "DOC-09",
+  "nurseId" : "NUR-09",
+  "admissionDate" : "2025-11-22",
+  "status" : "COMPLETED",
+  "medicalStaffIds" : [ ]
+}, {
+  "id" : "APP-02",
+  "departmentId" : "DEP-05",
+  "patientId" : "PAT-03",
+  "doctorId" : "DOC-05",
+  "nurseId" : "NUR-05",
+  "admissionDate" : "2025-11-21",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+}, {
+  "id" : "APP-01",
+  "departmentId" : "DEP-01",
+  "patientId" : "PAT-01",
+  "doctorId" : "DOC-01",
+  "nurseId" : "NUR-01",
+  "admissionDate" : "2025-11-20",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+}, {
+  "id" : "APP-10",
+  "departmentId" : "DEP-10",
+  "patientId" : "PAT-10",
+  "doctorId" : "DOC-09",
+  "nurseId" : "NUR-10",
+  "admissionDate" : "2025-11-17",
+  "status" : "ACTIVE",
+  "medicalStaffIds" : [ ]
+} ]
