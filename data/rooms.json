@@ -1,0 +1,78 @@
+[ {
+  "id" : "ROM-01",
+  "hospitalId" : "HOS-01",
+  "number" : "101",
+  "capacity" : 6,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROM-02",
+  "hospitalId" : "HOS-01",
+  "number" : "102",
+  "capacity" : 6,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROM-10",
+  "hospitalId" : "HOS-08",
+  "number" : "ICU-1",
+  "capacity" : 4,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROM-05",
+  "hospitalId" : "HOS-03",
+  "number" : "305",
+  "capacity" : 6,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROM-06",
+  "hospitalId" : "HOS-04",
+  "number" : "A1",
+  "capacity" : 3,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROM-03",
+  "hospitalId" : "HOS-02",
+  "number" : "201",
+  "capacity" : 4,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROM-04",
+  "hospitalId" : "HOS-02",
+  "number" : "202",
+  "capacity" : 6,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROM-09",
+  "hospitalId" : "HOS-07",
+  "number" : "12",
+  "capacity" : 6,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROOM-4778431f",
+  "hospitalId" : "HOS-09",
+  "number" : "1221",
+  "capacity" : 4,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROM-07",
+  "hospitalId" : "HOS-05",
+  "number" : "B2",
+  "capacity" : 2,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+}, {
+  "id" : "ROM-08",
+  "hospitalId" : "HOS-06",
+  "number" : "C3",
+  "capacity" : 5,
+  "status" : "AVAILABLE",
+  "appointmentIds" : [ ]
+} ]

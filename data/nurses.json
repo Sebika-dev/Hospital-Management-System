@@ -1,0 +1,61 @@
+[ {
+  "id" : "NUR-07",
+  "name" : "Mihaela Toma",
+  "appointmentIds" : [ "APP-07" ],
+  "departmentId" : "DEP-07",
+  "qualificationLevel" : "PRACTICAL_NURSE"
+}, {
+  "id" : "NUR-06",
+  "name" : "Georgeta Preda",
+  "appointmentIds" : [ "APP-09" ],
+  "departmentId" : "DEP-06",
+  "qualificationLevel" : "REGISTERED_NURSE"
+}, {
+  "id" : "NUR-09",
+  "name" : "Alina Dobre",
+  "appointmentIds" : [ "APP-03", "APP-08" ],
+  "departmentId" : "DEP-09",
+  "qualificationLevel" : "REGISTERED_NURSE"
+}, {
+  "id" : "NUR-08",
+  "name" : "Gabriela Sandu",
+  "appointmentIds" : [ "APP-06" ],
+  "departmentId" : "DEP-08",
+  "qualificationLevel" : "REGISTERED_NURSE"
+}, {
+  "id" : "NUR-03",
+  "name" : "Raluca Nistor",
+  "appointmentIds" : [ "APP-05" ],
+  "departmentId" : "DEP-03",
+  "qualificationLevel" : "REGISTERED_NURSE"
+}, {
+  "id" : "NUR-02",
+  "name" : "Ioana Barbu",
+  "appointmentIds" : [ ],
+  "departmentId" : "DEP-02",
+  "qualificationLevel" : "PRACTICAL_NURSE"
+}, {
+  "id" : "NUR-05",
+  "name" : "Daniela Rusu",
+  "appointmentIds" : [ "APP-02" ],
+  "departmentId" : "DEP-05",
+  "qualificationLevel" : "PRACTICAL_NURSE"
+}, {
+  "id" : "NUR-04",
+  "name" : "Simona Voinea",
+  "appointmentIds" : [ "APP-04" ],
+  "departmentId" : "DEP-04",
+  "qualificationLevel" : "REGISTERED_NURSE"
+}, {
+  "id" : "NUR-10",
+  "name" : "Diana Mocanu",
+  "appointmentIds" : [ "APP-10" ],
+  "departmentId" : "DEP-10",
+  "qualificationLevel" : "PRACTICAL_NURSE"
+}, {
+  "id" : "NUR-01",
+  "name" : "Ana Diaconu",
+  "appointmentIds" : [ "APP-01" ],
+  "departmentId" : "DEP-01",
+  "qualificationLevel" : "REGISTERED_NURSE"
+} ]
