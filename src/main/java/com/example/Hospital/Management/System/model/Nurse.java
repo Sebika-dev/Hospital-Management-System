@@ -1,32 +1,25 @@
 package com.example.Hospital.Management.System.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import java.util.List;
+
+@Entity
+@Table(name = "nurses")
 public class Nurse extends MedicalStaff {
+    @Enumerated(EnumType.STRING)
     private NurseQualificationLevel qualificationLevel;
 
-    public Nurse() {
-        super();
-    }
+    @OneToMany(mappedBy = "nurse")
+    private List<Appointment> appointments;
 
-    public Nurse(String id, String name, String departmentId, NurseQualificationLevel qualificationLevel) {
-        super(id, name, departmentId);
+    public Nurse() {}
+    public Nurse(String name, NurseQualificationLevel qualificationLevel, Department department) {
+        super(name, department);
         this.qualificationLevel = qualificationLevel;
     }
-
-    public NurseQualificationLevel getQualificationLevel() {
-        return qualificationLevel;
-    }
-
-    public void setQualificationLevel(NurseQualificationLevel qualificationLevel) {
-        this.qualificationLevel = qualificationLevel;
-    }
-
-    @Override
-    public String toString() {
-        return "Nurse{" +
-                "id='" + getId() + '\'' +
-                ", name='" + getName() + '\'' +
-                ", departmentId='" + getDepartmentId() + '\'' +
-                ", qualificationLevel=" + qualificationLevel +
-                '}';
-    }
+    public NurseQualificationLevel getQualificationLevel() { return qualificationLevel; }
+    public void setQualificationLevel(NurseQualificationLevel qualificationLevel) { this.qualificationLevel = qualificationLevel; }
+    public List<Appointment> getAppointments() { return appointments; }
+    public void setAppointments(List<Appointment> appointments) { this.appointments = appointments; }
 }
