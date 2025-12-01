@@ -1,24 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
 <head>
+    <meta charset="UTF-8">
+    <title>Staff Links</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div class="wrap">
     <div class="topbar">
-        <a th:href="@{/}">Home</a>
-        <h1>Links</h1>
+        <a class="back" th:href="@{/}">← Home</a>
+        <div class="hx"><div class="pill a" style="background:var(--slate)">🔗</div><h1>Staff Allocations</h1></div>
     </div>
     <div class="card">
-        <a class="btn btn-success" th:href="@{/medical-staff-appointments/new}">Add</a>
+        <div class="actions">
+            <a class="btn btn-success" th:href="@{/medical-staff-appointments/new}">＋ Add Link</a>
+        </div>
         <table class="table">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>App ID</th>
+                <th>Appt ID</th>
                 <th>Staff ID</th>
                 <th>Type</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -28,8 +32,8 @@
                 <td th:text="${m.medicalStaffId}"></td>
                 <td th:text="${m.staffType}"></td>
                 <td>
-                    <form style="display:inline" th:action="@{/medical-staff-appointments/{id}/delete(id=${m.id})}" method="post">
-                        <button>Del</button>
+                    <form th:action="@{/medical-staff-appointments/{id}/delete(id=${m.id})}" method="post" onsubmit="return confirm('Delete this link?');">
+                        <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
                     </form>
                 </td>
             </tr>

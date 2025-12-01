@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
 <head>
     <meta charset="UTF-8">
     <title>Hospitals</title>
@@ -12,7 +12,9 @@
         <div class="hx"><div class="pill h">🏨</div><h1>Hospitals</h1></div>
     </div>
     <div class="card">
-        <div class="actions"><a class="btn btn-success" th:href="@{/hospitals/new}">＋ Add Hospital</a></div>
+        <div class="actions">
+            <a class="btn btn-success" th:href="@{/hospitals/new}">＋ Add Hospital</a>
+        </div>
         <table class="table">
             <thead>
             <tr>
@@ -23,7 +25,7 @@
                 <th>Phone</th>
                 <th>Depts</th>
                 <th>Rooms</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -36,10 +38,12 @@
                 <td th:text="${h.departments.size()}"></td>
                 <td th:text="${h.rooms.size()}"></td>
                 <td>
-                    <a class="btn btn-primary" th:href="@{/hospitals/{id}/edit(id=${h.id})}">Edit</a>
-                    <form style="display:inline" th:action="@{/hospitals/{id}/delete(id=${h.id})}" method="post">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
+                    <div style="display:flex; gap:5px;">
+                        <a class="btn btn-primary" th:href="@{/hospitals/{id}/edit(id=${h.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
+                        <form th:action="@{/hospitals/{id}/delete(id=${h.id})}" method="post" onsubmit="return confirm('Delete this hospital?');">
+                            <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             </tbody>
