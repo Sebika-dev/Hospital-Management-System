@@ -1,18 +1,47 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
-    <meta charset="UTF-8"><title>New Hospital</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospital Form</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>.error{color:red;font-size:0.85em;margin-top:4px;}</style>
 </head>
-<body><div class="wrap">
-    <div class="topbar"><a class="back" th:href="@{/hospitals}">← Back</a><div class="hx"><div class="pill h">🏨</div><h1>New Hospital</h1></div></div>
+<body>
+<div class="wrap">
+    <div class="topbar">
+        <a class="back" th:href="@{/hospitals}">← Back</a>
+        <div class="hx">
+            <div class="pill h">🏨</div>
+            <h1 th:text="${hospital.id} != null ? 'Edit Hospital' : 'New Hospital'">New Hospital</h1>
+        </div>
+    </div>
     <div class="card">
-        <form class="form" th:action="@{/hospitals}" th:object="${hospital}" method="post">
+        <form class="form" th:action="${hospital.id} != null ? @{/hospitals/{id}(id=${hospital.id})} : @{/hospitals}" th:object="${hospital}" method="post">
             <div class="row">
-                <div><label>Name</label><input th:field="*{name}" required></div>
-                <div><label>City</label><input th:field="*{city}" required></div>
+                <div>
+                    <label>Name</label>
+                    <input th:field="*{name}" th:errorclass="is-invalid">
+                    <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
+                </div>
+                <div>
+                    <label>City</label>
+                    <input th:field="*{city}" th:errorclass="is-invalid">
+                    <div class="error" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Error</div>
+                </div>
             </div>
-            <div><label>Address</label><input th:field="*{address}"></div>
-            <div><label>Phone</label><input th:field="*{phoneNumber}"></div>
-            <div><button class="btn btn-success" type="submit">Create</button></div>
+            <div>
+                <label>Address</label>
+                <input th:field="*{address}" th:errorclass="is-invalid">
+                <div class="error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Error</div>
+            </div>
+            <div>
+                <label>Phone</label>
+                <input th:field="*{phoneNumber}" th:errorclass="is-invalid">
+                <div class="error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Error</div>
+            </div>
+            <div><button class="btn btn-success" type="submit">Save</button></div>
         </form>
     </div>
-</div></body></html>
+</div>
+</body>
+</html>

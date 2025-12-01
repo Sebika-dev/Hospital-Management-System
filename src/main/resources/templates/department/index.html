@@ -1,21 +1,46 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
-    <meta charset="UTF-8"><title>Departments</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Departments</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
-</head><body><div class="wrap">
-    <div class="topbar"><a class="back" th:href="@{/}">← Home</a><div class="hx"><div class="pill d">🏥</div><h1>Departments</h1></div></div>
+</head>
+<body>
+<div class="wrap">
+    <div class="topbar">
+        <a class="back" th:href="@{/}">← Home</a>
+        <div class="hx"><div class="pill d">🏥</div><h1>Departments</h1></div>
+    </div>
     <div class="card">
         <div class="actions"><a class="btn btn-success" th:href="@{/departments/new}">＋ Add Department</a></div>
         <table class="table">
-            <thead><tr><th>ID</th><th>Name</th><th>Hospital</th><th>Head Doctor</th><th>Phone</th><th></th></tr></thead>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Hospital</th>
+                <th>Head Doctor</th>
+                <th>Phone</th>
+                <th></th>
+            </tr>
+            </thead>
             <tbody>
             <tr th:each="d : ${departments}">
-                <td th:text="${d.id}"></td><td th:text="${d.name}"></td>
-                <td th:text="${hospitalNames.get(d.hospitalId)}"></td>
+                <td th:text="${d.id}"></td>
+                <td th:text="${d.name}"></td>
+                <td th:text="${d.hospital.name}"></td>
                 <td th:text="${d.headDoctorName}"></td>
                 <td th:text="${d.phoneNumber}"></td>
-                <td><form th:action="@{/departments/{id}/delete(id=${d.id})}" method="post"><button class="btn btn-danger" type="submit">Delete</button></form></td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{/departments/{id}/edit(id=${d.id})}">Edit</a>
+                    <form style="display:inline" th:action="@{/departments/{id}/delete(id=${d.id})}" method="post">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
-</div></body></html>
+</div>
+</body>
+</html>

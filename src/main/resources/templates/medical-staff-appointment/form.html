@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="wrap">
+    <div class="topbar">
+        <a th:href="@{/medical-staff-appointments}">Back</a>
+        <h1>Link Form</h1>
+    </div>
+    <div class="card">
+        <form class="form" th:action="@{/medical-staff-appointments}" th:object="${msa}" method="post">
+            <div>
+                <label>App ID</label>
+                <input type="number" th:field="*{appointmentId}">
+                <div th:if="${#fields.hasErrors('appointmentId')}" th:errors="*{appointmentId}">Err</div>
+            </div>
+
+            <div>
+                <label>Staff ID</label>
+                <input type="number" th:field="*{medicalStaffId}">
+                <div th:if="${#fields.hasErrors('medicalStaffId')}" th:errors="*{medicalStaffId}">Err</div>
+            </div>
+
+            <div>
+                <label>Type</label>
+                <select th:field="*{staffType}">
+                    <option value="DOCTOR">Doc</option>
+                    <option value="NURSE">Nurse</option>
+                </select>
+            </div>
+
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

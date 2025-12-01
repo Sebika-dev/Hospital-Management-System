@@ -1,27 +1,46 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
-    <meta charset="UTF-8"><title>New Nurse</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nurse Form</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
-</head><body><div class="wrap">
-    <div class="topbar"><a class="back" th:href="@{/nurses}">← Back</a><div class="hx"><div class="pill n">👩‍⚕️</div><h1>New Nurse</h1></div></div>
+    <style>.error{color:red;font-size:0.85em;margin-top:4px;}</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="topbar">
+        <a class="back" th:href="@{/nurses}">← Back</a>
+        <div class="hx">
+            <div class="pill n">👩‍⚕️</div>
+            <h1 th:text="${nurse.id} != null ? 'Edit Nurse' : 'New Nurse'">New Nurse</h1>
+        </div>
+    </div>
     <div class="card">
-        <form class="form" th:action="@{/nurses}" th:object="${nurse}" method="post">
+        <form class="form" th:action="${nurse.id} != null ? @{/nurses/{id}(id=${nurse.id})} : @{/nurses}" th:object="${nurse}" method="post">
             <div class="row">
-                <div><label>Name</label><input th:field="*{name}" required></div>
+                <div>
+                    <label>Name</label>
+                    <input th:field="*{name}" th:errorclass="is-invalid">
+                    <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
+                </div>
                 <div>
                     <label>Department</label>
-                    <select th:field="*{departmentId}" required>
+                    <select th:field="*{department}" th:errorclass="is-invalid">
                         <option value="">-- Select Department --</option>
                         <option th:each="dep : ${departments}" th:value="${dep.id}" th:text="${dep.name}"></option>
                     </select>
+                    <div class="error" th:if="${#fields.hasErrors('department')}" th:errors="*{department}">Error</div>
                 </div>
             </div>
             <div>
-                <label>Qualification Level</label>
-                <select th:field="*{qualificationLevel}" required>
+                <label>Qualification</label>
+                <select th:field="*{qualificationLevel}">
                     <option th:each="q : ${qualificationLevels}" th:value="${q}" th:text="${q}"></option>
                 </select>
             </div>
-            <div><button class="btn btn-success" type="submit">Create</button></div>
+            <div><button class="btn btn-success" type="submit">Save</button></div>
         </form>
     </div>
-</div></body></html>
+</div>
+</body>
+</html>
