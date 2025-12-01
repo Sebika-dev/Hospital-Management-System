@@ -1,48 +1,86 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
 <head>
+    <meta charset="UTF-8">
+    <title>Patient Form</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>.error{color:#ef4444;font-size:0.85em;margin-top:4px;}</style>
 </head>
 <body>
 <div class="wrap">
     <div class="topbar">
-        <a th:href="@{/patients}">Back</a>
-        <h1>Patient Form</h1>
+        <a class="back" th:href="@{/patients}">← Back</a>
+        <div class="hx">
+            <div class="pill p">🧑‍⚕️</div>
+            <h1 th:text="${patient.id} != null ? 'Edit Patient' : 'New Patient'">Form</h1>
+        </div>
     </div>
     <div class="card">
-        <form class="form"
-              th:action="${patient.id} != null ? @{/patients/{id}(id=${patient.id})} : @{/patients}"
-              th:object="${patient}"
-              method="post">
-
-            <div>
-                <label>Name</label>
-                <input th:field="*{name}">
-                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Err</div>
+        <form class="form" th:action="${patient.id} != null ? @{/patients/{id}(id=${patient.id})} : @{/patients}" th:object="${patient}" method="post">
+            <div class="row">
+                <div>
+                    <label>Name *</label>
+                    <input th:field="*{name}" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
+                    <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
+                </div>
+                <div>
+                    <label>Phone</label>
+                    <input th:field="*{phoneNumber}">
+                </div>
             </div>
-
-            <div>
-                <label>Phone</label>
-                <input th:field="*{phoneNumber}">
+            <div class="row">
+                <div>
+                    <label>Email</label>
+                    <input type="email" th:field="*{email}">
+                </div>
+                <div>
+                    <label>Hospital *</label>
+                    <select id="hId" th:field="*{hospital}" onchange="loadResources()" th:classappend="${#fields.hasErrors('hospital')} ? 'is-invalid'">
+                        <option value="">-- Select Hospital --</option>
+                        <option th:each="h : ${hospitals}" th:value="${h.id}" th:text="${h.name}"></option>
+                    </select>
+                    <div class="error" th:if="${#fields.hasErrors('hospital')}" th:errors="*{hospital}">Error</div>
+                </div>
             </div>
-
             <div>
-                <label>Hospital</label>
-                <select th:field="*{hospital}">
-                    <option th:each="h : ${hospitals}" th:value="${h.id}" th:text="${h.name}"></option>
+                <label>Department</label>
+                <select id="dId" th:field="*{department}">
+                    <option value="">-- Select Department --</option>
+                    <option th:if="${patient.department != null}" th:value="${patient.department.id}" th:text="${patient.department.name}" selected></option>
                 </select>
             </div>
 
-            <div>
-                <label>Dept</label>
-                <select th:field="*{department}">
-                    <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
-                </select>
+            <div style="margin-top:10px">
+                <button class="btn btn-success" type="submit">Save Patient</button>
             </div>
-
-            <button type="submit">Save</button>
         </form>
     </div>
 </div>
+
+<script>
+    async function loadResources() {
+        const id = document.getElementById('hId').value;
+        const dSel = document.getElementById('dId');
+
+        dSel.innerHTML = '<option value="">-- Select Department --</option>';
+
+        if (!id) return;
+
+        try {
+            const res = await fetch('/api/hospitals/' + id + '/resources');
+            if (res.ok) {
+                const data = await res.json();
+                data.departments.forEach(d => {
+                    let o = document.createElement('option');
+                    o.value = d.id;
+                    o.text = d.name;
+                    dSel.add(o);
+                });
+            }
+        } catch (e) {
+            console.error("Error loading resources", e);
+        }
+    }
+</script>
 </body>
 </html>
