@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Departments</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        .details-row { background-color: #f9fafb; }
+        .details-content { padding: 15px; border-left: 4px solid #3b82f6; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-info { background: #64748b; font-size: 0.9em; padding: 6px 12px; }
+    </style>
 </head>
 <body>
 <div class="wrap">
@@ -18,33 +23,52 @@
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Hospital</th>
-                <th>Head Doctor</th>
-                <th>Phone</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="d : ${departments}">
-                <td th:text="${d.id}"></td>
-                <td th:text="${d.name}"></td>
-                <td th:text="${d.hospital.name}"></td>
-                <td th:text="${d.headDoctorName}"></td>
-                <td th:text="${d.phoneNumber}"></td>
-                <td>
-                    <div style="display:flex; gap:5px;">
-                        <a class="btn btn-primary" th:href="@{/departments/{id}/edit(id=${d.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
-                        <form th:action="@{/departments/{id}/delete(id=${d.id})}" method="post" onsubmit="return confirm('Delete this department?');">
-                            <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
+            <th:block th:each="d : ${departments}">
+                <tr>
+                    <td th:text="${d.name}" style="font-weight:bold"></td>
+                    <td th:text="${d.hospital.name}"></td>
+                    <td>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn btn-info" onclick="toggleDetails(this)">Detalii</button>
+                            <a class="btn btn-primary" th:href="@{/departments/{id}/edit(id=${d.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
+                            <form th:action="@{/departments/{id}/delete(id=${d.id})}" method="post" onsubmit="return confirm('Delete this department?');">
+                                <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="details-row" style="display:none;">
+                    <td colspan="3">
+                        <div class="details-content">
+                            <div><strong>ID:</strong> <span th:text="${d.id}"></span></div>
+                            <div><strong>Head Doctor:</strong> <span th:text="${d.headDoctorName != null ? d.headDoctorName : '-'}"></span></div>
+                            <div><strong>Phone:</strong> <span th:text="${d.phoneNumber != null ? d.phoneNumber : '-'}"></span></div>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
             </tbody>
         </table>
     </div>
 </div>
+<script>
+    function toggleDetails(btn) {
+        const row = btn.closest('tr');
+        const nextRow = row.nextElementSibling;
+        if (nextRow.style.display === 'none') {
+            nextRow.style.display = 'table-row';
+            btn.innerText = 'Ascunde';
+        } else {
+            nextRow.style.display = 'none';
+            btn.innerText = 'Detalii';
+        }
+    }
+</script>
 </body>
 </html>

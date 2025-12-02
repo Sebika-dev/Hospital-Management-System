@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Appointments</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        .details-row { background-color: #f9fafb; }
+        .details-content { padding: 15px; border-left: 4px solid #64748b; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-info { background: #64748b; font-size: 0.9em; padding: 6px 12px; }
+    </style>
 </head>
 <body>
 <div class="wrap">
@@ -18,43 +23,59 @@
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Date</th>
                 <th>Status</th>
-                <th>Patient</th>
-                <th>Room</th>
-                <th>Dept</th>
-                <th>Doc</th>
-                <th>Nurse</th>
-                <th>Actions</th>
+                <th>Patient</th> <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="a : ${appointments}">
-                <td th:text="${a.id}"></td>
-                <td th:text="${a.admissionDate}"></td>
-                <td>
-                    <span th:text="${a.status}"
-                          th:style="${a.status.name() == 'ACTIVE' ? 'color:green;font-weight:bold' : 'color:grey'}">
-                    </span>
-                </td>
-                <td th:text="${a.patient.name}"></td>
-                <td th:text="${a.room != null ? a.room.number : '-'}"></td>
-                <td th:text="${a.department.name}"></td>
-                <td th:text="${a.doctor != null ? a.doctor.name : '-'}"></td>
-                <td th:text="${a.nurse != null ? a.nurse.name : '-'}"></td>
-                <td>
-                    <div style="display:flex; gap:5px;">
-                        <a class="btn btn-primary" th:href="@{/appointments/{id}/edit(id=${a.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
-                        <form th:action="@{/appointments/{id}/delete(id=${a.id})}" method="post" onsubmit="return confirm('Delete this appointment?');">
-                            <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
+            <th:block th:each="a : ${appointments}">
+                <tr>
+                    <td th:text="${a.admissionDate}"></td>
+                    <td>
+                        <span th:text="${a.status}"
+                              th:style="${a.status.name() == 'ACTIVE' ? 'color:green;font-weight:bold' : 'color:grey'}">
+                        </span>
+                    </td>
+                    <td th:text="${a.patient.name}" style="font-weight:bold"></td>
+                    <td>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn btn-info" onclick="toggleDetails(this)">Detalii</button>
+                            <a class="btn btn-primary" th:href="@{/appointments/{id}/edit(id=${a.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
+                            <form th:action="@{/appointments/{id}/delete(id=${a.id})}" method="post" onsubmit="return confirm('Delete this appointment?');">
+                                <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="details-row" style="display:none;">
+                    <td colspan="4">
+                        <div class="details-content">
+                            <div><strong>ID:</strong> <span th:text="${a.id}"></span></div>
+                            <div><strong>Department:</strong> <span th:text="${a.department.name}"></span></div>
+                            <div><strong>Room:</strong> <span th:text="${a.room != null ? a.room.number : 'No Room'}"></span></div>
+                            <div><strong>Doctor:</strong> <span th:text="${a.doctor != null ? a.doctor.name : 'No Doctor'}"></span></div>
+                            <div><strong>Nurse:</strong> <span th:text="${a.nurse != null ? a.nurse.name : 'No Nurse'}"></span></div>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
             </tbody>
         </table>
     </div>
 </div>
+<script>
+    function toggleDetails(btn) {
+        const row = btn.closest('tr');
+        const nextRow = row.nextElementSibling;
+        if (nextRow.style.display === 'none') {
+            nextRow.style.display = 'table-row';
+            btn.innerText = 'Ascunde';
+        } else {
+            nextRow.style.display = 'none';
+            btn.innerText = 'Detalii';
+        }
+    }
+</script>
 </body>
 </html>

@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Nurses</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        .details-row { background-color: #f9fafb; }
+        .details-content { padding: 15px; border-left: 4px solid #ec4899; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-info { background: #64748b; font-size: 0.9em; padding: 6px 12px; }
+    </style>
 </head>
 <body>
 <div class="wrap">
@@ -18,31 +23,51 @@
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Department</th>
-                <th>Qualification</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="n : ${nurses}">
-                <td th:text="${n.id}"></td>
-                <td th:text="${n.name}"></td>
-                <td th:text="${n.department.name}"></td>
-                <td th:text="${n.qualificationLevel}"></td>
-                <td>
-                    <div style="display:flex; gap:5px;">
-                        <a class="btn btn-primary" th:href="@{/nurses/{id}/edit(id=${n.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
-                        <form th:action="@{/nurses/{id}/delete(id=${n.id})}" method="post" onsubmit="return confirm('Delete this nurse?');">
-                            <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
+            <th:block th:each="n : ${nurses}">
+                <tr>
+                    <td th:text="${n.name}" style="font-weight:bold"></td>
+                    <td th:text="${n.department.name}"></td>
+                    <td>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn btn-info" onclick="toggleDetails(this)">Detalii</button>
+                            <a class="btn btn-primary" th:href="@{/nurses/{id}/edit(id=${n.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
+                            <form th:action="@{/nurses/{id}/delete(id=${n.id})}" method="post" onsubmit="return confirm('Delete this nurse?');">
+                                <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="details-row" style="display:none;">
+                    <td colspan="3">
+                        <div class="details-content">
+                            <div><strong>ID:</strong> <span th:text="${n.id}"></span></div>
+                            <div><strong>Qualification:</strong> <span th:text="${n.qualificationLevel}"></span></div>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
             </tbody>
         </table>
     </div>
 </div>
+<script>
+    function toggleDetails(btn) {
+        const row = btn.closest('tr');
+        const nextRow = row.nextElementSibling;
+        if (nextRow.style.display === 'none') {
+            nextRow.style.display = 'table-row';
+            btn.innerText = 'Ascunde';
+        } else {
+            nextRow.style.display = 'none';
+            btn.innerText = 'Detalii';
+        }
+    }
+</script>
 </body>
 </html>
