@@ -1,8 +1,14 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
-    <meta charset="UTF-8"><title>Patients</title>
+<!DOCTYPE html>
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
-</head><body><div class="wrap">
-    <div class="topbar"><a class="back" th:href="@{/}">← Home</a>
+</head>
+<body>
+<div class="wrap">
+    <div class="topbar">
+        <a class="back" th:href="@{/}">← Home</a>
         <div class="hx"><div class="pill p">🧑‍⚕️</div><h1>Patients</h1></div>
     </div>
     <div class="card">
@@ -10,26 +16,37 @@
             <a class="btn btn-success" th:href="@{/patients/new}">＋ Add Patient</a>
         </div>
         <table class="table">
-            <thead><tr>
-                <th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Room</th><th>Department</th><th>Appointments</th><th></th>
-            </tr></thead>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Hospital</th>
+                <th>Dept</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
             <tbody>
             <tr th:each="p : ${patients}">
                 <td th:text="${p.id}"></td>
                 <td th:text="${p.name}"></td>
                 <td th:text="${p.phoneNumber}"></td>
                 <td th:text="${p.email}"></td>
-                <td th:text="${p.roomId != null ? roomLabels.get(p.roomId) : '-'}"></td>
-                <td th:text="${p.departmentId != null ? departmentNames.get(p.departmentId) : '-'}"></td>
-                <td th:text="${p.appointmentIds.size()}"></td>
+                <td th:text="${p.hospital != null ? p.hospital.name : '-'}"></td>
+                <td th:text="${p.department != null ? p.department.name : '-'}"></td>
                 <td>
-                    <a class="btn btn-primary" th:href="@{/patients/{id}/edit(id=${p.id})}">Edit</a>
-                    <form style="display:inline" th:action="@{/patients/{id}/delete(id=${p.id})}" method="post">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
+                    <div style="display:flex; gap:5px;">
+                        <a class="btn btn-primary" th:href="@{/patients/{id}/edit(id=${p.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
+                        <form th:action="@{/patients/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('Delete this patient?');">
+                            <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-</div></body></html>
+</div>
+</body>
+</html>

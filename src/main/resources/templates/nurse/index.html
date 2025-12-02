@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
 <head>
     <meta charset="UTF-8">
     <title>Nurses</title>
@@ -12,7 +12,9 @@
         <div class="hx"><div class="pill n">👩‍⚕️</div><h1>Nurses</h1></div>
     </div>
     <div class="card">
-        <div class="actions"><a class="btn btn-success" th:href="@{/nurses/new}">＋ Add Nurse</a></div>
+        <div class="actions">
+            <a class="btn btn-success" th:href="@{/nurses/new}">＋ Add Nurse</a>
+        </div>
         <table class="table">
             <thead>
             <tr>
@@ -20,22 +22,22 @@
                 <th>Name</th>
                 <th>Department</th>
                 <th>Qualification</th>
-                <th>Appointments</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="n : ${nurses}">
                 <td th:text="${n.id}"></td>
                 <td th:text="${n.name}"></td>
-                <td th:text="${departmentNames.get(n.departmentId)}"></td>
+                <td th:text="${n.department.name}"></td>
                 <td th:text="${n.qualificationLevel}"></td>
-                <td th:text="${n.appointmentIds.size()}"></td>
                 <td>
-                    <a class="btn btn-primary" th:href="@{/nurses/{id}/edit(id=${n.id})}">Edit</a>
-                    <form style="display:inline" th:action="@{/nurses/{id}/delete(id=${n.id})}" method="post">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
+                    <div style="display:flex; gap:5px;">
+                        <a class="btn btn-primary" th:href="@{/nurses/{id}/edit(id=${n.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
+                        <form th:action="@{/nurses/{id}/delete(id=${n.id})}" method="post" onsubmit="return confirm('Delete this nurse?');">
+                            <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             </tbody>

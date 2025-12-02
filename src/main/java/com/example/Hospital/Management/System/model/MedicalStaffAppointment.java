@@ -1,49 +1,23 @@
 package com.example.Hospital.Management.System.model;
 
-public class MedicalStaffAppointment {
-    private String id;
-    private String appointmentId;
-    private String medicalStaffId;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
-    public MedicalStaffAppointment() {
-    }
+@Entity
+@Table(name = "medical_staff_appointments")
+public class MedicalStaffAppointment extends BaseEntity {
+    @NotNull private Long appointmentId;
+    @NotNull private Long medicalStaffId;
+    private String staffType;
 
-    public MedicalStaffAppointment(String id, String appointmentId, String medicalStaffId) {
-        this.id = id;
-        this.appointmentId = appointmentId;
-        this.medicalStaffId = medicalStaffId;
+    public MedicalStaffAppointment() {}
+    public MedicalStaffAppointment(Long appointmentId, Long medicalStaffId, String staffType) {
+        this.appointmentId = appointmentId; this.medicalStaffId = medicalStaffId; this.staffType = staffType;
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAppointmentId() {
-        return appointmentId;
-    }
-
-    public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
-    }
-
-    public String getMedicalStaffId() {
-        return medicalStaffId;
-    }
-
-    public void setMedicalStaffId(String medicalStaffId) {
-        this.medicalStaffId = medicalStaffId;
-    }
-
-    @Override
-    public String toString() {
-        return "MedicalStaffAppointment{" +
-                "id='" + id + '\'' +
-                ", appointmentId='" + appointmentId + '\'' +
-                ", medicalStaffId='" + medicalStaffId + '\'' +
-                '}';
-    }
+    public Long getAppointmentId() { return appointmentId; }
+    public void setAppointmentId(Long appointmentId) { this.appointmentId = appointmentId; }
+    public Long getMedicalStaffId() { return medicalStaffId; }
+    public void setMedicalStaffId(Long medicalStaffId) { this.medicalStaffId = medicalStaffId; }
+    public String getStaffType() { return staffType; }
+    public void setStaffType(String staffType) { this.staffType = staffType; }
 }

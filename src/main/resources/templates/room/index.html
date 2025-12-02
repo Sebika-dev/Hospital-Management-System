@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
 <head>
     <meta charset="UTF-8">
     <title>Rooms</title>
@@ -12,32 +12,38 @@
         <div class="hx"><div class="pill r">🛏️</div><h1>Rooms</h1></div>
     </div>
     <div class="card">
-        <div class="actions"><a class="btn btn-success" th:href="@{/rooms/new}">＋ Add Room</a></div>
+        <div class="actions">
+            <a class="btn btn-success" th:href="@{/rooms/new}">＋ Add Room</a>
+        </div>
         <table class="table">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Hospital</th>
                 <th>Number</th>
+                <th>Hospital</th>
                 <th>Capacity</th>
                 <th>Status</th>
-                <th>Appointments</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="r : ${rooms}">
                 <td th:text="${r.id}"></td>
-                <td th:text="${hospitalNames.get(r.hospitalId)}"></td>
                 <td th:text="${r.number}"></td>
+                <td th:text="${r.hospital.name}"></td>
                 <td th:text="${r.capacity}"></td>
-                <td th:text="${r.status}"></td>
-                <td th:text="${r.appointmentIds.size()}"></td>
                 <td>
-                    <a class="btn btn-primary" th:href="@{/rooms/{id}/edit(id=${r.id})}">Edit</a>
-                    <form style="display:inline" th:action="@{/rooms/{id}/delete(id=${r.id})}" method="post">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
+                    <span th:text="${r.status}"
+                          th:style="${r.status.name() == 'AVAILABLE' ? 'color:green;font-weight:bold' : 'color:orange;font-weight:bold'}">
+                    </span>
+                </td>
+                <td>
+                    <div style="display:flex; gap:5px;">
+                        <a class="btn btn-primary" th:href="@{/rooms/{id}/edit(id=${r.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
+                        <form th:action="@{/rooms/{id}/delete(id=${r.id})}" method="post" onsubmit="return confirm('Delete this room?');">
+                            <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             </tbody>

@@ -1,58 +1,21 @@
 package com.example.Hospital.Management.System.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
-public abstract class MedicalStaff {
-    private String id;
-    private String name;
-    private List<String> appointmentIds;
-    private String departmentId;
+@MappedSuperclass
+public abstract class MedicalStaff extends BaseEntity {
+    @NotBlank private String name;
 
-    public MedicalStaff() {
-        this.appointmentIds = new ArrayList<>();
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
-    public MedicalStaff(String id, String name, String departmentId) {
-        this.id = id;
-        this.name = name;
-        this.departmentId = departmentId;
-        this.appointmentIds = new ArrayList<>();
-    }
+    public MedicalStaff() {}
+    public MedicalStaff(String name, Department department) { this.name = name; this.department = department; }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<String> getAppointmentIds() {
-        return appointmentIds;
-    }
-
-    public void setAppointmentIds(List<String> appointmentIds) {
-        this.appointmentIds = appointmentIds;
-    }
-
-    public void addAppointment(String appointmentId) {
-        this.appointmentIds.add(appointmentId);
-    }
-
-    public String getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public Department getDepartment() { return department; }
+    public void setDepartment(Department department) { this.department = department; }
 }

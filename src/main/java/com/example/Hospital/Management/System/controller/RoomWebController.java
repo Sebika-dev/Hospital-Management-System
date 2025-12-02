@@ -1,87 +1,60 @@
 package com.example.Hospital.Management.System.controller;
-
-import com.example.Hospital.Management.System.model.Hospital;
 import com.example.Hospital.Management.System.model.Room;
 import com.example.Hospital.Management.System.model.RoomStatus;
 import com.example.Hospital.Management.System.service.HospitalService;
 import com.example.Hospital.Management.System.service.RoomService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/rooms")
 public class RoomWebController {
-    private final RoomService roomService;
+    private final RoomService service;
     private final HospitalService hospitalService;
-
-    @Autowired
-    public RoomWebController(RoomService roomService,
-                             HospitalService hospitalService) {
-        this.roomService = roomService;
-        this.hospitalService = hospitalService;
+    @Autowired public RoomWebController(RoomService service, HospitalService hospitalService) {
+        this.service = service; this.hospitalService = hospitalService;
     }
-
-    @GetMapping
-    public String listRooms(Model model) {
-        var rooms = roomService.getAllRooms();
-        Map<String,String> hospitalNames = hospitalService.getAllHospitals()
-                .stream().collect(Collectors.toMap(Hospital::getId, Hospital::getName));
-        model.addAttribute("rooms", rooms);
-        model.addAttribute("hospitalNames", hospitalNames);
+    @GetMapping public String list(Model model) {
+        model.addAttribute("rooms", service.getAllRooms());
         return "room/index";
     }
-
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+    @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("room", new Room());
         model.addAttribute("hospitals", hospitalService.getAllHospitals());
         model.addAttribute("statuses", RoomStatus.values());
         return "room/form";
     }
-
-    @PostMapping
-    public String createRoom(@ModelAttribute Room room, Model model) {
-        try {
-            roomService.addRoom(room);
-            return "redirect:/rooms";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
+    @PostMapping public String create(@Valid @ModelAttribute Room room, BindingResult result, Model model) {
+        if (result.hasErrors()) {
             model.addAttribute("hospitals", hospitalService.getAllHospitals());
             model.addAttribute("statuses", RoomStatus.values());
             return "room/form";
         }
+        service.saveRoom(room);
+        return "redirect:/rooms";
     }
-
-    @GetMapping("/{id}/edit")
-    public String editRoom(@PathVariable String id, Model model) {
-        model.addAttribute("room", roomService.getRoomById(id).orElseThrow());
+    @GetMapping("/{id}/edit") public String editForm(@PathVariable Long id, Model model) {
+        model.addAttribute("room", service.getRoomById(id).orElseThrow());
         model.addAttribute("hospitals", hospitalService.getAllHospitals());
         model.addAttribute("statuses", RoomStatus.values());
         return "room/form";
     }
-
-    @PostMapping("/{id}")
-    public String updateRoom(@PathVariable String id, @ModelAttribute Room room, Model model) {
-        try {
-            room.setId(id);
-            roomService.updateRoom(room);
-            return "redirect:/rooms";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
+    @PostMapping("/{id}") public String update(@PathVariable Long id, @Valid @ModelAttribute Room room, BindingResult result, Model model) {
+        if (result.hasErrors()) {
             model.addAttribute("hospitals", hospitalService.getAllHospitals());
             model.addAttribute("statuses", RoomStatus.values());
             return "room/form";
         }
+        room.setId(id);
+        service.saveRoom(room);
+        return "redirect:/rooms";
     }
-
-    @PostMapping("/{id}/delete")
-    public String deleteRoom(@PathVariable String id) {
-        roomService.deleteRoom(id);
+    @PostMapping("/{id}/delete") public String delete(@PathVariable Long id) {
+        service.deleteRoom(id);
         return "redirect:/rooms";
     }
 }

@@ -1,44 +1,43 @@
 package com.example.Hospital.Management.System.model;
 
-import java.util.ArrayList;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.util.List;
 
-public class Patient {
-    private String id;
-    private String name;
+@Entity
+@Table(name = "patients")
+public class Patient extends BaseEntity {
+    @NotBlank private String name;
     private String phoneNumber;
     private String email;
 
-    // NOU: Legătura directă cu spitalul
-    private String hospitalId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
 
-    private String roomId;
-    private String departmentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
-    private List<String> appointmentIds = new ArrayList<>();
+    // DIAGRAM CHANGE: Patient does NOT have a room. Appointment has the room.
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private List<Appointment> appointments;
 
+    public Patient() {}
+    public Patient(String name, String phoneNumber, Hospital hospital) {
+        this.name = name; this.phoneNumber = phoneNumber; this.hospital = hospital;
+    }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-
-    public String getHospitalId() { return hospitalId; }
-    public void setHospitalId(String hospitalId) { this.hospitalId = hospitalId; }
-
-    public String getRoomId() { return roomId; }
-    public void setRoomId(String roomId) { this.roomId = roomId; }
-
-    public String getDepartmentId() { return departmentId; }
-    public void setDepartmentId(String departmentId) { this.departmentId = departmentId; }
-
-    public List<String> getAppointmentIds() { return appointmentIds; }
-    public void setAppointmentIds(List<String> appointmentIds) { this.appointmentIds = appointmentIds; }
-    public void addAppointment(String id) { this.appointmentIds.add(id); }
+    public Hospital getHospital() { return hospital; }
+    public void setHospital(Hospital hospital) { this.hospital = hospital; }
+    public Department getDepartment() { return department; }
+    public void setDepartment(Department department) { this.department = department; }
+    public List<Appointment> getAppointments() { return appointments; }
+    public void setAppointments(List<Appointment> appointments) { this.appointments = appointments; }
 }

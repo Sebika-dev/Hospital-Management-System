@@ -1,82 +1,49 @@
 package com.example.Hospital.Management.System.controller;
-
 import com.example.Hospital.Management.System.model.Department;
-import com.example.Hospital.Management.System.model.Hospital;
 import com.example.Hospital.Management.System.service.DepartmentService;
 import com.example.Hospital.Management.System.service.HospitalService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/departments")
 public class DepartmentWebController {
-    private final DepartmentService departmentService;
+    private final DepartmentService service;
     private final HospitalService hospitalService;
-
-    @Autowired
-    public DepartmentWebController(DepartmentService departmentService,
-                                   HospitalService hospitalService) {
-        this.departmentService = departmentService;
-        this.hospitalService = hospitalService;
+    @Autowired public DepartmentWebController(DepartmentService service, HospitalService hospitalService) {
+        this.service = service; this.hospitalService = hospitalService;
     }
-
-    @GetMapping
-    public String listDepartments(Model model) {
-        var departments = departmentService.getAllDepartments();
-        Map<String,String> hospitalNames = hospitalService.getAllHospitals()
-                .stream().collect(Collectors.toMap(Hospital::getId, Hospital::getName));
-        model.addAttribute("departments", departments);
-        model.addAttribute("hospitalNames", hospitalNames);
+    @GetMapping public String list(Model model) {
+        model.addAttribute("departments", service.getAllDepartments());
         return "department/index";
     }
-
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+    @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("department", new Department());
         model.addAttribute("hospitals", hospitalService.getAllHospitals());
         return "department/form";
     }
-
-    @PostMapping
-    public String createDepartment(@ModelAttribute Department department, Model model) {
-        try {
-            departmentService.addDepartment(department);
-            return "redirect:/departments";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("hospitals", hospitalService.getAllHospitals());
-            return "department/form";
-        }
+    @PostMapping public String create(@Valid @ModelAttribute Department department, BindingResult result, Model model) {
+        if (result.hasErrors()) { model.addAttribute("hospitals", hospitalService.getAllHospitals()); return "department/form"; }
+        service.saveDepartment(department);
+        return "redirect:/departments";
     }
-
-    @GetMapping("/{id}/edit")
-    public String editDepartment(@PathVariable String id, Model model) {
-        model.addAttribute("department", departmentService.getDepartmentById(id).orElseThrow());
+    @GetMapping("/{id}/edit") public String editForm(@PathVariable Long id, Model model) {
+        model.addAttribute("department", service.getDepartmentById(id).orElseThrow());
         model.addAttribute("hospitals", hospitalService.getAllHospitals());
         return "department/form";
     }
-
-    @PostMapping("/{id}")
-    public String updateDepartment(@PathVariable String id, @ModelAttribute Department department, Model model) {
-        try {
-            department.setId(id);
-            departmentService.updateDepartment(department);
-            return "redirect:/departments";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("hospitals", hospitalService.getAllHospitals());
-            return "department/form";
-        }
+    @PostMapping("/{id}") public String update(@PathVariable Long id, @Valid @ModelAttribute Department department, BindingResult result, Model model) {
+        if (result.hasErrors()) { model.addAttribute("hospitals", hospitalService.getAllHospitals()); return "department/form"; }
+        department.setId(id);
+        service.saveDepartment(department);
+        return "redirect:/departments";
     }
-
-    @PostMapping("/{id}/delete")
-    public String deleteDepartment(@PathVariable String id) {
-        departmentService.deleteDepartment(id);
+    @PostMapping("/{id}/delete") public String delete(@PathVariable Long id) {
+        service.deleteDepartment(id);
         return "redirect:/departments";
     }
 }

@@ -1,46 +1,41 @@
 package com.example.Hospital.Management.System.model;
 
-public class Department {
-    private String id;
-    private String name;
-    private String hospitalId;
-    private String headDoctorName;    // NOU
-    private String phoneNumber;       // NOU
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Department() {
-    }
+@Entity
+@Table(name = "departments")
+public class Department extends BaseEntity {
+    @NotBlank private String name;
+    private String headDoctorName;
+    private String phoneNumber;
 
-    public Department(String id, String name, String hospitalId, String headDoctorName, String phoneNumber) {
-        this.id = id;
-        this.name = name;
-        this.hospitalId = hospitalId;
-        this.headDoctorName = headDoctorName;
-        this.phoneNumber = phoneNumber;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id")
+    @NotNull
+    private Hospital hospital;
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    @OneToMany(mappedBy = "department")
+    private List<Doctor> doctors = new ArrayList<>();
+
+    @OneToMany(mappedBy = "department")
+    private List<Nurse> nurses = new ArrayList<>();
+
+    public Department() {}
+    public Department(String name, Hospital hospital) { this.name = name; this.hospital = hospital; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
-    public String getHospitalId() { return hospitalId; }
-    public void setHospitalId(String hospitalId) { this.hospitalId = hospitalId; }
-
     public String getHeadDoctorName() { return headDoctorName; }
     public void setHeadDoctorName(String headDoctorName) { this.headDoctorName = headDoctorName; }
-
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-
-    @Override
-    public String toString() {
-        return "Department{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", hospitalId='" + hospitalId + '\'' +
-                ", headDoctorName='" + headDoctorName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
-    }
+    public Hospital getHospital() { return hospital; }
+    public void setHospital(Hospital hospital) { this.hospital = hospital; }
+    public List<Doctor> getDoctors() { return doctors; }
+    public void setDoctors(List<Doctor> doctors) { this.doctors = doctors; }
+    public List<Nurse> getNurses() { return nurses; }
+    public void setNurses(List<Nurse> nurses) { this.nurses = nurses; }
 }

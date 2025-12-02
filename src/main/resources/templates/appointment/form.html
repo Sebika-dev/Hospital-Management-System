@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
 <head>
     <meta charset="UTF-8">
     <title>Appointment Form</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>.error{color:#ef4444;font-size:0.85em;margin-top:4px;}</style>
 </head>
 <body>
 <div class="wrap">
@@ -11,92 +12,93 @@
         <a class="back" th:href="@{/appointments}">← Back</a>
         <div class="hx">
             <div class="pill a">📅</div>
-            <h1 th:text="${appointment.id} != null ? 'Edit Appointment' : 'New Appointment'">New Appointment</h1>
+            <h1 th:text="${appointment.id} != null ? 'Edit Appointment' : 'New Appointment'">Form</h1>
         </div>
     </div>
-
     <div class="card">
-        <form class="form"
-              th:action="${appointment.id} != null ? @{/appointments/{id}(id=${appointment.id})} : @{/appointments}"
-              th:object="${appointment}"
-              method="post">
-
+        <form class="form" th:action="${appointment.id} != null ? @{/appointments/{id}(id=${appointment.id})} : @{/appointments}" th:object="${appointment}" method="post">
             <div class="row">
                 <div>
-                    <label>Department</label>
-                    <select name="departmentId" th:field="*{departmentId}" required>
-                        <option value="">-- Select Department --</option>
-                        <option th:each="dep : ${departments}" th:value="${dep.id}" th:text="${dep.name}"></option>
-                    </select>
+                    <label>Date *</label>
+                    <input type="date" th:field="*{admissionDate}" th:classappend="${#fields.hasErrors('admissionDate')} ? 'is-invalid'">
+                    <div class="error" th:if="${#fields.hasErrors('admissionDate')}" th:errors="*{admissionDate}">Error</div>
                 </div>
                 <div>
-                    <label>Patient</label>
-                    <select name="patientId" th:field="*{patientId}" required>
-                        <option value="">-- Select Patient --</option>
-                        <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.name}"></option>
+                    <label>Status</label>
+                    <select th:field="*{status}">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
                     </select>
-                    <div id="roomInfo" class="back" style="margin-top:6px">Room: -</div>
                 </div>
             </div>
 
             <div class="row">
                 <div>
+                    <label>Patient *</label>
+                    <select id="pId" th:field="*{patient}" required onchange="onPatientSelect()" th:classappend="${#fields.hasErrors('patient')} ? 'is-invalid'">
+                        <option value="">-- Select Patient --</option>
+                        <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.name}"></option>
+                    </select>
+                    <div class="error" th:if="${#fields.hasErrors('patient')}" th:errors="*{patient}">Error</div>
+                </div>
+                <div>
+                    <label>Department *</label>
+                    <select id="dId" th:field="*{department}" required th:classappend="${#fields.hasErrors('department')} ? 'is-invalid'">
+                        <option value="">-- Select Department --</option>
+                        <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
+                    </select>
+                    <div class="error" th:if="${#fields.hasErrors('department')}" th:errors="*{department}">Error</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Room (Optional)</label>
+                    <select id="rId" th:field="*{room}">
+                        <option value="">-- No Room --</option>
+                        <option th:each="r : ${rooms}" th:value="${r.id}" th:text="${r.number + ' (' + r.hospital.name + ')'}"></option>
+                    </select>
+                </div>
+                <div></div>
+            </div>
+
+            <div class="row">
+                <div>
                     <label>Doctor</label>
-                    <select th:field="*{doctorId}">
+                    <select th:field="*{doctor}">
                         <option value="">-- No Doctor --</option>
                         <option th:each="d : ${doctors}" th:value="${d.id}" th:text="${d.name}"></option>
                     </select>
                 </div>
                 <div>
                     <label>Nurse</label>
-                    <select th:field="*{nurseId}">
+                    <select th:field="*{nurse}">
                         <option value="">-- No Nurse --</option>
                         <option th:each="n : ${nurses}" th:value="${n.id}" th:text="${n.name}"></option>
                     </select>
                 </div>
             </div>
 
-            <div class="row">
-                <div>
-                    <label>Admission Date</label>
-                    <input type="date" th:field="*{admissionDate}" required>
-                </div>
-                <div>
-                    <label>Status</label>
-                    <select th:field="*{status}" required>
-                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
-                    </select>
-                </div>
-            </div>
-
-            <div>
-                <button class="btn btn-success" type="submit" th:text="${appointment.id} != null ? 'Save' : 'Create'">Create</button>
+            <div style="margin-top:10px">
+                <button class="btn btn-success" type="submit">Save Appointment</button>
             </div>
         </form>
     </div>
 </div>
 
-<script th:inline="javascript">
-    const patientSelect = document.querySelector('select[name="patientId"]');
-    const departmentSelect = document.querySelector('select[name="departmentId"]');
-    const roomInfo = document.getElementById('roomInfo');
-
-    async function onPatientChange() {
-        const id = patientSelect.value;
-        if (!id) { roomInfo.textContent = 'Room: -'; return; }
+<script>
+    async function onPatientSelect() {
+        const pId = document.getElementById('pId').value;
+        if (!pId) return;
         try {
-            const resp = await fetch('/api/patients/' + id);
-            if (!resp.ok) return;
-            const data = await resp.json();
-
-            if (data.departmentId) {
-                const opt = [...departmentSelect.options].find(o => o.value === data.departmentId);
-                if (opt) departmentSelect.value = data.departmentId;
+            const res = await fetch('/api/patients/' + pId);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.departmentId) {
+                    document.getElementById('dId').value = data.departmentId;
+                }
             }
-            roomInfo.textContent = data.roomId ? ('Room: ' + data.roomId) : 'Room: -';
-        } catch(e) {}
+        } catch(e) { console.error(e); }
     }
-    if (patientSelect) patientSelect.addEventListener('change', onPatientChange);
 </script>
 </body>
 </html>

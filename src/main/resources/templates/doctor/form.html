@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
 <head>
     <meta charset="UTF-8">
     <title>Doctor Form</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>.error{color:#ef4444;font-size:0.85em;margin-top:4px;}</style>
 </head>
 <body>
 <div class="wrap">
@@ -11,29 +12,33 @@
         <a class="back" th:href="@{/doctors}">← Back</a>
         <div class="hx">
             <div class="pill dr">👨‍⚕️</div>
-            <h1 th:text="${doctor.id} != null ? 'Edit Doctor' : 'New Doctor'">New Doctor</h1>
+            <h1 th:text="${doctor.id} != null ? 'Edit Doctor' : 'New Doctor'">Form</h1>
         </div>
     </div>
     <div class="card">
-        <form class="form"
-              th:action="${doctor.id} != null ? @{/doctors/{id}(id=${doctor.id})} : @{/doctors}"
-              th:object="${doctor}"
-              method="post">
-
+        <form class="form" th:action="${doctor.id} != null ? @{/doctors/{id}(id=${doctor.id})} : @{/doctors}" th:object="${doctor}" method="post">
             <div class="row">
-                <div><label>Name</label><input th:field="*{name}" required></div>
                 <div>
-                    <label>Department</label>
-                    <select th:field="*{departmentId}" required>
+                    <label>Name *</label>
+                    <input th:field="*{name}" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
+                    <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
+                </div>
+                <div>
+                    <label>Department *</label>
+                    <select th:field="*{department}" th:classappend="${#fields.hasErrors('department')} ? 'is-invalid'">
                         <option value="">-- Select Department --</option>
-                        <option th:each="dep : ${departments}" th:value="${dep.id}" th:text="${dep.name}"></option>
+                        <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
                     </select>
+                    <div class="error" th:if="${#fields.hasErrors('department')}" th:errors="*{department}">Error</div>
                 </div>
             </div>
-            <div><label>License Number</label><input th:field="*{licenseNumber}" required></div>
-
             <div>
-                <button class="btn btn-success" type="submit" th:text="${doctor.id} != null ? 'Save' : 'Create'">Create</button>
+                <label>License Number *</label>
+                <input th:field="*{licenseNumber}" th:classappend="${#fields.hasErrors('licenseNumber')} ? 'is-invalid'">
+                <div class="error" th:if="${#fields.hasErrors('licenseNumber')}" th:errors="*{licenseNumber}">Error</div>
+            </div>
+            <div style="margin-top:10px">
+                <button class="btn btn-success" type="submit">Save Doctor</button>
             </div>
         </form>
     </div>

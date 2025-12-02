@@ -1,59 +1,55 @@
 package com.example.Hospital.Management.System.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Appointment {
-    private String id;
-    private String departmentId;
-    private String patientId;
-
-    // NOI
-    private String doctorId;
-    private String nurseId;
-
+@Entity
+@Table(name = "appointments")
+public class Appointment extends BaseEntity {
+    @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate admissionDate;
+
+    @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
 
-    // Poți păstra pentru extensii viitoare
-    private List<String> medicalStaffIds;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
+    @NotNull
+    private Patient patient;
 
-    public Appointment() {
-        this.medicalStaffIds = new ArrayList<>();
-    }
+    // DIAGRAM CHANGE: Appointment is linked to Room
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private Room room;
 
-    public Appointment(String id, String departmentId, String patientId, LocalDate admissionDate, AppointmentStatus status) {
-        this.id = id;
-        this.departmentId = departmentId;
-        this.patientId = patientId;
-        this.admissionDate = admissionDate;
-        this.status = status;
-        this.medicalStaffIds = new ArrayList<>();
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    @NotNull
+    private Department department;
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
 
-    public String getDepartmentId() { return departmentId; }
-    public void setDepartmentId(String departmentId) { this.departmentId = departmentId; }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nurse_id")
+    private Nurse nurse;
 
-    public String getPatientId() { return patientId; }
-    public void setPatientId(String patientId) { this.patientId = patientId; }
-
-    public String getDoctorId() { return doctorId; }
-    public void setDoctorId(String doctorId) { this.doctorId = doctorId; }
-
-    public String getNurseId() { return nurseId; }
-    public void setNurseId(String nurseId) { this.nurseId = nurseId; }
-
+    public Appointment() {}
     public LocalDate getAdmissionDate() { return admissionDate; }
     public void setAdmissionDate(LocalDate admissionDate) { this.admissionDate = admissionDate; }
-
     public AppointmentStatus getStatus() { return status; }
     public void setStatus(AppointmentStatus status) { this.status = status; }
-
-    public List<String> getMedicalStaffIds() { return medicalStaffIds; }
-    public void setMedicalStaffIds(List<String> medicalStaffIds) { this.medicalStaffIds = medicalStaffIds; }
-    public void addMedicalStaff(String medicalStaffId) { this.medicalStaffIds.add(medicalStaffId); }
+    public Patient getPatient() { return patient; }
+    public void setPatient(Patient patient) { this.patient = patient; }
+    public Room getRoom() { return room; }
+    public void setRoom(Room room) { this.room = room; }
+    public Department getDepartment() { return department; }
+    public void setDepartment(Department department) { this.department = department; }
+    public Doctor getDoctor() { return doctor; }
+    public void setDoctor(Doctor doctor) { this.doctor = doctor; }
+    public Nurse getNurse() { return nurse; }
+    public void setNurse(Nurse nurse) { this.nurse = nurse; }
 }

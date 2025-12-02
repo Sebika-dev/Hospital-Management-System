@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
 <head>
     <meta charset="UTF-8">
     <title>Room Form</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>.error{color:#ef4444;font-size:0.85em;margin-top:4px;}</style>
 </head>
 <body>
 <div class="wrap">
@@ -11,40 +12,39 @@
         <a class="back" th:href="@{/rooms}">← Back</a>
         <div class="hx">
             <div class="pill r">🛏️</div>
-            <h1 th:text="${room.id != null} ? 'Edit Room' : 'New Room'">New Room</h1>
+            <h1 th:text="${room.id} != null ? 'Edit Room' : 'New Room'">Form</h1>
         </div>
     </div>
     <div class="card">
-        <div th:if="${error}" class="alert alert-danger"
-             style="background-color: #ef4444; color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-            <span th:text="${error}">Error</span>
-        </div>
-
-        <form class="form"
-              th:action="${room.id != null} ? @{/rooms/{id}(id=${room.id})} : @{/rooms}"
-              th:object="${room}"
-              method="post">
-
+        <form class="form" th:action="${room.id} != null ? @{/rooms/{id}(id=${room.id})} : @{/rooms}" th:object="${room}" method="post">
+            <div class="row">
+                <div>
+                    <label>Number *</label>
+                    <input th:field="*{number}" th:classappend="${#fields.hasErrors('number')} ? 'is-invalid'">
+                    <div class="error" th:if="${#fields.hasErrors('number')}" th:errors="*{number}">Error</div>
+                </div>
+                <div>
+                    <label>Capacity *</label>
+                    <input type="number" th:field="*{capacity}" th:classappend="${#fields.hasErrors('capacity')} ? 'is-invalid'">
+                    <div class="error" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}">Error</div>
+                </div>
+            </div>
             <div>
-                <label>Hospital</label>
-                <select th:field="*{hospitalId}" required>
+                <label>Hospital *</label>
+                <select th:field="*{hospital}" th:classappend="${#fields.hasErrors('hospital')} ? 'is-invalid'">
                     <option value="">-- Select Hospital --</option>
                     <option th:each="h : ${hospitals}" th:value="${h.id}" th:text="${h.name}"></option>
                 </select>
-            </div>
-            <div class="row">
-                <div><label>Number</label><input th:field="*{number}" required></div>
-                <div><label>Capacity</label><input type="number" th:field="*{capacity}" required></div>
+                <div class="error" th:if="${#fields.hasErrors('hospital')}" th:errors="*{hospital}">Error</div>
             </div>
             <div>
                 <label>Status</label>
-                <select th:field="*{status}" required>
+                <select th:field="*{status}">
                     <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
                 </select>
             </div>
-
-            <div>
-                <button class="btn btn-success" type="submit" th:text="${room.id != null} ? 'Save' : 'Create'">Create</button>
+            <div style="margin-top:10px">
+                <button class="btn btn-success" type="submit">Save Room</button>
             </div>
         </form>
     </div>

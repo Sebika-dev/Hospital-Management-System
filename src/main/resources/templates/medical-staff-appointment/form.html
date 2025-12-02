@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
+<head>
+    <meta charset="UTF-8">
+    <title>Link Form</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>.error{color:#ef4444;font-size:0.85em;margin-top:4px;}</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="topbar">
+        <a class="back" th:href="@{/medical-staff-appointments}">← Back</a>
+        <div class="hx">
+            <div class="pill a" style="background:var(--slate)">🔗</div>
+            <h1>New Allocation</h1>
+        </div>
+    </div>
+    <div class="card">
+        <form class="form" th:action="@{/medical-staff-appointments}" th:object="${msa}" method="post">
+            <div class="row">
+                <div>
+                    <label>Appointment ID *</label>
+                    <input type="number" th:field="*{appointmentId}" th:classappend="${#fields.hasErrors('appointmentId')} ? 'is-invalid'">
+                    <div class="error" th:if="${#fields.hasErrors('appointmentId')}" th:errors="*{appointmentId}">Error</div>
+                </div>
+                <div>
+                    <label>Staff ID *</label>
+                    <input type="number" th:field="*{medicalStaffId}" th:classappend="${#fields.hasErrors('medicalStaffId')} ? 'is-invalid'">
+                    <div class="error" th:if="${#fields.hasErrors('medicalStaffId')}" th:errors="*{medicalStaffId}">Error</div>
+                </div>
+            </div>
+            <div>
+                <label>Type</label>
+                <select th:field="*{staffType}">
+                    <option value="DOCTOR">Doctor</option>
+                    <option value="NURSE">Nurse</option>
+                </select>
+            </div>
+            <div style="margin-top:10px">
+                <button class="btn btn-success" type="submit">Save Link</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
