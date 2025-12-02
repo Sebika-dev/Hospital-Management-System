@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Rooms</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        .details-row { background-color: #f9fafb; }
+        .details-content { padding: 15px; border-left: 4px solid #f59e0b; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-info { background: #64748b; font-size: 0.9em; padding: 6px 12px; }
+    </style>
 </head>
 <body>
 <div class="wrap">
@@ -18,37 +23,57 @@
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Number</th>
                 <th>Hospital</th>
-                <th>Capacity</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="r : ${rooms}">
-                <td th:text="${r.id}"></td>
-                <td th:text="${r.number}"></td>
-                <td th:text="${r.hospital.name}"></td>
-                <td th:text="${r.capacity}"></td>
-                <td>
-                    <span th:text="${r.status}"
-                          th:style="${r.status.name() == 'AVAILABLE' ? 'color:green;font-weight:bold' : 'color:orange;font-weight:bold'}">
-                    </span>
-                </td>
-                <td>
-                    <div style="display:flex; gap:5px;">
-                        <a class="btn btn-primary" th:href="@{/rooms/{id}/edit(id=${r.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
-                        <form th:action="@{/rooms/{id}/delete(id=${r.id})}" method="post" onsubmit="return confirm('Delete this room?');">
-                            <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
+            <th:block th:each="r : ${rooms}">
+                <tr>
+                    <td th:text="${r.number}" style="font-weight:bold"></td>
+                    <td th:text="${r.hospital.name}"></td>
+                    <td>
+                        <span th:text="${r.status}"
+                              th:style="${r.status.name() == 'AVAILABLE' ? 'color:green;font-weight:bold' : 'color:orange;font-weight:bold'}">
+                        </span>
+                    </td>
+                    <td>
+                        <div style="display:flex; gap:5px;">
+                            <button class="btn btn-info" onclick="toggleDetails(this)">Detalii</button>
+                            <a class="btn btn-primary" th:href="@{/rooms/{id}/edit(id=${r.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
+                            <form th:action="@{/rooms/{id}/delete(id=${r.id})}" method="post" onsubmit="return confirm('Delete this room?');">
+                                <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="details-row" style="display:none;">
+                    <td colspan="4">
+                        <div class="details-content">
+                            <div><strong>ID:</strong> <span th:text="${r.id}"></span></div>
+                            <div><strong>Capacity:</strong> <span th:text="${r.capacity} + ' Beds'"></span></div>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
             </tbody>
         </table>
     </div>
 </div>
+<script>
+    function toggleDetails(btn) {
+        const row = btn.closest('tr');
+        const nextRow = row.nextElementSibling;
+        if (nextRow.style.display === 'none') {
+            nextRow.style.display = 'table-row';
+            btn.innerText = 'Ascunde';
+        } else {
+            nextRow.style.display = 'none';
+            btn.innerText = 'Detalii';
+        }
+    }
+</script>
 </body>
 </html>
