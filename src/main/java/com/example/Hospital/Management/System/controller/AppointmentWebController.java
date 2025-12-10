@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @Controller
 @RequestMapping("/appointments")
 public class AppointmentWebController {
@@ -22,10 +24,37 @@ public class AppointmentWebController {
         this.service = s; this.deptService = d; this.patientService = p; this.doctorService = doc; this.nurseService = n; this.roomService = r;
     }
 
-    @GetMapping public String list(Model model) {
-        model.addAttribute("appointments", service.getAllAppointments());
+    @GetMapping
+    public String list(Model model,
+                       @RequestParam(required = false) Long patientId,
+                       @RequestParam(required = false) Long doctorId,
+                       @RequestParam(required = false) AppointmentStatus status,
+                       @RequestParam(required = false) LocalDate startDate,
+                       @RequestParam(required = false) LocalDate endDate,
+                       @RequestParam(defaultValue = "admissionDate") String sortField,
+                       @RequestParam(defaultValue = "desc") String sortDir) {
+
+        var appointments = service.getAllAppointments(patientId, doctorId, status, startDate, endDate, sortField, sortDir);
+
+        model.addAttribute("appointments", appointments);
+        model.addAttribute("patients", patientService.getAllPatients());
+        model.addAttribute("doctors", doctorService.getAllDoctors());
+        model.addAttribute("statuses", AppointmentStatus.values());
+
+        // Parametrii pentru UI
+        model.addAttribute("filterPat", patientId);
+        model.addAttribute("filterDoc", doctorId);
+        model.addAttribute("filterStat", status);
+        model.addAttribute("filterStart", startDate);
+        model.addAttribute("filterEnd", endDate);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
         return "appointment/index";
     }
+
+    // ... Metodele vechi (create, edit, delete) ...
     @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("appointment", new Appointment());
         populateModel(model);

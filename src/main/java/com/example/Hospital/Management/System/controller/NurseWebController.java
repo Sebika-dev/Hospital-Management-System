@@ -1,4 +1,5 @@
 package com.example.Hospital.Management.System.controller;
+
 import com.example.Hospital.Management.System.model.Nurse;
 import com.example.Hospital.Management.System.model.NurseQualificationLevel;
 import com.example.Hospital.Management.System.service.DepartmentService;
@@ -18,10 +19,32 @@ public class NurseWebController {
     @Autowired public NurseWebController(NurseService service, DepartmentService departmentService) {
         this.service = service; this.departmentService = departmentService;
     }
-    @GetMapping public String list(Model model) {
-        model.addAttribute("nurses", service.getAllNurses());
+
+    @GetMapping
+    public String list(Model model,
+                       @RequestParam(required = false) String name,
+                       @RequestParam(required = false) Long departmentId,
+                       @RequestParam(required = false) NurseQualificationLevel level,
+                       @RequestParam(defaultValue = "name") String sortField,
+                       @RequestParam(defaultValue = "asc") String sortDir) {
+
+        var nurses = service.getAllNurses(name, departmentId, level, sortField, sortDir);
+
+        model.addAttribute("nurses", nurses);
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        model.addAttribute("levels", NurseQualificationLevel.values());
+
+        model.addAttribute("filterName", name);
+        model.addAttribute("filterDept", departmentId);
+        model.addAttribute("filterLevel", level);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
         return "nurse/index";
     }
+
+    // ... Metode standard ...
     @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("nurse", new Nurse());
         model.addAttribute("departments", departmentService.getAllDepartments());

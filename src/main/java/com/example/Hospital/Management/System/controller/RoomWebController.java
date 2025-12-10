@@ -1,4 +1,5 @@
 package com.example.Hospital.Management.System.controller;
+
 import com.example.Hospital.Management.System.model.Room;
 import com.example.Hospital.Management.System.model.RoomStatus;
 import com.example.Hospital.Management.System.service.HospitalService;
@@ -18,10 +19,34 @@ public class RoomWebController {
     @Autowired public RoomWebController(RoomService service, HospitalService hospitalService) {
         this.service = service; this.hospitalService = hospitalService;
     }
-    @GetMapping public String list(Model model) {
-        model.addAttribute("rooms", service.getAllRooms());
+
+    @GetMapping
+    public String list(Model model,
+                       @RequestParam(required = false) String number,
+                       @RequestParam(required = false) Long hospitalId,
+                       @RequestParam(required = false) RoomStatus status,
+                       @RequestParam(required = false) Integer minCapacity,
+                       @RequestParam(defaultValue = "number") String sortField,
+                       @RequestParam(defaultValue = "asc") String sortDir) {
+
+        var rooms = service.getAllRooms(number, hospitalId, status, minCapacity, sortField, sortDir);
+
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("hospitals", hospitalService.getAllHospitals());
+        model.addAttribute("statuses", RoomStatus.values());
+
+        model.addAttribute("filterNumber", number);
+        model.addAttribute("filterHos", hospitalId);
+        model.addAttribute("filterStatus", status);
+        model.addAttribute("filterCap", minCapacity);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
         return "room/index";
     }
+
+    // ... Metode standard ...
     @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("room", new Room());
         model.addAttribute("hospitals", hospitalService.getAllHospitals());
