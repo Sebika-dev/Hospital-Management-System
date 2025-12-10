@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Appointment Form</title>
@@ -10,10 +10,7 @@
 <div class="wrap">
     <div class="topbar">
         <a class="back" th:href="@{/appointments}">← Back</a>
-        <div class="hx">
-            <div class="pill a">📅</div>
-            <h1 th:text="${appointment.id} != null ? 'Edit Appointment' : 'New Appointment'">Form</h1>
-        </div>
+        <div class="hx"><div class="pill a">📅</div><h1 th:text="${appointment.id} != null ? 'Edit Appointment' : 'New Appointment'">Form</h1></div>
     </div>
     <div class="card">
         <form class="form" th:action="${appointment.id} != null ? @{/appointments/{id}(id=${appointment.id})} : @{/appointments}" th:object="${appointment}" method="post">
@@ -30,26 +27,22 @@
                     </select>
                 </div>
             </div>
-
             <div class="row">
                 <div>
                     <label>Patient *</label>
-                    <select id="pId" th:field="*{patient}" required onchange="onPatientSelect()" th:classappend="${#fields.hasErrors('patient')} ? 'is-invalid'">
+                    <select id="pId" th:field="*{patient}" required onchange="onPatientSelect()">
                         <option value="">-- Select Patient --</option>
                         <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.name}"></option>
                     </select>
-                    <div class="error" th:if="${#fields.hasErrors('patient')}" th:errors="*{patient}">Error</div>
                 </div>
                 <div>
                     <label>Department *</label>
-                    <select id="dId" th:field="*{department}" required th:classappend="${#fields.hasErrors('department')} ? 'is-invalid'">
+                    <select id="dId" th:field="*{department}" required>
                         <option value="">-- Select Department --</option>
                         <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
                     </select>
-                    <div class="error" th:if="${#fields.hasErrors('department')}" th:errors="*{department}">Error</div>
                 </div>
             </div>
-
             <div class="row">
                 <div>
                     <label>Room (Optional)</label>
@@ -60,7 +53,6 @@
                 </div>
                 <div></div>
             </div>
-
             <div class="row">
                 <div>
                     <label>Doctor</label>
@@ -77,14 +69,10 @@
                     </select>
                 </div>
             </div>
-
-            <div style="margin-top:10px">
-                <button class="btn btn-success" type="submit">Save Appointment</button>
-            </div>
+            <div style="margin-top:10px"><button class="btn btn-success" type="submit">Save Appointment</button></div>
         </form>
     </div>
 </div>
-
 <script>
     async function onPatientSelect() {
         const pId = document.getElementById('pId').value;
@@ -93,9 +81,7 @@
             const res = await fetch('/api/patients/' + pId);
             if (res.ok) {
                 const data = await res.json();
-                if (data.departmentId) {
-                    document.getElementById('dId').value = data.departmentId;
-                }
+                if (data.departmentId) document.getElementById('dId').value = data.departmentId;
             }
         } catch(e) { console.error(e); }
     }

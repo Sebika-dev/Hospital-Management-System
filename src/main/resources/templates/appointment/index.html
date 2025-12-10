@@ -8,6 +8,10 @@
         .details-row { background-color: #f9fafb; }
         .details-content { padding: 15px; border-left: 4px solid #64748b; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-info { background: #64748b; font-size: 0.9em; padding: 6px 12px; }
+        .filter-box { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+        .filter-box div { display: flex; flex-direction: column; }
+        .filter-box label { font-size: 0.8rem; margin-bottom: 4px; font-weight: bold; }
+        .th-sort { color: #72809a; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -16,33 +20,60 @@
         <a class="back" th:href="@{/}">← Home</a>
         <div class="hx"><div class="pill a">📅</div><h1>Appointments</h1></div>
     </div>
-    <div class="card">
-        <div class="actions">
-            <a class="btn btn-success" th:href="@{/appointments/new}">＋ Add Appointment</a>
+
+    <form class="filter-box" th:action="@{/appointments}" method="get">
+        <input type="hidden" name="sortField" th:value="${sortField}">
+        <input type="hidden" name="sortDir" th:value="${sortDir}">
+
+        <div><label>From</label><input type="date" name="startDate" th:value="${filterStart}"></div>
+        <div><label>To</label><input type="date" name="endDate" th:value="${filterEnd}"></div>
+        <div>
+            <label>Patient</label>
+            <select name="patientId">
+                <option value="">All</option>
+                <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.name}" th:selected="${p.id == filterPat}"></option>
+            </select>
         </div>
+        <div>
+            <label>Doctor</label>
+            <select name="doctorId">
+                <option value="">All</option>
+                <option th:each="d : ${doctors}" th:value="${d.id}" th:text="${d.name}" th:selected="${d.id == filterDoc}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Status</label>
+            <select name="status">
+                <option value="">All</option>
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == filterStat}"></option>
+            </select>
+        </div>
+        <div><button class="btn btn-primary" type="submit">Filter</button></div>
+        <div><a th:href="@{/appointments}" class="btn" style="background:#e5e7eb; color:#333;">Reset</a></div>
+    </form>
+
+    <div class="card">
+        <div class="actions"><a class="btn btn-success" th:href="@{/appointments/new}">＋ Add Appointment</a></div>
         <table class="table">
             <thead>
             <tr>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Patient</th> <th>Actions</th>
+                <th><a class="th-sort" th:href="@{/appointments(sortField='admissionDate', sortDir=${reverseSortDir}, patientId=${filterPat}, doctorId=${filterDoc}, status=${filterStat}, startDate=${filterStart}, endDate=${filterEnd})}">Date <span th:if="${sortField == 'admissionDate'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span></a></th>
+                <th><a class="th-sort" th:href="@{/appointments(sortField='status', sortDir=${reverseSortDir}, patientId=${filterPat}, doctorId=${filterDoc}, status=${filterStat}, startDate=${filterStart}, endDate=${filterEnd})}">Status <span th:if="${sortField == 'status'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span></a></th>
+                <th>Patient</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <th:block th:each="a : ${appointments}">
                 <tr>
                     <td th:text="${a.admissionDate}"></td>
-                    <td>
-                        <span th:text="${a.status}"
-                              th:style="${a.status.name() == 'ACTIVE' ? 'color:green;font-weight:bold' : 'color:grey'}">
-                        </span>
-                    </td>
+                    <td><span th:text="${a.status}" th:style="${a.status.name() == 'ACTIVE' ? 'color:green;font-weight:bold' : 'color:grey'}"></span></td>
                     <td th:text="${a.patient.name}" style="font-weight:bold"></td>
                     <td>
                         <div style="display:flex; gap:5px;">
                             <button class="btn btn-info" onclick="toggleDetails(this)">Detalii</button>
                             <a class="btn btn-primary" th:href="@{/appointments/{id}/edit(id=${a.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
-                            <form th:action="@{/appointments/{id}/delete(id=${a.id})}" method="post" onsubmit="return confirm('Delete this appointment?');">
+                            <form th:action="@{/appointments/{id}/delete(id=${a.id})}" method="post" onsubmit="return confirm('Delete?');">
                                 <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
                             </form>
                         </div>
@@ -51,7 +82,6 @@
                 <tr class="details-row" style="display:none;">
                     <td colspan="4">
                         <div class="details-content">
-                            <div><strong>ID:</strong> <span th:text="${a.id}"></span></div>
                             <div><strong>Department:</strong> <span th:text="${a.department.name}"></span></div>
                             <div><strong>Room:</strong> <span th:text="${a.room != null ? a.room.number : 'No Room'}"></span></div>
                             <div><strong>Doctor:</strong> <span th:text="${a.doctor != null ? a.doctor.name : 'No Doctor'}"></span></div>
@@ -64,18 +94,6 @@
         </table>
     </div>
 </div>
-<script>
-    function toggleDetails(btn) {
-        const row = btn.closest('tr');
-        const nextRow = row.nextElementSibling;
-        if (nextRow.style.display === 'none') {
-            nextRow.style.display = 'table-row';
-            btn.innerText = 'Ascunde';
-        } else {
-            nextRow.style.display = 'none';
-            btn.innerText = 'Detalii';
-        }
-    }
-</script>
+<script>function toggleDetails(b){const r=b.closest('tr');const n=r.nextElementSibling;if(n.style.display==='none'){n.style.display='table-row';b.innerText='Ascunde';}else{n.style.display='none';b.innerText='Detalii';}}</script>
 </body>
 </html>

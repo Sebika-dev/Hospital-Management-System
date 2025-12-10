@@ -6,8 +6,12 @@
     <link rel="stylesheet" th:href="@{/css/app.css}">
     <style>
         .details-row { background-color: #f9fafb; }
-        .details-content { padding: 15px; border-left: 4px solid #ec4899; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .details-content { padding: 15px; border-left: 4px solid #ec4899; }
         .btn-info { background: #64748b; font-size: 0.9em; padding: 6px 12px; }
+        .filter-box { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+        .filter-box div { display: flex; flex-direction: column; }
+        .th-sort { color: #72809a; text-decoration: none; }
+        .appt-list li { font-size: 0.9em; padding: 3px 0; border-bottom: 1px dashed #e5e7eb; }
     </style>
 </head>
 <body>
@@ -16,15 +20,38 @@
         <a class="back" th:href="@{/}">← Home</a>
         <div class="hx"><div class="pill n">👩‍⚕️</div><h1>Nurses</h1></div>
     </div>
-    <div class="card">
-        <div class="actions">
-            <a class="btn btn-success" th:href="@{/nurses/new}">＋ Add Nurse</a>
+
+    <form class="filter-box" th:action="@{/nurses}" method="get">
+        <input type="hidden" name="sortField" th:value="${sortField}">
+        <input type="hidden" name="sortDir" th:value="${sortDir}">
+
+        <div><label>Name</label><input type="text" name="name" th:value="${filterName}"></div>
+        <div>
+            <label>Department</label>
+            <select name="departmentId">
+                <option value="">All</option>
+                <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}" th:selected="${d.id == filterDept}"></option>
+            </select>
         </div>
+        <div>
+            <label>Qualification</label>
+            <select name="level">
+                <option value="">All</option>
+                <option th:each="l : ${levels}" th:value="${l}" th:text="${l}" th:selected="${l == filterLevel}"></option>
+            </select>
+        </div>
+        <div><button class="btn btn-primary" type="submit">Filter</button></div>
+        <div><a th:href="@{/nurses}" class="btn" style="background:#e5e7eb; color:#333;">Reset</a></div>
+    </form>
+
+    <div class="card">
+        <div class="actions"><a class="btn btn-success" th:href="@{/nurses/new}">＋ Add Nurse</a></div>
         <table class="table">
             <thead>
             <tr>
-                <th>Name</th>
+                <th><a class="th-sort" th:href="@{/nurses(sortField='name', sortDir=${reverseSortDir}, name=${filterName}, departmentId=${filterDept}, level=${filterLevel})}">Name <span th:if="${sortField == 'name'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span></a></th>
                 <th>Department</th>
+                <th><a class="th-sort" th:href="@{/nurses(sortField='qualificationLevel', sortDir=${reverseSortDir}, name=${filterName}, departmentId=${filterDept}, level=${filterLevel})}">Qualification <span th:if="${sortField == 'qualificationLevel'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span></a></th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -33,21 +60,27 @@
                 <tr>
                     <td th:text="${n.name}" style="font-weight:bold"></td>
                     <td th:text="${n.department.name}"></td>
+                    <td th:text="${n.qualificationLevel}"></td>
                     <td>
                         <div style="display:flex; gap:5px;">
                             <button class="btn btn-info" onclick="toggleDetails(this)">Detalii</button>
                             <a class="btn btn-primary" th:href="@{/nurses/{id}/edit(id=${n.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
-                            <form th:action="@{/nurses/{id}/delete(id=${n.id})}" method="post" onsubmit="return confirm('Delete this nurse?');">
+                            <form th:action="@{/nurses/{id}/delete(id=${n.id})}" method="post" onsubmit="return confirm('Delete?');">
                                 <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
                             </form>
                         </div>
                     </td>
                 </tr>
                 <tr class="details-row" style="display:none;">
-                    <td colspan="3">
+                    <td colspan="4">
                         <div class="details-content">
-                            <div><strong>ID:</strong> <span th:text="${n.id}"></span></div>
-                            <div><strong>Qualification:</strong> <span th:text="${n.qualificationLevel}"></span></div>
+                            <strong>Appointments:</strong>
+                            <ul th:unless="${#lists.isEmpty(n.appointments)}" class="appt-list" style="margin-top:5px; padding:0; list-style:none;">
+                                <li th:each="a : ${n.appointments}">
+                                    <span th:text="${a.admissionDate}"></span> - Patient: <span th:text="${a.patient.name}"></span>
+                                </li>
+                            </ul>
+                            <span th:if="${#lists.isEmpty(n.appointments)}">None</span>
                         </div>
                     </td>
                 </tr>
@@ -56,18 +89,6 @@
         </table>
     </div>
 </div>
-<script>
-    function toggleDetails(btn) {
-        const row = btn.closest('tr');
-        const nextRow = row.nextElementSibling;
-        if (nextRow.style.display === 'none') {
-            nextRow.style.display = 'table-row';
-            btn.innerText = 'Ascunde';
-        } else {
-            nextRow.style.display = 'none';
-            btn.innerText = 'Detalii';
-        }
-    }
-</script>
+<script>function toggleDetails(b){const r=b.closest('tr');const n=r.nextElementSibling;if(n.style.display==='none'){n.style.display='table-row';b.innerText='Ascunde';}else{n.style.display='none';b.innerText='Detalii';}}</script>
 </body>
 </html>

@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Staff Links</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <style>
+        .filter-box { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 10px; align-items: end; flex-wrap: wrap;}
+        .filter-box div { display: flex; flex-direction: column; }
+        .th-sort { color: #72809a; text-decoration: none; }
+    </style>
 </head>
 <body>
 <div class="wrap">
@@ -11,15 +16,31 @@
         <a class="back" th:href="@{/}">← Home</a>
         <div class="hx"><div class="pill a" style="background:var(--slate)">🔗</div><h1>Staff Allocations</h1></div>
     </div>
-    <div class="card">
-        <div class="actions">
-            <a class="btn btn-success" th:href="@{/medical-staff-appointments/new}">＋ Add Link</a>
+
+    <form class="filter-box" th:action="@{/medical-staff-appointments}" method="get">
+        <input type="hidden" name="sortField" th:value="${sortField}">
+        <input type="hidden" name="sortDir" th:value="${sortDir}">
+        <div><label>Appt ID</label><input type="number" name="appointmentId" th:value="${filterApp}"></div>
+        <div><label>Staff ID</label><input type="number" name="medicalStaffId" th:value="${filterStaff}"></div>
+        <div>
+            <label>Type</label>
+            <select name="staffType">
+                <option value="">All</option>
+                <option value="DOCTOR" th:selected="${filterType == 'DOCTOR'}">Doctor</option>
+                <option value="NURSE" th:selected="${filterType == 'NURSE'}">Nurse</option>
+            </select>
         </div>
+        <div><button class="btn btn-primary" type="submit">Filter</button></div>
+        <div><a th:href="@{/medical-staff-appointments}" class="btn" style="background:#e5e7eb; color:#333;">Reset</a></div>
+    </form>
+
+    <div class="card">
+        <div class="actions"><a class="btn btn-success" th:href="@{/medical-staff-appointments/new}">＋ Add Link</a></div>
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Appt ID</th>
+                <th><a class="th-sort" th:href="@{/medical-staff-appointments(sortField='id', sortDir=${reverseSortDir}, appointmentId=${filterApp}, medicalStaffId=${filterStaff}, staffType=${filterType})}">ID <span th:if="${sortField == 'id'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span></a></th>
+                <th><a class="th-sort" th:href="@{/medical-staff-appointments(sortField='appointmentId', sortDir=${reverseSortDir}, appointmentId=${filterApp}, medicalStaffId=${filterStaff}, staffType=${filterType})}">Appt ID <span th:if="${sortField == 'appointmentId'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span></a></th>
                 <th>Staff ID</th>
                 <th>Type</th>
                 <th>Actions</th>
@@ -32,7 +53,7 @@
                 <td th:text="${m.medicalStaffId}"></td>
                 <td th:text="${m.staffType}"></td>
                 <td>
-                    <form th:action="@{/medical-staff-appointments/{id}/delete(id=${m.id})}" method="post" onsubmit="return confirm('Delete this link?');">
+                    <form th:action="@{/medical-staff-appointments/{id}/delete(id=${m.id})}" method="post" onsubmit="return confirm('Delete?');">
                         <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
                     </form>
                 </td>

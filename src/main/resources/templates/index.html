@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="[http://www.thymeleaf.org](http://www.thymeleaf.org)">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>HMS Dashboard</title>
@@ -9,45 +9,17 @@
 <body>
 <div class="wrap">
     <div class="topbar">
-        <div class="hx">
-            <div class="pill h">🏥</div>
-            <h1>Hospital Management System</h1>
-        </div>
+        <div class="hx"><div class="pill h">🏥</div><h1>Hospital Management System</h1></div>
     </div>
-
     <div class="grid">
-        <a th:href="@{/hospitals}" class="card-link">
-            <div class="pillX h">🏨</div>
-            <div><b>Hospitals</b><div class="back">Manage hospitals</div></div>
-        </a>
-        <a th:href="@{/departments}" class="card-link">
-            <div class="pillX d">🏥</div>
-            <div><b>Departments</b><div class="back">Manage departments</div></div>
-        </a>
-        <a th:href="@{/rooms}" class="card-link">
-            <div class="pillX r">🛏️</div>
-            <div><b>Rooms</b><div class="back">Manage rooms</div></div>
-        </a>
-        <a th:href="@{/patients}" class="card-link">
-            <div class="pillX p">🧑‍⚕️</div>
-            <div><b>Patients</b><div class="back">Manage patients</div></div>
-        </a>
-        <a th:href="@{/doctors}" class="card-link">
-            <div class="pillX dr">👨‍⚕️</div>
-            <div><b>Doctors</b><div class="back">Manage doctors</div></div>
-        </a>
-        <a th:href="@{/nurses}" class="card-link">
-            <div class="pillX n">👩‍⚕️</div>
-            <div><b>Nurses</b><div class="back">Manage nurses</div></div>
-        </a>
-        <a th:href="@{/appointments}" class="card-link">
-            <div class="pillX a">📅</div>
-            <div><b>Appointments</b><div class="back">Manage appointments</div></div>
-        </a>
-        <a th:href="@{/medical-staff-appointments}" class="card-link">
-            <div class="pillX a" style="background:var(--slate)">🔗</div>
-            <div><b>Staff Links</b><div class="back">Assign staff to apps</div></div>
-        </a>
+        <a th:href="@{/hospitals}" class="card-link"><div class="pillX h">🏨</div><div><b>Hospitals</b><div class="back">Manage hospitals</div></div></a>
+        <a th:href="@{/departments}" class="card-link"><div class="pillX d">🏥</div><div><b>Departments</b><div class="back">Manage departments</div></div></a>
+        <a th:href="@{/rooms}" class="card-link"><div class="pillX r">🛏️</div><div><b>Rooms</b><div class="back">Manage rooms</div></div></a>
+        <a th:href="@{/patients}" class="card-link"><div class="pillX p">🧑‍⚕️</div><div><b>Patients</b><div class="back">Manage patients</div></div></a>
+        <a th:href="@{/doctors}" class="card-link"><div class="pillX dr">👨‍⚕️</div><div><b>Doctors</b><div class="back">Manage doctors</div></div></a>
+        <a th:href="@{/nurses}" class="card-link"><div class="pillX n">👩‍⚕️</div><div><b>Nurses</b><div class="back">Manage nurses</div></div></a>
+        <a th:href="@{/appointments}" class="card-link"><div class="pillX a">📅</div><div><b>Appointments</b><div class="back">Manage appointments</div></div></a>
+        <a th:href="@{/medical-staff-appointments}" class="card-link"><div class="pillX a" style="background:var(--slate)">🔗</div><div><b>Staff Links</b><div class="back">Assign staff to apps</div></div></a>
     </div>
 </div>
 </body>

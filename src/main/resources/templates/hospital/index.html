@@ -6,8 +6,12 @@
     <link rel="stylesheet" th:href="@{/css/app.css}">
     <style>
         .details-row { background-color: #f9fafb; }
-        .details-content { padding: 15px; border-left: 4px solid #3b82f6; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .details-content { padding: 15px; border-left: 4px solid #22c55e; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .btn-info { background: #64748b; font-size: 0.9em; padding: 6px 12px; }
+        .list-group { list-style: none; padding-left: 0; margin-top: 5px; }
+        .list-group li { font-size: 0.9em; padding: 2px 0; border-bottom: 1px solid #eee; }
+        .filter-box { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 10px; align-items: end; }
+        .th-sort { color: #72809a; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -16,15 +20,23 @@
         <a class="back" th:href="@{/}">← Home</a>
         <div class="hx"><div class="pill h">🏨</div><h1>Hospitals</h1></div>
     </div>
+
+    <form class="filter-box" th:action="@{/hospitals}" method="get">
+        <input type="hidden" name="sortField" th:value="${sortField}">
+        <input type="hidden" name="sortDir" th:value="${sortDir}">
+        <div style="display:flex; flex-direction:column"><label>Name</label><input type="text" name="name" th:value="${filterName}"></div>
+        <div style="display:flex; flex-direction:column"><label>City</label><input type="text" name="city" th:value="${filterCity}"></div>
+        <button class="btn btn-primary" type="submit">Filter</button>
+        <a th:href="@{/hospitals}" class="btn" style="background:#e5e7eb; color:#333;">Reset</a>
+    </form>
+
     <div class="card">
-        <div class="actions">
-            <a class="btn btn-success" th:href="@{/hospitals/new}">＋ Add Hospital</a>
-        </div>
+        <div class="actions"><a class="btn btn-success" th:href="@{/hospitals/new}">＋ Add Hospital</a></div>
         <table class="table">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>City</th>
+                <th><a class="th-sort" th:href="@{/hospitals(sortField='name', sortDir=${reverseSortDir}, name=${filterName}, city=${filterCity})}">Name <span th:if="${sortField == 'name'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span></a></th>
+                <th><a class="th-sort" th:href="@{/hospitals(sortField='city', sortDir=${reverseSortDir}, name=${filterName}, city=${filterCity})}">City <span th:if="${sortField == 'city'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span></a></th>
                 <th>Address</th>
                 <th>Phone</th>
                 <th>Actions</th>
@@ -41,7 +53,7 @@
                         <div style="display:flex; gap:5px;">
                             <button class="btn btn-info" onclick="toggleDetails(this)">Detalii</button>
                             <a class="btn btn-primary" th:href="@{/hospitals/{id}/edit(id=${h.id})}" style="padding: 6px 12px; font-size: 0.9em;">Edit</a>
-                            <form th:action="@{/hospitals/{id}/delete(id=${h.id})}" method="post" onsubmit="return confirm('Delete this hospital?');">
+                            <form th:action="@{/hospitals/{id}/delete(id=${h.id})}" method="post" onsubmit="return confirm('Delete?');">
                                 <button class="btn btn-danger" type="submit" style="padding: 6px 12px; font-size: 0.9em;">Del</button>
                             </form>
                         </div>
@@ -50,9 +62,18 @@
                 <tr class="details-row" style="display:none;">
                     <td colspan="5">
                         <div class="details-content">
-                            <div><strong>Internal ID:</strong> <span th:text="${h.id}"></span></div>
-                            <div><strong>Departments Count:</strong> <span th:text="${h.departments.size()}"></span></div>
-                            <div><strong>Rooms Count:</strong> <span th:text="${h.rooms.size()}"></span></div>
+                            <div><strong>Departments:</strong>
+                                <ul th:unless="${#lists.isEmpty(h.departments)}" class="list-group">
+                                    <li th:each="dept : ${h.departments}" th:text="${dept.name}"></li>
+                                </ul>
+                                <span th:if="${#lists.isEmpty(h.departments)}">None</span>
+                            </div>
+                            <div><strong>Rooms:</strong>
+                                <ul th:unless="${#lists.isEmpty(h.rooms)}" class="list-group">
+                                    <li th:each="rm : ${h.rooms}" th:text="'Room ' + ${rm.number} + ' (' + ${rm.status} + ')'"></li>
+                                </ul>
+                                <span th:if="${#lists.isEmpty(h.rooms)}">None</span>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -61,22 +82,6 @@
         </table>
     </div>
 </div>
-
-<script>
-    function toggleDetails(btn) {
-        // Găsește rândul părinte (tr) al butonului
-        const row = btn.closest('tr');
-        // Găsește rândul imediat următor (cel cu detalii)
-        const nextRow = row.nextElementSibling;
-
-        if (nextRow.style.display === 'none') {
-            nextRow.style.display = 'table-row';
-            btn.innerText = 'Ascunde';
-        } else {
-            nextRow.style.display = 'none';
-            btn.innerText = 'Detalii';
-        }
-    }
-</script>
+<script>function toggleDetails(b){const r=b.closest('tr');const n=r.nextElementSibling;if(n.style.display==='none'){n.style.display='table-row';b.innerText='Ascunde';}else{n.style.display='none';b.innerText='Detalii';}}</script>
 </body>
 </html>
