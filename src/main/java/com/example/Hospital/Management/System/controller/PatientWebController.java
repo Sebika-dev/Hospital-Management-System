@@ -16,13 +16,39 @@ public class PatientWebController {
     private final DepartmentService departmentService;
 
     public PatientWebController(PatientService service, HospitalService hospitalService, DepartmentService departmentService) {
-        this.service = service; this.hospitalService = hospitalService; this.departmentService = departmentService;
+        this.service = service;
+        this.hospitalService = hospitalService;
+        this.departmentService = departmentService;
     }
 
-    @GetMapping public String list(Model model) {
-        model.addAttribute("patients", service.getAllPatients());
+    @GetMapping
+    public String list(Model model,
+                       @RequestParam(required = false) String name,
+                       @RequestParam(required = false) Long hospitalId,
+                       @RequestParam(required = false) Long departmentId,
+                       @RequestParam(required = false) String email,
+                       @RequestParam(defaultValue = "name") String sortField,
+                       @RequestParam(defaultValue = "asc") String sortDir) {
+
+        var patients = service.getAllPatients(name, hospitalId, departmentId, email, sortField, sortDir);
+
+        model.addAttribute("patients", patients);
+        model.addAttribute("hospitals", hospitalService.getAllHospitals());
+        model.addAttribute("departments", departmentService.getAllDepartments());
+
+        // Parametrii pentru UI (filtre + sortare)
+        model.addAttribute("filterName", name);
+        model.addAttribute("filterHos", hospitalId);
+        model.addAttribute("filterDept", departmentId);
+        model.addAttribute("filterEmail", email);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
         return "patient/index";
     }
+
+    // ... Metodele create, edit, update, delete rămân neschimbate (le ai deja) ...
     @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("patient", new Patient());
         populateModel(model);

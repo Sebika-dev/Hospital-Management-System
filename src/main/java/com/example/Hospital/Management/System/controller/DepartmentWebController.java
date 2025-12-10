@@ -1,4 +1,5 @@
 package com.example.Hospital.Management.System.controller;
+
 import com.example.Hospital.Management.System.model.Department;
 import com.example.Hospital.Management.System.service.DepartmentService;
 import com.example.Hospital.Management.System.service.HospitalService;
@@ -17,10 +18,29 @@ public class DepartmentWebController {
     @Autowired public DepartmentWebController(DepartmentService service, HospitalService hospitalService) {
         this.service = service; this.hospitalService = hospitalService;
     }
-    @GetMapping public String list(Model model) {
-        model.addAttribute("departments", service.getAllDepartments());
+
+    @GetMapping
+    public String list(Model model,
+                       @RequestParam(required = false) String name,
+                       @RequestParam(required = false) Long hospitalId,
+                       @RequestParam(defaultValue = "name") String sortField,
+                       @RequestParam(defaultValue = "asc") String sortDir) {
+
+        var departments = service.getAllDepartments(name, hospitalId, sortField, sortDir);
+
+        model.addAttribute("departments", departments);
+        model.addAttribute("hospitals", hospitalService.getAllHospitals());
+
+        model.addAttribute("filterName", name);
+        model.addAttribute("filterHos", hospitalId);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
         return "department/index";
     }
+
+    // ... Metode standard ...
     @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("department", new Department());
         model.addAttribute("hospitals", hospitalService.getAllHospitals());

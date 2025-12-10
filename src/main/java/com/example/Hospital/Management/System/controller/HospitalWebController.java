@@ -1,4 +1,5 @@
 package com.example.Hospital.Management.System.controller;
+
 import com.example.Hospital.Management.System.model.Hospital;
 import com.example.Hospital.Management.System.service.HospitalService;
 import jakarta.validation.Valid;
@@ -14,10 +15,26 @@ public class HospitalWebController {
     private final HospitalService service;
     @Autowired public HospitalWebController(HospitalService service) { this.service = service; }
 
-    @GetMapping public String list(Model model) {
-        model.addAttribute("hospitals", service.getAllHospitals());
+    @GetMapping
+    public String list(Model model,
+                       @RequestParam(required = false) String name,
+                       @RequestParam(required = false) String city,
+                       @RequestParam(defaultValue = "name") String sortField,
+                       @RequestParam(defaultValue = "asc") String sortDir) {
+
+        var hospitals = service.getAllHospitals(name, city, sortField, sortDir);
+
+        model.addAttribute("hospitals", hospitals);
+        model.addAttribute("filterName", name);
+        model.addAttribute("filterCity", city);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
         return "hospital/index";
     }
+
+    // ... Metode standard (create, edit, delete) ...
     @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("hospital", new Hospital());
         return "hospital/form";
